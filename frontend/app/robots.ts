@@ -1,5 +1,8 @@
 import { MetadataRoute } from 'next';
 
+// Required for static export
+export const dynamic = 'force-static';
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourusername.github.io';
 const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'PrikkelendePreken';
 const baseUrl = `${siteUrl}/${repoName}`;
