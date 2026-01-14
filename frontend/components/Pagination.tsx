@@ -15,25 +15,28 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
   }
 
   return (
-    <nav className="flex justify-center gap-2 mt-8" aria-label="Paginering">
+    <nav className="flex justify-center items-center gap-2 mt-12" aria-label="Paginering">
       {currentPage > 1 && (
         <Link
           href={currentPage === 2 ? '/sermons' : `/sermons/page/${currentPage - 1}`}
-          className="px-4 py-2 border rounded-md hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-warm-300 transition-all font-medium shadow-sm"
         >
-          ← Vorige
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Vorige
         </Link>
       )}
 
-      <div className="flex gap-1">
+      <div className="flex gap-1.5">
         {pages.map((page) => (
           <Link
             key={page}
             href={page === 1 ? '/sermons' : `/sermons/page/${page}`}
-            className={`px-4 py-2 border rounded-md transition-colors ${
+            className={`min-w-[44px] h-11 flex items-center justify-center rounded-xl font-semibold transition-all ${
               page === currentPage
-                ? 'bg-primary-600 text-white border-primary-600'
-                : 'hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md'
+                : 'bg-white border border-warm-200 text-warm-700 hover:bg-warm-50 hover:border-warm-300 shadow-sm'
             }`}
           >
             {page}
@@ -44,9 +47,12 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {currentPage < totalPages && (
         <Link
           href={`/sermons/page/${currentPage + 1}`}
-          className="px-4 py-2 border rounded-md hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-warm-300 transition-all font-medium shadow-sm"
         >
-          Volgende →
+          Volgende
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </Link>
       )}
     </nav>
