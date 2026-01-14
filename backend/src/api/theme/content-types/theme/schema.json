@@ -4,8 +4,8 @@
   "info": {
     "singularName": "theme",
     "pluralName": "themes",
-    "displayName": "Theme",
-    "description": "Thema's / topics voor preken"
+    "displayName": "Thema",
+    "description": "Thema's voor preken"
   },
   "options": {
     "draftAndPublish": false

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
-import { getSermonBySlug, getAllSermonSlugs, formatDate } from '@/lib/strapi';
+import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference } from '@/lib/strapi';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -53,7 +53,10 @@ export default async function SermonDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const { title, date, bibleText, content, summary, audio, speaker, themes } = sermon;
+  const { title, date, bibleText, bibleReference, content, summary, audio, speaker, themes } = sermon;
+  
+  // Use structured bibleReference if available, otherwise fall back to bibleText
+  const displayBibleText = formatBibleReference(bibleReference) || bibleText;
 
   return (
     <div>
@@ -110,12 +113,12 @@ export default async function SermonDetailPage({ params }: PageProps) {
               </span>
             )}
 
-            {bibleText && (
+            {displayBibleText && (
               <span className="flex items-center gap-2 bg-primary-100/60 backdrop-blur px-3 py-1.5 rounded-full text-sm font-medium text-primary-700 italic">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                {bibleText}
+                {displayBibleText}
               </span>
             )}
           </div>

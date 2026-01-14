@@ -36,7 +36,7 @@ export default async function HomePage() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-serif leading-tight">
               Welkom bij{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-primary-100">
-                Prikkerende Preken
+                Prikkelende Preken
               </span>
             </h1>
             <p className="text-lg md:text-xl text-warm-200 mb-8 leading-relaxed">

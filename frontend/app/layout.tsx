@@ -15,17 +15,17 @@ const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'PrikkelendePreken';
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteUrl}/${repoName}`),
   title: {
-    default: 'Prikkerende Preken - Preek Archief',
-    template: '%s | Prikkerende Preken',
+    default: 'Prikkelende Preken - Preek Archief',
+    template: '%s | Prikkelende Preken',
   },
   description: 'Luister naar en lees preken uit ons archief. Doorzoek preken op spreker, thema en bijbeltekst.',
   keywords: ['preken', 'sermons', 'bijbel', 'christelijk', 'archief', 'kerk'],
-  authors: [{ name: 'Prikkerende Preken' }],
+  authors: [{ name: 'Prikkelende Preken' }],
   openGraph: {
     type: 'website',
     locale: 'nl_NL',
-    siteName: 'Prikkerende Preken',
-    title: 'Prikkerende Preken - Preek Archief',
+    siteName: 'Prikkelende Preken',
+    title: 'Prikkelende Preken - Preek Archief',
     description: 'Luister naar en lees preken uit ons archief.',
   },
   robots: {

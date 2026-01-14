@@ -12,7 +12,7 @@ export default function Footer() {
                 PP
               </span>
               <span className="text-lg font-bold text-white">
-                Prikkerende Preken
+                Prikkelende Preken
               </span>
             </div>
             <p className="text-warm-400 text-sm leading-relaxed">
@@ -50,7 +50,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-warm-800">
           <p className="text-center text-warm-500 text-sm">
-            © {new Date().getFullYear()} Prikkerende Preken. Alle rechten voorbehouden.
+            © {new Date().getFullYear()} Prikkelende Preken. Alle rechten voorbehouden.
           </p>
         </div>
       </div>

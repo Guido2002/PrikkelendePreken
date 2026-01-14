@@ -19,7 +19,7 @@ export default function Header() {
               PP
             </span>
             <span className="text-lg font-bold text-warm-900 group-hover:text-primary-700 transition-colors hidden sm:block">
-              Prikkerende Preken
+              Prikkelende Preken
             </span>
           </Link>
 

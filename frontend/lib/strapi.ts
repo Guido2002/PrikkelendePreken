@@ -183,6 +183,30 @@ export function formatDate(dateString: string): string {
 }
 
 /**
+ * Format bible reference to readable string
+ * e.g. "Johannes 3:16" or "Psalmen 23:1-6"
+ */
+export function formatBibleReference(ref: {
+  book: string;
+  chapter: number;
+  verseStart?: number | null;
+  verseEnd?: number | null;
+} | null): string | null {
+  if (!ref) return null;
+  
+  let result = `${ref.book} ${ref.chapter}`;
+  
+  if (ref.verseStart) {
+    result += `:${ref.verseStart}`;
+    if (ref.verseEnd && ref.verseEnd !== ref.verseStart) {
+      result += `-${ref.verseEnd}`;
+    }
+  }
+  
+  return result;
+}
+
+/**
  * Get total number of pages for pagination
  */
 export async function getSermonPageCount(pageSize = 12): Promise<number> {

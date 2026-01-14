@@ -4,8 +4,8 @@
   "info": {
     "singularName": "speaker",
     "pluralName": "speakers",
-    "displayName": "Speaker",
-    "description": "Sprekers / preachers"
+    "displayName": "Spreker",
+    "description": "Sprekers voor Prikkelende Preken"
   },
   "options": {
     "draftAndPublish": false

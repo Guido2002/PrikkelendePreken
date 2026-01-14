@@ -1,14 +1,17 @@
 import Link from 'next/link';
 import { Sermon } from '@/lib/types';
-import { formatDate } from '@/lib/strapi';
+import { formatDate, formatBibleReference } from '@/lib/strapi';
 
 interface SermonCardProps {
   sermon: Sermon;
 }
 
 export default function SermonCard({ sermon }: SermonCardProps) {
-  const { title, slug, date, summary, bibleText, speaker, audio } = sermon;
+  const { title, slug, date, summary, bibleText, bibleReference, speaker, audio } = sermon;
   const speakerName = speaker?.name;
+  
+  // Use structured bibleReference if available, otherwise fall back to bibleText
+  const displayBibleText = formatBibleReference(bibleReference) || bibleText;
 
   return (
     <article className="group bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200">
@@ -58,12 +61,12 @@ export default function SermonCard({ sermon }: SermonCardProps) {
               Onbekende spreker
             </span>
           )}
-          {bibleText && (
+          {displayBibleText && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-              {bibleText}
+              {displayBibleText}
             </span>
           )}
         </div>

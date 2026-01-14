@@ -433,8 +433,8 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiSermonSermon extends Struct.CollectionTypeSchema {
   collectionName: 'sermons';
   info: {
-    description: 'Preken / sermons voor het archief';
-    displayName: 'Sermon';
+    description: 'Preken voor het Prikkelende Preken archief';
+    displayName: 'Preek';
     pluralName: 'sermons';
     singularName: 'sermon';
   };
@@ -443,6 +443,7 @@ export interface ApiSermonSermon extends Struct.CollectionTypeSchema {
   };
   attributes: {
     audio: Schema.Attribute.Media<'audios'>;
+    bibleReference: Schema.Attribute.Component<'shared.bible-reference', false>;
     bibleText: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
@@ -480,8 +481,8 @@ export interface ApiSermonSermon extends Struct.CollectionTypeSchema {
 export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
   collectionName: 'speakers';
   info: {
-    description: 'Sprekers / preachers';
-    displayName: 'Speaker';
+    description: 'Sprekers voor Prikkelende Preken';
+    displayName: 'Spreker';
     pluralName: 'speakers';
     singularName: 'speaker';
   };
@@ -516,8 +517,8 @@ export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
 export interface ApiThemeTheme extends Struct.CollectionTypeSchema {
   collectionName: 'themes';
   info: {
-    description: "Thema's / topics voor preken";
-    displayName: 'Theme';
+    description: "Thema's voor preken";
+    displayName: 'Thema';
     pluralName: 'themes';
     singularName: 'theme';
   };

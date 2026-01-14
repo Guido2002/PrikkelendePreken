@@ -32,6 +32,14 @@ export interface Theme {
   updatedAt: string;
 }
 
+export interface BibleReference {
+  id: number;
+  book: string;
+  chapter: number;
+  verseStart: number | null;
+  verseEnd: number | null;
+}
+
 export interface Sermon {
   id: number;
   documentId: string;
@@ -41,6 +49,7 @@ export interface Sermon {
   content: string | null;
   date: string;
   bibleText: string | null;
+  bibleReference: BibleReference | null;
   audio: StrapiMedia | null;
   speaker: Speaker | null;
   themes: Theme[];

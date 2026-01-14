@@ -4,8 +4,8 @@
   "info": {
     "singularName": "sermon",
     "pluralName": "sermons",
-    "displayName": "Sermon",
-    "description": "Preken / sermons voor het archief"
+    "displayName": "Preek",
+    "description": "Preken voor het Prikkelende Preken archief"
   },
   "options": {
     "draftAndPublish": true
@@ -36,6 +36,11 @@
     "bibleText": {
       "type": "string",
       "maxLength": 255
+    },
+    "bibleReference": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.bible-reference"
     },
     "audio": {
       "type": "media",

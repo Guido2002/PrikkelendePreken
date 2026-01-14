@@ -1,5 +1,6 @@
 import { SearchDocument } from './search';
 import { Sermon } from './types';
+import { formatBibleReference } from './strapi';
 
 // Strip HTML tags from content
 function stripHtml(html: string | null): string {
@@ -12,10 +13,13 @@ export function sermonToSearchDocument(sermon: Sermon): SearchDocument {
   const date = new Date(sermon.date);
   const contentText = stripHtml(sermon.content);
   
+  // Use structured bibleReference if available, otherwise fall back to bibleText
+  const displayBibleText = formatBibleReference(sermon.bibleReference) || sermon.bibleText;
+  
   // Build searchable text from all fields
   const searchableText = [
     sermon.title,
-    sermon.bibleText,
+    displayBibleText,
     sermon.summary,
     contentText,
     sermon.speaker?.name,
@@ -28,7 +32,7 @@ export function sermonToSearchDocument(sermon: Sermon): SearchDocument {
     title: sermon.title,
     summary: sermon.summary,
     content: contentText,
-    bibleText: sermon.bibleText,
+    bibleText: displayBibleText,
     date: sermon.date,
     speakerName: sermon.speaker?.name || null,
     speakerId: sermon.speaker?.id || null,
