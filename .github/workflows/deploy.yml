@@ -5,6 +5,10 @@ on:
   push:
     branches: ["main"]
   
+  # Trigger from Strapi webhook
+  repository_dispatch:
+    types: [strapi-update]
+  
   # Allow manual trigger
   workflow_dispatch:
 
