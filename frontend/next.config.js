@@ -21,6 +21,9 @@ const nextConfig = {
   
   // Trailing slashes for cleaner static URLs
   trailingSlash: true,
+
+  // Allow dev origins for local network access
+  allowedDevOrigins: ['192.168.2.37'],
 };
 
 module.exports = nextConfig;

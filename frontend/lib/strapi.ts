@@ -117,7 +117,7 @@ export async function getAllSermonSlugs(): Promise<string[]> {
   });
 
   const response = await fetchAPI<StrapiResponse<Sermon[]>>(`/sermons?${queryParams}`);
-  return response.data.map((sermon) => sermon.attributes.slug);
+  return response.data.map((sermon) => sermon.slug);
 }
 
 /**
@@ -149,7 +149,7 @@ export async function getAllSpeakerSlugs(): Promise<string[]> {
   });
 
   const response = await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
-  return response.data.map((speaker) => speaker.attributes.slug);
+  return response.data.map((speaker) => speaker.slug);
 }
 
 /**

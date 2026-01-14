@@ -1,61 +1,52 @@
-// TypeScript types for Strapi API responses
+// TypeScript types for Strapi v5 API responses
+// Note: Strapi v5 returns flat objects without the "attributes" wrapper
 
 export interface StrapiMedia {
   id: number;
-  attributes: {
-    name: string;
-    url: string;
-    mime: string;
-    size: number;
-    formats?: {
-      thumbnail?: { url: string };
-    };
+  documentId: string;
+  name: string;
+  url: string;
+  mime: string;
+  size: number;
+  formats?: {
+    thumbnail?: { url: string };
   };
 }
 
 export interface Speaker {
   id: number;
-  attributes: {
-    name: string;
-    slug: string;
-    bio: string | null;
-    createdAt: string;
-    updatedAt: string;
-  };
+  documentId: string;
+  name: string;
+  slug: string;
+  bio: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Theme {
   id: number;
-  attributes: {
-    name: string;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  documentId: string;
+  name: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Sermon {
   id: number;
-  attributes: {
-    title: string;
-    slug: string;
-    summary: string | null;
-    content: string | null;
-    date: string;
-    bibleText: string | null;
-    audio: {
-      data: StrapiMedia | null;
-    };
-    speaker: {
-      data: Speaker | null;
-    };
-    themes: {
-      data: Theme[];
-    };
-    publishedAt: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  documentId: string;
+  title: string;
+  slug: string;
+  summary: string | null;
+  content: string | null;
+  date: string;
+  bibleText: string | null;
+  audio: StrapiMedia | null;
+  speaker: Speaker | null;
+  themes: Theme[];
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface StrapiResponse<T> {

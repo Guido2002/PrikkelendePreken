@@ -7,8 +7,8 @@ interface SermonCardProps {
 }
 
 export default function SermonCard({ sermon }: SermonCardProps) {
-  const { title, slug, date, summary, bibleText, speaker } = sermon.attributes;
-  const speakerName = speaker.data?.attributes.name;
+  const { title, slug, date, summary, bibleText, speaker } = sermon;
+  const speakerName = speaker?.name;
 
   return (
     <article className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">

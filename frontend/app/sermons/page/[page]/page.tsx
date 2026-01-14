@@ -3,11 +3,12 @@ import { notFound } from 'next/navigation';
 import SermonCard from '@/components/SermonCard';
 import Pagination from '@/components/Pagination';
 import { getSermons, getSermonPageCount } from '@/lib/strapi';
+import { Sermon } from '@/lib/types';
 
 const PAGE_SIZE = 12;
 
 interface PageProps {
-  params: { page: string };
+  params: Promise<{ page: string }>;
 }
 
 // Generate all paginated pages at build time
@@ -29,7 +30,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const pageNum = parseInt(params.page, 10);
+  const { page } = await params;
+  const pageNum = Number.parseInt(page, 10);
   
   return {
     title: `Alle Preken - Pagina ${pageNum}`,
@@ -38,13 +40,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PaginatedSermonsPage({ params }: PageProps) {
-  const pageNum = parseInt(params.page, 10);
+  const { page } = await params;
+  const pageNum = Number.parseInt(page, 10);
   
-  if (isNaN(pageNum) || pageNum < 2) {
+  if (Number.isNaN(pageNum) || pageNum < 2) {
     notFound();
   }
 
-  let sermons = [];
+  let sermons: Sermon[] = [];
   let totalPages = 1;
 
   try {

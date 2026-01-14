@@ -28,8 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const response = await getAllSermons();
     sermonPages = response.data.map((sermon) => ({
-      url: `${baseUrl}/sermons/${sermon.attributes.slug}`,
-      lastModified: new Date(sermon.attributes.updatedAt),
+      url: `${baseUrl}/sermons/${sermon.slug}`,
+      lastModified: new Date(sermon.updatedAt),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));

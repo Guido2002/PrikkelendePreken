@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import SermonCard from '@/components/SermonCard';
 import Pagination from '@/components/Pagination';
-import { getSermons, getSermonPageCount } from '@/lib/strapi';
+import { getSermons } from '@/lib/strapi';
+import { Sermon } from '@/lib/types';
 
 export const metadata: Metadata = {
   title: 'Alle Preken',
@@ -14,7 +15,7 @@ export const dynamic = 'force-static';
 const PAGE_SIZE = 12;
 
 export default async function SermonsPage() {
-  let sermons = [];
+  let sermons: Sermon[] = [];
   let totalPages = 1;
 
   try {

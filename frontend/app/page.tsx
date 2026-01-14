@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import SermonCard from '@/components/SermonCard';
 import { getLatestSermons } from '@/lib/strapi';
+import { Sermon } from '@/lib/types';
 
 // Generate static page at build time
 export const dynamic = 'force-static';
 
 export default async function HomePage() {
-  let sermons = [];
+  let sermons: Sermon[] = [];
   
   try {
     const response = await getLatestSermons(6);

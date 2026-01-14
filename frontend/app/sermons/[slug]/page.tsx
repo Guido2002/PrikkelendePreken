@@ -5,7 +5,7 @@ import AudioPlayer from '@/components/AudioPlayer';
 import { getSermonBySlug, getAllSermonSlugs, formatDate } from '@/lib/strapi';
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Generate all sermon detail pages at build time
@@ -21,13 +21,14 @@ export async function generateStaticParams() {
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const sermon = await getSermonBySlug(params.slug);
+  const { slug } = await params;
+  const sermon = await getSermonBySlug(slug);
 
   if (!sermon) {
     return { title: 'Preek niet gevonden' };
   }
 
-  const { title, summary, bibleText, date } = sermon.attributes;
+  const { title, summary, bibleText, date } = sermon;
 
   return {
     title,
@@ -42,18 +43,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function SermonDetailPage({ params }: PageProps) {
-  const sermon = await getSermonBySlug(params.slug);
+  const { slug } = await params;
+  const sermon = await getSermonBySlug(slug);
 
   if (!sermon) {
     notFound();
   }
 
-  const { title, date, bibleText, content, summary, audio, speaker, themes } =
-    sermon.attributes;
-  
-  const speakerData = speaker.data;
-  const themesData = themes.data;
-  const audioData = audio.data;
+  const { title, date, bibleText, content, summary, audio, speaker, themes } = sermon;
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-12">
@@ -90,12 +87,12 @@ export default async function SermonDetailPage({ params }: PageProps) {
             {formatDate(date)}
           </time>
 
-          {speakerData && (
+          {speaker && (
             <span className="flex items-center gap-1">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-              {speakerData.attributes.name}
+              {speaker.name}
             </span>
           )}
 
@@ -110,14 +107,14 @@ export default async function SermonDetailPage({ params }: PageProps) {
         </div>
 
         {/* Themes */}
-        {themesData && themesData.length > 0 && (
+        {themes && themes.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
-            {themesData.map((theme) => (
+            {themes.map((theme) => (
               <span
                 key={theme.id}
                 className="px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm"
               >
-                {theme.attributes.name}
+                {theme.name}
               </span>
             ))}
           </div>
@@ -125,10 +122,10 @@ export default async function SermonDetailPage({ params }: PageProps) {
       </header>
 
       {/* Audio Player */}
-      {audioData && (
+      {audio && (
         <div className="mb-8">
           <AudioPlayer
-            url={audioData.attributes.url}
+            url={audio.url}
             title={title}
           />
         </div>
