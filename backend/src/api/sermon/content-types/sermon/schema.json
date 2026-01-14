@@ -14,8 +14,8 @@
   "attributes": {
     "title": {
       "type": "string",
-      "required": true,
-      "maxLength": 255
+      "maxLength": 255,
+      "required": true
     },
     "slug": {
       "type": "uid",
@@ -33,20 +33,18 @@
       "type": "date",
       "required": true
     },
-    "bibleText": {
-      "type": "string",
-      "maxLength": 255
-    },
     "bibleReference": {
       "type": "component",
-      "repeatable": false,
-      "component": "shared.bible-reference"
+      "component": "shared.bible-reference",
+      "repeatable": false
     },
     "audio": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["audios"]
+      "allowedTypes": [
+        "audios"
+      ]
     },
     "speaker": {
       "type": "relation",

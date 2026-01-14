@@ -444,10 +444,6 @@ export interface ApiSermonSermon extends Struct.CollectionTypeSchema {
   attributes: {
     audio: Schema.Attribute.Media<'audios'>;
     bibleReference: Schema.Attribute.Component<'shared.bible-reference', false>;
-    bibleText: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255;
-      }>;
     content: Schema.Attribute.RichText;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

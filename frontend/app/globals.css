@@ -22,29 +22,42 @@ button:focus-visible {
   @apply outline-2 outline-offset-2 outline-primary-500 rounded;
 }
 
+/* Improved scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-warm-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-warm-300 rounded-full hover:bg-warm-400 transition-colors;
+}
+
 /* Rich text content styling */
 .prose {
   @apply text-warm-700 leading-relaxed;
 }
 
 .prose h2 {
-  @apply text-2xl font-bold mt-10 mb-4 text-warm-900 font-serif;
+  @apply text-2xl font-bold mt-12 mb-5 text-warm-900 font-serif;
 }
 
 .prose h3 {
-  @apply text-xl font-semibold mt-8 mb-3 text-warm-900 font-serif;
+  @apply text-xl font-semibold mt-10 mb-4 text-warm-900 font-serif;
 }
 
 .prose p {
-  @apply mb-5 leading-7;
+  @apply mb-6 leading-8;
 }
 
 .prose ul {
-  @apply list-disc ml-6 mb-5 space-y-2;
+  @apply list-disc ml-6 mb-6 space-y-2;
 }
 
 .prose ol {
-  @apply list-decimal ml-6 mb-5 space-y-2;
+  @apply list-decimal ml-6 mb-6 space-y-2;
 }
 
 .prose li {
@@ -52,11 +65,11 @@ button:focus-visible {
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary-300 pl-5 py-1 my-6 text-warm-600 italic bg-warm-100/50 rounded-r-lg;
+  @apply border-l-4 border-primary-400 pl-6 py-2 my-8 text-warm-600 italic bg-gradient-to-r from-warm-100/80 to-transparent rounded-r-xl;
 }
 
 .prose a {
-  @apply text-primary-700 hover:text-primary-800 underline underline-offset-2 decoration-primary-300 hover:decoration-primary-500 transition-colors;
+  @apply text-primary-600 hover:text-primary-700 underline underline-offset-4 decoration-primary-300 hover:decoration-primary-500 transition-all;
 }
 
 .prose strong {
@@ -88,4 +101,38 @@ button:focus-visible {
 /* Gradient text */
 .gradient-text {
   @apply bg-gradient-to-r from-primary-700 to-primary-500 bg-clip-text text-transparent;
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  @apply bg-gradient-to-r from-warm-100 via-warm-200 to-warm-100 bg-[length:200%_100%] rounded-lg;
+  animation: shimmer 1.5s infinite ease-in-out;
+}
+
+/* Card hover lift effect */
+.hover-lift {
+  @apply transition-all duration-300;
+}
+
+.hover-lift:hover {
+  @apply -translate-y-1 shadow-soft-lg;
+}
+
+/* Glass morphism effect */
+.glass {
+  @apply bg-white/80 backdrop-blur-md border border-white/20;
+}
+
+/* Button press effect */
+.btn-press:active {
+  @apply scale-[0.98];
 }
