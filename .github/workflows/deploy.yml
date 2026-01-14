@@ -44,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Clean cache
+        run: rm -rf .next
+
       - name: Build with Next.js
         run: npm run build
         env:
