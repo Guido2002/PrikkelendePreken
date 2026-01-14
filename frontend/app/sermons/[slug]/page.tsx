@@ -8,6 +8,9 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Required for static export - only allow slugs from generateStaticParams
+export const dynamicParams = false;
+
 // Generate all sermon detail pages at build time
 export async function generateStaticParams() {
   try {

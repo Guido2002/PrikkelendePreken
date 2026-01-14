@@ -11,6 +11,9 @@ interface PageProps {
   params: Promise<{ page: string }>;
 }
 
+// Required for static export - don't allow pages not in generateStaticParams
+export const dynamicParams = false;
+
 // Generate all paginated pages at build time
 export async function generateStaticParams() {
   try {
@@ -22,6 +25,7 @@ export async function generateStaticParams() {
       params.push({ page: i.toString() });
     }
     
+    // If no extra pages, return empty array (dynamicParams=false handles this)
     return params;
   } catch (error) {
     console.error('Error generating static params:', error);
