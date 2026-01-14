@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 
 export default function Footer() {
@@ -73,19 +75,20 @@ export default function Footer() {
             <p className="text-warm-400 text-sm mb-4">
               Ontvang een notificatie bij nieuwe preken.
             </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+            <form className="flex flex-col sm:flex-row gap-2" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
                 placeholder="je@email.nl"
-                className="flex-1 px-4 py-2.5 bg-warm-800/50 border border-warm-700 rounded-xl text-sm text-white placeholder-warm-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition-all"
+                className="w-full sm:flex-1 px-4 py-3 sm:py-2.5 bg-warm-800/50 border border-warm-700 rounded-xl text-sm text-white placeholder-warm-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition-all"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-sm font-medium transition-all hover:shadow-lg hover:shadow-primary-900/30"
+                className="w-full sm:w-auto px-4 py-3 sm:py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-sm font-medium transition-all hover:shadow-lg hover:shadow-primary-900/30 inline-flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
+                <span className="sm:hidden">Aanmelden</span>
               </button>
             </form>
           </div>

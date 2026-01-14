@@ -19,7 +19,7 @@ export default function SermonCard({ sermon }: SermonCardProps) {
       <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
       
       <Link href={`/sermons/${slug}`} className="block relative">
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           {/* Top row: Date & Audio badge */}
           <div className="flex items-center justify-between mb-4">
             <time dateTime={date} className="flex items-center gap-1.5 text-sm text-warm-500">
@@ -80,7 +80,7 @@ export default function SermonCard({ sermon }: SermonCardProps) {
         </div>
 
         {/* Bottom action bar */}
-        <div className="px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
+        <div className="px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
           <span className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm">
             Bekijk preek
             <svg 

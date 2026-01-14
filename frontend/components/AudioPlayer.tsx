@@ -118,7 +118,7 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-gradient-to-br from-warm-900 via-primary-900 to-warm-900 rounded-2xl p-6 shadow-xl">
+    <div className="bg-gradient-to-br from-warm-900 via-primary-900 to-warm-900 rounded-2xl p-4 sm:p-6 shadow-xl">
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
@@ -131,8 +131,8 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
       </audio>
 
       {/* Player header */}
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-900/50">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-900/50">
           <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
           </svg>
@@ -144,7 +144,7 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
         {/* Playback rate button */}
         <button
           onClick={cyclePlaybackRate}
-          className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
+          className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
           title="Afspeelsnelheid aanpassen"
         >
           {playbackRate}x
@@ -176,11 +176,11 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-3 sm:gap-4">
         {/* Skip back */}
         <button
           onClick={() => skip(-10)}
-          className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
           title="10 seconden terug"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +214,7 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
         {/* Skip forward */}
         <button
           onClick={() => skip(10)}
-          className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
           title="10 seconden vooruit"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,7 +224,7 @@ export default function AudioPlayer({ url, title }: AudioPlayerProps) {
       </div>
 
       {/* Keyboard hints */}
-      <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-center gap-4 text-xs text-white/40">
+      <div className="hidden md:flex mt-5 pt-4 border-t border-white/10 items-center justify-center gap-4 text-xs text-white/40">
         <span className="flex items-center gap-1.5">
           <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Space</kbd>
           Afspelen/Pauzeren

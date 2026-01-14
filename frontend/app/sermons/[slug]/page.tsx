@@ -94,7 +94,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </li>
-              <li className="text-warm-800 font-medium truncate max-w-[200px]">{title}</li>
+              <li className="text-warm-800 font-medium truncate max-w-[140px] sm:max-w-[240px]">{title}</li>
             </ol>
           </nav>
 
@@ -161,7 +161,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
 
         {/* Summary */}
         {summary && (
-          <div className="relative bg-gradient-to-br from-primary-50 via-warm-50 to-primary-50/30 rounded-2xl p-8 mb-12 border border-primary-100/50 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-primary-50 via-warm-50 to-primary-50/30 rounded-2xl p-5 sm:p-8 mb-12 border border-primary-100/50 overflow-hidden">
             {/* Decorative element */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-100/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
             
@@ -174,7 +174,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
                 </span>
                 Samenvatting
               </h2>
-              <p className="text-warm-700 leading-relaxed text-lg">{summary}</p>
+              <p className="text-warm-700 leading-relaxed text-base sm:text-lg">{summary}</p>
             </div>
           </div>
         )}

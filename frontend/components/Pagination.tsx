@@ -59,7 +59,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         {currentPage > 1 ? (
           <Link
             href={currentPage === 2 ? '/sermons' : `/sermons/page/${currentPage - 1}`}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
           >
             <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -67,7 +67,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
             <span className="hidden sm:inline">Vorige</span>
           </Link>
         ) : (
-          <span className="flex items-center gap-2 px-4 py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
+          <span className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -110,7 +110,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         {currentPage < totalPages ? (
           <Link
             href={`/sermons/page/${currentPage + 1}`}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
           >
             <span className="hidden sm:inline">Volgende</span>
             <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
             </svg>
           </Link>
         ) : (
-          <span className="flex items-center gap-2 px-4 py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
+          <span className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
             <span className="hidden sm:inline">Volgende</span>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

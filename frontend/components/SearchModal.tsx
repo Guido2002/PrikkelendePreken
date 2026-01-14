@@ -126,7 +126,7 @@ export default function SearchModal() {
               onChange={e => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Zoek preken, bijbelteksten, sprekers..."
-              className="w-full pl-12 pr-32 py-4 text-lg bg-transparent text-warm-900 placeholder-warm-400 focus:outline-none"
+              className="w-full pl-11 sm:pl-12 pr-24 sm:pr-32 py-3.5 sm:py-4 text-base sm:text-lg bg-transparent text-warm-900 placeholder-warm-400 focus:outline-none"
             />
 
             {/* Right side buttons */}
@@ -134,7 +134,7 @@ export default function SearchModal() {
               {/* Filter toggle */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                   showFilters || activeFilterCount > 0
                     ? 'bg-primary-100 text-primary-700'
                     : 'bg-warm-100 text-warm-600 hover:bg-warm-200'
@@ -239,7 +239,7 @@ export default function SearchModal() {
           {/* Suggestions */}
           {suggestions.length > 0 && query && (
             <div className="border-b border-warm-100 px-4 py-2 bg-warm-50/30">
-              <div className="flex items-center gap-2 text-xs text-warm-500">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-warm-500">
                 <span>Suggesties:</span>
                 {suggestions.map((suggestion, index) => (
                   <button
@@ -250,7 +250,7 @@ export default function SearchModal() {
                     {suggestion}
                   </button>
                 ))}
-                <kbd className="ml-auto px-1.5 py-0.5 bg-warm-100 text-warm-400 rounded text-xs">Tab</kbd>
+                <kbd className="sm:ml-auto px-1.5 py-0.5 bg-warm-100 text-warm-400 rounded text-xs">Tab</kbd>
               </div>
             </div>
           )}
@@ -336,8 +336,8 @@ export default function SearchModal() {
 
           {/* Footer */}
           <div className="border-t border-warm-100 px-4 py-3 bg-warm-50/50">
-            <div className="flex items-center justify-between text-xs text-warm-500">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-warm-500">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <span className="flex items-center gap-1.5">
                   <kbd className="px-1.5 py-0.5 bg-white border border-warm-200 rounded">↑↓</kbd>
                   Navigeren
@@ -351,7 +351,7 @@ export default function SearchModal() {
                   Sluiten
                 </span>
               </div>
-              <span>Powered by Fuse.js</span>
+              <span className="hidden sm:inline">Powered by Fuse.js</span>
             </div>
           </div>
         </div>
