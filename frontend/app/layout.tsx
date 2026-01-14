@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ClientWrapper from '@/components/ClientWrapper';
+import { getSermons } from '@/lib/strapi';
+import { buildSearchIndex } from '@/lib/searchIndex';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -31,17 +34,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+async function getSearchIndex() {
+  try {
+    // Fetch all sermons for search index
+    const response = await getSermons({ page: 1, pageSize: 1000 });
+    return buildSearchIndex(response.data);
+  } catch (error) {
+    console.error('Error building search index:', error);
+    return [];
+  }
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const searchIndex = await getSearchIndex();
+
   return (
     <html lang="nl">
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <body className={`${inter.className} min-h-screen flex flex-col bg-warm-50`}>
+        <ClientWrapper searchIndex={searchIndex}>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </ClientWrapper>
       </body>
     </html>
   );

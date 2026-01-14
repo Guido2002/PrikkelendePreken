@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import SermonCard from '@/components/SermonCard';
+import SearchTrigger from '@/components/SearchTrigger';
 import { getLatestSermons } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
 
@@ -38,10 +39,16 @@ export default async function HomePage() {
                 Prikkerende Preken
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-warm-200 mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-warm-200 mb-8 leading-relaxed">
               Ontdek inspirerende preken uit ons archief. Luister, lees en laat je 
               raken door Gods Woord.
             </p>
+            
+            {/* Search bar */}
+            <div className="mb-8">
+              <SearchTrigger />
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/sermons"
