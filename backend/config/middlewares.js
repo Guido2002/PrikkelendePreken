@@ -2,6 +2,13 @@ module.exports = [
   'strapi::logger',
   'strapi::errors',
   {
+    name: 'global::upload-cache',
+    config: {
+      // Audio files are content-addressed in Strapi (hash in filename), so immutable caching is safe.
+      maxAgeSeconds: 31536000,
+    },
+  },
+  {
     name: 'strapi::security',
     config: {
       contentSecurityPolicy: {
