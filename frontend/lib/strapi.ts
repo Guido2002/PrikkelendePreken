@@ -5,11 +5,12 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // When using `output: 'export'`, builds can fail if Strapi is temporarily unavailable.
-// These fallbacks keep the build/export working; update via env var when needed.
-const FALLBACK_SPEAKER_SLUGS: string[] = (process.env.STRAPI_FALLBACK_SPEAKER_SLUGS || '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
+// These fallbacks keep the build/export working.
+// Hardcoded known speaker slugs as backup when Strapi is down during build.
+const FALLBACK_SPEAKER_SLUGS: string[] = [
+  'ds-g-boer',
+  'dr-w-aalders',
+];
 
 /**
  * Generic fetch wrapper for Strapi REST API
