@@ -4,6 +4,13 @@ import { Sermon, Speaker, Theme, StrapiResponse } from './types';
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
 
+// When using `output: 'export'`, builds can fail if Strapi is temporarily unavailable.
+// These fallbacks keep the build/export working; update via env var when needed.
+const FALLBACK_SPEAKER_SLUGS: string[] = (process.env.STRAPI_FALLBACK_SPEAKER_SLUGS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 /**
  * Generic fetch wrapper for Strapi REST API
  * All fetches use force-cache for static generation
@@ -124,7 +131,12 @@ export async function getAllSermonSlugs(): Promise<string[]> {
  * Get all speakers
  */
 export async function getSpeakers(): Promise<StrapiResponse<Speaker[]>> {
-  return fetchAPI<StrapiResponse<Speaker[]>>('/speakers?sort=name:asc');
+  try {
+    return await fetchAPI<StrapiResponse<Speaker[]>>('/speakers?sort=name:asc');
+  } catch (error) {
+    console.error('Error fetching speakers (returning empty list):', error);
+    return { data: [], meta: {} };
+  }
 }
 
 /**
@@ -135,8 +147,13 @@ export async function getSpeakerBySlug(slug: string): Promise<Speaker | null> {
     'filters[slug][$eq]': slug,
   });
 
-  const response = await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
-  return response.data[0] || null;
+  try {
+    const response = await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
+    return response.data[0] || null;
+  } catch (error) {
+    console.error(`Error fetching speaker by slug "${slug}" (returning null):`, error);
+    return null;
+  }
 }
 
 /**
@@ -148,8 +165,13 @@ export async function getAllSpeakerSlugs(): Promise<string[]> {
     'pagination[pageSize]': '100',
   });
 
-  const response = await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
-  return response.data.map((speaker) => speaker.slug);
+  try {
+    const response = await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
+    return response.data.map((speaker) => speaker.slug);
+  } catch (error) {
+    console.error('Error fetching speaker slugs from Strapi (using fallback list):', error);
+    return FALLBACK_SPEAKER_SLUGS;
+  }
 }
 
 /**

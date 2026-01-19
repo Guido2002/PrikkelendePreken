@@ -16,10 +16,15 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
   try {
     const slugs = await getAllSpeakerSlugs();
+    // For `output: 'export'`, returning an empty array causes the export to fail for dynamic routes.
+    // If Strapi is down and no fallback is configured, we still return a single placeholder page.
+    if (!slugs || slugs.length === 0) {
+      return [{ slug: 'dominee' }];
+    }
     return slugs.map((slug) => ({ slug }));
   } catch (error) {
     console.error('Error generating speaker static params:', error);
-    return [];
+    return [{ slug: 'dominee' }];
   }
 }
 
@@ -28,7 +33,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const speaker = await getSpeakerBySlug(slug);
 
   if (!speaker) {
-    return { title: 'Dominee niet gevonden' };
+    return {
+      title: 'Dominee',
+      description: 'Dominee profiel is tijdelijk niet beschikbaar.',
+    };
   }
 
   return {
@@ -49,7 +57,53 @@ export default async function DomineeDetailPage({ params }: PageProps) {
   const speaker = await getSpeakerBySlug(slug);
 
   if (!speaker) {
-    notFound();
+    // Avoid failing static export when Strapi is temporarily unavailable.
+    // We show a friendly message instead of a hard 404.
+    return (
+      <div>
+        <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <nav className="mb-6" aria-label="Breadcrumb">
+              <ol className="flex items-center gap-2 text-sm">
+                <li>
+                  <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </li>
+                <li>
+                  <Link href="/dominees" className="text-warm-500 hover:text-primary-600 transition-colors">
+                    Dominees
+                  </Link>
+                </li>
+              </ol>
+            </nav>
+
+            <h1 className="text-3xl md:text-4xl font-bold text-warm-900 font-serif mb-4">Dominee tijdelijk niet beschikbaar</h1>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              We kunnen dit dominee-profiel nu niet laden (Strapi is tijdelijk onbereikbaar). Probeer het later opnieuw.
+            </p>
+            <p className="text-warm-500 text-sm mt-3">Slug: {slug}</p>
+
+            <div className="mt-8">
+              <Link
+                href="/dominees"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"
+              >
+                <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                </svg>
+                Terug naar alle dominees
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
   }
 
   let sermons: Sermon[] = [];
