@@ -501,6 +501,7 @@ export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
+    profilePicture: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     sermons: Schema.Attribute.Relation<'oneToMany', 'api::sermon.sermon'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
