@@ -44,16 +44,23 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
 
+  const getEffectiveDuration = () => {
+    const d = audioRef.current?.duration;
+    if (typeof d === 'number' && Number.isFinite(d) && d > 0) return d;
+    return duration;
+  };
+
   const seekToClientX = (clientX: number) => {
     if (!audioRef.current || !progressRef.current) return;
-    if (!duration || Number.isNaN(duration)) return;
+    const effectiveDuration = getEffectiveDuration();
+    if (!effectiveDuration || Number.isNaN(effectiveDuration)) return;
 
     const rect = progressRef.current.getBoundingClientRect();
     if (rect.width <= 0) return;
     const percent = (clientX - rect.left) / rect.width;
     const clampedPercent = Math.max(0, Math.min(1, percent));
 
-    audioRef.current.currentTime = clampedPercent * duration;
+    audioRef.current.currentTime = clampedPercent * effectiveDuration;
   };
 
   // Handle seeking
@@ -62,7 +69,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!duration) return;
+    e.preventDefault();
     setIsScrubbing(true);
     progressRef.current?.setPointerCapture(e.pointerId);
     seekToClientX(e.clientX);
@@ -70,6 +77,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
   const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (!isScrubbing) return;
+    e.preventDefault();
     seekToClientX(e.clientX);
   };
 
@@ -84,7 +92,8 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
   const handleSeekKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (!audioRef.current) return;
-    if (!duration) return;
+    const effectiveDuration = getEffectiveDuration();
+    if (!effectiveDuration) return;
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -113,7 +122,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
     if (e.key === 'End') {
       e.preventDefault();
-      audioRef.current.currentTime = duration;
+      audioRef.current.currentTime = effectiveDuration;
       return;
     }
   };
@@ -121,7 +130,9 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   // Skip forward/backward
   const skip = (seconds: number) => {
     if (!audioRef.current) return;
-    audioRef.current.currentTime = Math.max(0, Math.min(duration, currentTime + seconds));
+    const effectiveDuration = getEffectiveDuration();
+    const baseTime = audioRef.current.currentTime;
+    audioRef.current.currentTime = Math.max(0, Math.min(effectiveDuration || baseTime, baseTime + seconds));
   };
 
   // Change playback rate
@@ -142,8 +153,18 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handleDurationChange = () => setDuration(audio.duration);
-    const handleLoadedMetadata = () => setIsLoading(false);
-    const handleCanPlay = () => setIsLoading(false);
+    const handleLoadedMetadata = () => {
+      if (Number.isFinite(audio.duration)) {
+        setDuration(audio.duration);
+      }
+      setIsLoading(false);
+    };
+    const handleCanPlay = () => {
+      if (Number.isFinite(audio.duration)) {
+        setDuration(audio.duration);
+      }
+      setIsLoading(false);
+    };
     const handleWaiting = () => {
       // Waiting fires during playback when buffer runs dry; show spinner then.
       if (!audio.paused) {
@@ -198,7 +219,8 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [togglePlay, currentTime, duration]);
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const effectiveDurationForUi = getEffectiveDuration();
+  const progress = effectiveDurationForUi > 0 ? (currentTime / effectiveDurationForUi) * 100 : 0;
 
   let playButtonIcon: React.ReactNode;
   if (isLoading) {
