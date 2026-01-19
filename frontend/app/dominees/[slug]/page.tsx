@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import SermonCard from '@/components/SermonCard';
-import { getAllSpeakerSlugs, getSpeakerBySlug, getSermons } from '@/lib/strapi';
+import { getAllSpeakerSlugs, getSpeakerBySlug, getSermons, getStrapiMediaUrl } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
 
 interface PageProps {
@@ -46,13 +45,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: speaker.name,
       description: speaker.bio || undefined,
       type: 'profile',
+      images: speaker.profilePicture?.url ? [getStrapiMediaUrl(speaker.profilePicture.url)] : undefined,
     },
   };
 }
 
 export const dynamic = 'force-static';
 
-export default async function DomineeDetailPage({ params }: PageProps) {
+export default async function DomineeDetailPage({ params }: Readonly<PageProps>) {
   const { slug } = await params;
   const speaker = await getSpeakerBySlug(slug);
 
@@ -119,18 +119,30 @@ export default async function DomineeDetailPage({ params }: PageProps) {
 
   return (
     <div>
-      {/* Page Header */}
-      <section className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] bg-primary-100/30 rounded-full blur-3xl" />
+      {/* Hero */}
+      <section className="relative min-h-[70vh] md:min-h-[78vh] border-b border-warm-200 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          {speaker.profilePicture?.url ? (
+            <img
+              src={getStrapiMediaUrl(speaker.profilePicture.url)}
+              alt={speaker.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary-200/40 via-warm-100 to-primary-100" />
+          )}
+          {/* Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-b from-warm-950/55 via-warm-950/30 to-warm-50" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),rgba(255,255,255,0))]" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-12 md:pb-16">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center gap-2 text-sm">
               <li>
-                <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors flex items-center gap-1">
+                <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center gap-1">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
@@ -138,43 +150,61 @@ export default async function DomineeDetailPage({ params }: PageProps) {
                 </Link>
               </li>
               <li>
-                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </li>
               <li>
-                <Link href="/dominees" className="text-warm-500 hover:text-primary-600 transition-colors">
+                <Link href="/dominees" className="text-white/80 hover:text-white transition-colors">
                   Dominees
                 </Link>
               </li>
               <li>
-                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </li>
-              <li className="text-warm-800 font-medium truncate max-w-[200px]">{speaker.name}</li>
+              <li className="text-white font-medium truncate max-w-[240px]">{speaker.name}</li>
             </ol>
           </nav>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-6 font-serif leading-tight">{speaker.name}</h1>
+          <div className="max-w-3xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 font-serif leading-tight drop-shadow-sm">
+              {speaker.name}
+            </h1>
 
-          {speaker.bio && (
-            <p className="text-warm-700 text-lg leading-relaxed">{speaker.bio}</p>
-          )}
+            {speaker.bio ? (
+              <p className="text-white/90 text-lg md:text-xl leading-relaxed">
+                {speaker.bio}
+              </p>
+            ) : (
+              <p className="text-white/80 text-lg md:text-xl leading-relaxed">Geen bio beschikbaar.</p>
+            )}
 
-          <div className="flex flex-wrap items-center gap-3 mt-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-warm-200 rounded-xl text-sm font-medium text-warm-700">
-              <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-              {totalSermons} preken
-            </span>
+            <div className="flex flex-wrap items-center gap-3 mt-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur border border-white/15 rounded-xl text-sm font-medium text-white">
+                <svg className="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                {totalSermons} preken
+              </span>
+
+              <Link
+                href="#preken"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all"
+              >
+                Bekijk preken
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Sermons */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <section id="preken" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {sermons.length > 0 ? (
           <>
             <div className="flex items-center justify-between mb-8">

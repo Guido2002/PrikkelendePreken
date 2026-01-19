@@ -17,6 +17,12 @@
       "required": true,
       "maxLength": 255
     },
+    "profilePicture": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
     "slug": {
       "type": "uid",
       "targetField": "name",

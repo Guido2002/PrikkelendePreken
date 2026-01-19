@@ -19,6 +19,7 @@ export interface Speaker {
   name: string;
   slug: string;
   bio: string | null;
+  profilePicture?: StrapiMedia | null;
   createdAt: string;
   updatedAt: string;
 }

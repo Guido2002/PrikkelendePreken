@@ -132,7 +132,12 @@ export async function getAllSermonSlugs(): Promise<string[]> {
  */
 export async function getSpeakers(): Promise<StrapiResponse<Speaker[]>> {
   try {
-    return await fetchAPI<StrapiResponse<Speaker[]>>('/speakers?sort=name:asc');
+    const queryParams = new URLSearchParams({
+      'sort': 'name:asc',
+      'populate': '*',
+    });
+
+    return await fetchAPI<StrapiResponse<Speaker[]>>(`/speakers?${queryParams}`);
   } catch (error) {
     console.error('Error fetching speakers (returning empty list):', error);
     return { data: [], meta: {} };
@@ -145,6 +150,7 @@ export async function getSpeakers(): Promise<StrapiResponse<Speaker[]>> {
 export async function getSpeakerBySlug(slug: string): Promise<Speaker | null> {
   const queryParams = new URLSearchParams({
     'filters[slug][$eq]': slug,
+    'populate': '*',
   });
 
   try {

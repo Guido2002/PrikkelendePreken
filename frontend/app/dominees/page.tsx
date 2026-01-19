@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getSpeakers } from '@/lib/strapi';
+import { getSpeakers, getStrapiMediaUrl } from '@/lib/strapi';
 import { Speaker } from '@/lib/types';
 
 export const metadata: Metadata = {
@@ -70,30 +70,48 @@ export default async function DomineesPage() {
                 className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
-                <div className="relative p-6">
-                  <div className="flex items-start gap-3 mb-3">
-                    <span className="w-10 h-10 rounded-xl bg-primary-50 border border-primary-100 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </span>
-                    <div className="min-w-0">
-                      <h2 className="text-lg font-bold text-warm-900 group-hover:text-primary-700 transition-colors font-serif leading-snug truncate">
-                        {speaker.name}
-                      </h2>
-                      <p className="text-sm text-warm-500">Bekijk profiel</p>
-                    </div>
-                  </div>
-
-                  {speaker.bio && (
-                    <p className="text-warm-600 text-sm leading-relaxed line-clamp-3">{speaker.bio}</p>
+                {/* Image */}
+                <div className="relative h-44 sm:h-48">
+                  {speaker.profilePicture?.url ? (
+                    <img
+                      src={getStrapiMediaUrl(speaker.profilePicture.url)}
+                      alt={speaker.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-200/40 via-warm-100 to-primary-100" />
                   )}
 
-                  <div className="mt-5 pt-4 border-t border-warm-100">
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-warm-950/70 via-warm-950/10 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h2 className="text-xl font-bold text-white font-serif leading-snug truncate drop-shadow-sm">
+                      {speaker.name}
+                    </h2>
+                    <p className="text-white/80 text-sm">Bekijk profiel</p>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="relative p-6 pt-5">
+                  {speaker.bio ? (
+                    <p className="text-warm-600 text-sm leading-relaxed line-clamp-3">{speaker.bio}</p>
+                  ) : (
+                    <p className="text-warm-500 text-sm leading-relaxed">Geen bio beschikbaar.</p>
+                  )}
+
+                  <div className="mt-5 pt-4 border-t border-warm-100 flex items-center justify-between">
                     <span className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm">
                       Naar dominee
                       <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                    <span className="w-9 h-9 rounded-xl bg-primary-50 border border-primary-100 flex items-center justify-center text-primary-700">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </span>
                   </div>
