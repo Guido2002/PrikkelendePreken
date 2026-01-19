@@ -9,6 +9,7 @@ interface SermonCardProps {
 export default function SermonCard({ sermon }: SermonCardProps) {
   const { title, slug, date, summary, bibleText, bibleReference, speaker, audio } = sermon;
   const speakerName = speaker?.name;
+  const speakerSlug = speaker?.slug;
   
   // Use structured bibleReference if available, otherwise fall back to bibleText
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
@@ -17,8 +18,8 @@ export default function SermonCard({ sermon }: SermonCardProps) {
     <article className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60">
       {/* Hover gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
-      
-      <Link href={`/sermons/${slug}`} className="block relative">
+
+      <div className="block relative">
         <div className="p-5 sm:p-6">
           {/* Top row: Date & Audio badge */}
           <div className="flex items-center justify-between mb-4">
@@ -41,7 +42,9 @@ export default function SermonCard({ sermon }: SermonCardProps) {
 
           {/* Title */}
           <h2 className="text-xl font-bold text-warm-900 group-hover:text-primary-700 transition-colors line-clamp-2 font-serif mb-4 leading-snug">
-            {title}
+            <Link href={`/sermons/${slug}`} className="hover:underline decoration-primary-300 underline-offset-4">
+              {title}
+            </Link>
           </h2>
 
           {/* Summary */}
@@ -53,13 +56,16 @@ export default function SermonCard({ sermon }: SermonCardProps) {
 
           {/* Meta tags */}
           <div className="flex flex-wrap items-center gap-2">
-            {speakerName ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 text-warm-700 rounded-lg text-sm font-medium border border-warm-100">
+            {speakerName && speakerSlug ? (
+              <Link
+                href={`/dominees/${speakerSlug}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 text-warm-700 rounded-lg text-sm font-medium border border-warm-100 hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 transition-colors"
+              >
                 <svg className="w-3.5 h-3.5 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 {speakerName}
-              </span>
+              </Link>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 text-warm-400 rounded-lg text-sm border border-warm-100">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +87,10 @@ export default function SermonCard({ sermon }: SermonCardProps) {
 
         {/* Bottom action bar */}
         <div className="px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
-          <span className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm">
+          <Link
+            href={`/sermons/${slug}`}
+            className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm"
+          >
             Bekijk preek
             <svg 
               className="w-4 h-4 transition-transform group-hover:translate-x-1" 
@@ -91,9 +100,9 @@ export default function SermonCard({ sermon }: SermonCardProps) {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </span>
+          </Link>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }

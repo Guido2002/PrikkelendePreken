@@ -79,6 +79,20 @@ export default function Header() {
               )}
             </Link>
 
+            <Link 
+              href="/dominees" 
+              className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                isActive('/dominees')
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+              }`}
+            >
+              Dominees
+              {isActive('/dominees') && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
+              )}
+            </Link>
+
             {/* Divider */}
             <div className="w-px h-6 bg-warm-200 mx-2" />
 
@@ -165,9 +179,24 @@ export default function Header() {
               </svg>
               Preken
             </Link>
+
+            <Link 
+              href="/dominees" 
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
+                isActive('/dominees')
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-700 hover:bg-warm-50'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Dominees
+            </Link>
           </div>
         </div>
       </div>
     </header>
   );
 }
+
