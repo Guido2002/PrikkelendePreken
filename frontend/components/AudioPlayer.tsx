@@ -20,6 +20,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   // We flip it off once metadata is available so users can press play sooner on mobile.
   const [isLoading, setIsLoading] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [isScrubbing, setIsScrubbing] = useState(false);
 
   // Format time in mm:ss
   const formatTime = (time: number) => {
@@ -43,12 +44,42 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
 
+  const seekToClientX = (clientX: number) => {
+    if (!audioRef.current || !progressRef.current) return;
+    if (!duration || Number.isNaN(duration)) return;
+
+    const rect = progressRef.current.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    const percent = (clientX - rect.left) / rect.width;
+    const clampedPercent = Math.max(0, Math.min(1, percent));
+
+    audioRef.current.currentTime = clampedPercent * duration;
+  };
+
   // Handle seeking
   const handleSeek = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!audioRef.current || !progressRef.current) return;
-    const rect = progressRef.current.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    audioRef.current.currentTime = percent * duration;
+    seekToClientX(e.clientX);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!duration) return;
+    setIsScrubbing(true);
+    progressRef.current?.setPointerCapture(e.pointerId);
+    seekToClientX(e.clientX);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isScrubbing) return;
+    seekToClientX(e.clientX);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    setIsScrubbing(false);
+    try {
+      progressRef.current?.releasePointerCapture(e.pointerId);
+    } catch {
+      // no-op
+    }
   };
 
   const handleSeekKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -71,6 +102,19 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     if (e.key === 'ArrowRight') {
       e.preventDefault();
       skip(10);
+      return;
+    }
+
+    if (e.key === 'Home') {
+      e.preventDefault();
+      audioRef.current.currentTime = 0;
+      return;
+    }
+
+    if (e.key === 'End') {
+      e.preventDefault();
+      audioRef.current.currentTime = duration;
+      return;
     }
   };
 
@@ -217,9 +261,18 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
         type="button"
         ref={progressRef}
         onClick={handleSeek}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         onKeyDown={handleSeekKeyDown}
-        className="relative h-2 bg-white/20 rounded-full cursor-pointer group mb-4"
+        className="relative h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
         aria-label="Spring naar een ander tijdstip"
+        role="slider"
+        aria-valuemin={0}
+        aria-valuemax={duration || 0}
+        aria-valuenow={currentTime}
+        aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
       >
         {/* Buffered indicator would go here */}
         <div
@@ -228,7 +281,9 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
         />
         {/* Scrubber handle */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg transition-all ${
+            isScrubbing ? 'opacity-100 scale-110' : 'opacity-90 group-hover:scale-110'
+          }`}
           style={{ left: `calc(${progress}% - 8px)` }}
         />
       </button>
