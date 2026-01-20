@@ -288,7 +288,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         onKeyDown={handleSeekKeyDown}
-        className="relative h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
+        className="relative w-full h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
         aria-label="Spring naar een ander tijdstip"
         role="slider"
         aria-valuemin={0}
