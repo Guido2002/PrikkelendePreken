@@ -4,7 +4,7 @@ import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
 import FavoriteButton from '@/components/FavoriteButton';
 import ShareButton from '@/components/ShareButton';
-import BibleReader from '@/components/BibleReader';
+import BibleChapterReader from '@/components/BibleChapterReader';
 import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference } from '@/lib/strapi';
 
 interface PageProps {
@@ -56,7 +56,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const { title, date, bibleText, bibleReference, content, summary, audio, speaker, themes } = sermon;
+  const { title, date, bibleText, bibleReference, content, summary, audio, speaker, themes, bibleId, chapterId } = sermon;
   
   // Use structured bibleReference if available, otherwise fall back to bibleText
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
@@ -201,15 +201,27 @@ export default async function SermonDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Content */}
-        {content && (
-          <div
-            className="prose prose-warm max-w-none prose-headings:font-serif prose-headings:text-warm-900 prose-p:text-warm-700 prose-a:text-primary-600 prose-strong:text-warm-800 prose-lg"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        )}
+        <div className="mt-2 lg:grid lg:grid-cols-5 lg:gap-10">
+          {/* Sermon content */}
+          <div className="lg:col-span-3">
+            {content && (
+              <div
+                className="prose prose-warm max-w-none prose-headings:font-serif prose-headings:text-warm-900 prose-p:text-warm-700 prose-a:text-primary-600 prose-strong:text-warm-800 prose-lg"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            )}
+          </div>
 
-        <BibleReader bibleReference={bibleReference} fallbackBibleText={displayBibleText} />
+          {/* Scripture reader */}
+          <aside className="mt-10 lg:mt-0 lg:col-span-2 lg:sticky lg:top-24 self-start">
+            <BibleChapterReader
+              bibleId={bibleId}
+              chapterId={chapterId}
+              fallbackReference={displayBibleText}
+              defaultOpen={true}
+            />
+          </aside>
+        </div>
 
         {/* Back link */}
         <div className="mt-20 pt-10 border-t border-warm-200">
