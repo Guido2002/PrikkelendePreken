@@ -6,6 +6,9 @@ import { Speaker } from '@/lib/types';
 export const metadata: Metadata = {
   title: 'Dominees',
   description: 'Bekijk alle dominees/sprekers uit het archief van Prikkelende Preken.',
+  alternates: {
+    canonical: '/dominees',
+  },
 };
 
 // Generate static page at build time
@@ -78,6 +81,7 @@ export default async function DomineesPage() {
                       alt={speaker.name}
                       className="absolute inset-0 w-full h-full object-cover"
                       loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-200/40 via-warm-100 to-primary-100" />

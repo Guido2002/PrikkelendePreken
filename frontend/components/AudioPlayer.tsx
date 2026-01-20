@@ -284,7 +284,11 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const tag = target.tagName;
+      if (target.isContentEditable) return;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON' || tag === 'A') return;
       
       switch (e.key) {
         case ' ':
@@ -376,7 +380,7 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
           <button
             type="button"
             onClick={handleResume}
-            className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
+            className="self-start sm:self-auto px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
             title="Verder luisteren"
           >
             Verder luisteren
@@ -386,7 +390,7 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
         {/* Playback rate button */}
         <button
           onClick={cyclePlaybackRate}
-          className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
+          className="self-start sm:self-auto px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
           title="Afspeelsnelheid aanpassen"
         >
           {playbackRate}x
@@ -403,13 +407,13 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         onKeyDown={handleSeekKeyDown}
-        className="relative w-full h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
+        className="relative w-full h-3 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
         aria-label="Spring naar een ander tijdstip"
         role="slider"
         aria-valuemin={0}
-        aria-valuemax={duration || 0}
-        aria-valuenow={currentTime}
-        aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
+        aria-valuemax={effectiveDurationForUi || 0}
+        aria-valuenow={Math.max(0, Math.min(effectiveDurationForUi || 0, currentTime))}
+        aria-valuetext={`${formatTime(currentTime)} van ${formatTime(effectiveDurationForUi || 0)}`}
       >
         {/* Buffered indicator would go here */}
         <div
@@ -436,8 +440,9 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
         {/* Skip back */}
         <button
           onClick={() => skip(-10)}
-          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+          className="p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
           title="10 seconden terug"
+          aria-label="10 seconden terug"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
@@ -448,7 +453,7 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
         <button
           onClick={togglePlay}
           disabled={!url}
-          className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-400 hover:to-primary-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-primary-900/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-wait"
+          className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-400 hover:to-primary-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-primary-900/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-wait focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
           aria-label={isPlaying ? 'Pauzeren' : 'Afspelen'}
         >
           {playButtonIcon}
@@ -457,8 +462,9 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
         {/* Skip forward */}
         <button
           onClick={() => skip(10)}
-          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+          className="p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-warm-900"
           title="10 seconden vooruit"
+          aria-label="10 seconden vooruit"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />

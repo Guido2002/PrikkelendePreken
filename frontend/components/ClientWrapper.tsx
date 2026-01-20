@@ -1,8 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { SearchProvider } from '@/components/SearchProvider';
-import SearchModal from '@/components/SearchModal';
 import { SearchDocument } from '@/lib/search';
+
+const SearchModal = dynamic(() => import('@/components/SearchModal'), {
+  ssr: false,
+});
 
 interface ClientWrapperProps {
   children: React.ReactNode;

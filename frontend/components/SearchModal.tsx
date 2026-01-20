@@ -100,7 +100,7 @@ export default function SearchModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="pp-search-title">
       {/* Backdrop */}
       <button
         type="button"
@@ -112,6 +112,7 @@ export default function SearchModal() {
       {/* Modal */}
       <div className="relative min-h-screen flex items-start justify-center p-4 pt-[10vh]">
         <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+          <h2 id="pp-search-title" className="sr-only">Zoeken</h2>
           {/* Search Header */}
           <div className="relative border-b border-warm-100">
             {/* Search icon */}
@@ -144,6 +145,8 @@ export default function SearchModal() {
               {/* Filter toggle */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
+                aria-expanded={showFilters}
+                aria-controls="pp-search-filters"
                 className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                   showFilters || activeFilterCount > 0
                     ? 'bg-primary-100 text-primary-700'
@@ -170,7 +173,7 @@ export default function SearchModal() {
 
           {/* Filters Panel */}
           {showFilters && (
-            <div className="border-b border-warm-100 bg-warm-50/50 p-4">
+            <div id="pp-search-filters" className="border-b border-warm-100 bg-warm-50/50 p-4">
               <div className="flex flex-wrap gap-4">
                 {/* Sort */}
                 <div className="flex-1 min-w-[180px]">

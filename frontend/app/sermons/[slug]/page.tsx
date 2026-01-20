@@ -4,7 +4,8 @@ import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
 import FavoriteButton from '@/components/FavoriteButton';
 import ShareButton from '@/components/ShareButton';
-import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference } from '@/lib/strapi';
+import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference, getStrapiMediaUrl } from '@/lib/strapi';
+import { absoluteUrl } from '@/lib/site';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -33,16 +34,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Preek niet gevonden' };
   }
 
-  const { title, summary, bibleText, date } = sermon;
+  const { title, summary, bibleText, date, speaker } = sermon;
+  const canonicalPath = `/sermons/${slug}`;
 
   return {
     title,
     description: summary || `Preek over ${bibleText || title}`,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    authors: speaker?.name ? [{ name: speaker.name }] : undefined,
     openGraph: {
       title,
       description: summary || undefined,
       type: 'article',
       publishedTime: date,
+      url: canonicalPath,
     },
   };
 }
@@ -60,8 +67,50 @@ export default async function SermonDetailPage({ params }: PageProps) {
   // Use structured bibleReference if available, otherwise fall back to bibleText
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
 
+  const canonicalPath = `/sermons/${slug}/`;
+  const canonicalUrl = absoluteUrl(canonicalPath);
+  const audioUrl = audio?.url ? getStrapiMediaUrl(audio.url) : null;
+
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    datePublished: date,
+    dateModified: sermon.updatedAt,
+    description: summary || undefined,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    author: speaker?.name
+      ? {
+          '@type': 'Person',
+          name: speaker.name,
+        }
+      : undefined,
+    about: themes?.length
+      ? themes.map((t) => ({
+          '@type': 'Thing',
+          name: t.name,
+        }))
+      : undefined,
+    citation: displayBibleText || undefined,
+    associatedMedia: audioUrl
+      ? {
+          '@type': 'AudioObject',
+          contentUrl: audioUrl,
+          encodingFormat: 'audio/mpeg',
+          name: title,
+        }
+      : undefined,
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Page Header */}
       <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200 overflow-hidden">
         {/* Decorative background */}

@@ -8,6 +8,9 @@ import { Sermon } from '@/lib/types';
 export const metadata: Metadata = {
   title: 'Alle Preken',
   description: 'Doorzoek ons complete archief van preken. Sorteer op datum en ontdek inspirerende boodschappen.',
+  alternates: {
+    canonical: '/sermons',
+  },
 };
 
 // Generate static page at build time
