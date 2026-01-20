@@ -16,11 +16,11 @@ export default function SermonCard({ sermon }: SermonCardProps) {
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
 
   return (
-    <article className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60">
+    <article className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60 flex flex-col">
       {/* Hover gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none z-0" />
 
-      <div className="block relative">
+      <div className="relative z-10 flex flex-col h-full">
         <div className="p-5 sm:p-6">
           {/* Top row: Date & Audio badge */}
           <div className="flex items-center justify-between mb-4 gap-3">
@@ -99,7 +99,7 @@ export default function SermonCard({ sermon }: SermonCardProps) {
         </div>
 
         {/* Bottom action bar */}
-        <div className="px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
+        <div className="mt-auto px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
           <Link
             href={`/sermons/${slug}`}
             className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm"
