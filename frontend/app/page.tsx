@@ -3,6 +3,7 @@ import SermonCard from '@/components/SermonCard';
 import SearchTrigger from '@/components/SearchTrigger';
 import { getLatestSermons } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
+import Marquee from '@/components/Marquee';
 
 // Generate static page at build time
 export const dynamic = 'force-static';
@@ -19,203 +20,250 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-warm-900 via-primary-900 to-warm-900 text-white overflow-hidden min-h-[85vh] flex items-center">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-primary-800/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-primary-700/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
-        </div>
-        
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-        
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary-200 mb-8 border border-white/10">
-              <span className="w-2 h-2 bg-primary-400 rounded-full animate-pulse" />
-              Preek Archief
-            </div>
-            
-            {/* Main heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 font-serif leading-[1.1] tracking-tight">
-              <span className="block text-white/90">Welkom bij</span>
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-200 via-primary-300 to-primary-200">
-                Prikkelende Preken
-              </span>
-            </h1>
-            
-            {/* Subtitle */}
-            <p className="text-lg md:text-xl text-warm-300 mb-10 leading-relaxed max-w-2xl mx-auto">
-              Ontdek inspirerende preken uit ons archief. Luister, lees en laat je 
-              raken door de kracht van Gods Woord.
-            </p>
-            
-            {/* Search bar */}
-            <div className="mb-10">
-              <SearchTrigger />
-            </div>
+      {/* 90s Marquee Banner */}
+      <div className="bg-primary-900 py-2 bevel-inset">
+        <Marquee />
+      </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      {/* Hero Section - 90s Style */}
+      <section className="relative bg-warm-300 overflow-hidden">
+        {/* 90s decorative border */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-accent-400 to-primary-600" />
+        
+        <div className="max-w-5xl mx-auto px-4 py-12 md:py-16">
+          {/* Window-style container */}
+          <div className="window-90s">
+            {/* Title bar */}
+            <div className="window-90s-titlebar flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <span className="text-sm">📖</span>
+                <span>welkom.exe</span>
+              </span>
+              <div className="flex gap-1">
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center font-bold">_</span>
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center font-bold">□</span>
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center font-bold">×</span>
+              </div>
+            </div>
+            
+            {/* Content area */}
+            <div className="window-90s-content text-center py-8 md:py-12">
+              {/* Badge with pulse */}
+              <div className="inline-block mb-6">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-accent-400 text-warm-950 font-bold uppercase text-sm bevel-outset animate-pulse-glow">
+                  <span className="animate-blink">★</span>
+                  NIEUW! Preek Archief Online
+                  <span className="animate-blink">★</span>
+                </span>
+              </div>
+              
+              {/* Main heading with rainbow animation */}
+              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 uppercase text-shadow-3d">
+                <span className="block text-warm-950">Welkom bij</span>
+                <span className="block mt-2 text-rainbow">
+                  Prikkelende Preken
+                </span>
+              </h1>
+              
+              {/* Subtitle */}
+              <p className="text-lg md:text-xl text-warm-700 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Ontdek inspirerende preken uit ons archief. Luister, lees en laat je 
+                raken door de kracht van Gods Woord.
+              </p>
+              
+              {/* Search bar */}
+              <div className="mb-8">
+                <SearchTrigger />
+              </div>
+
+              {/* CTA Button */}
               <Link
                 href="/sermons"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-800 rounded-xl font-semibold hover:bg-primary-50 transition-all shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 hover:-translate-y-0.5"
+                className="btn-90s-primary inline-flex items-center gap-3 px-8 py-4 text-lg"
               >
-                Bekijk alle preken
-                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+                ▶ Bekijk alle preken
               </Link>
             </div>
+          </div>
 
-            {/* Stats */}
-            <div className="mt-16 pt-10 border-t border-white/10">
-              <div className="flex items-center justify-center gap-8 md:gap-16">
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">100+</div>
-                  <div className="text-sm text-primary-300 mt-1">Preken</div>
+          {/* Hit Counter Style Stats */}
+          <div className="mt-8 bevel-outset bg-warm-950 p-4">
+            <div className="bevel-inset bg-black p-4">
+              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-center">
+                <div className="hit-counter px-4 py-2 bevel-inset">
+                  <div className="text-2xl md:text-3xl font-mono font-bold">100+</div>
+                  <div className="text-xs uppercase tracking-wider text-green-400">Preken</div>
                 </div>
-                <div className="w-px h-12 bg-white/20" />
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">20+</div>
-                  <div className="text-sm text-primary-300 mt-1">Sprekers</div>
+                <div className="text-accent-400 text-2xl">|</div>
+                <div className="hit-counter px-4 py-2 bevel-inset">
+                  <div className="text-2xl md:text-3xl font-mono font-bold">020+</div>
+                  <div className="text-xs uppercase tracking-wider text-green-400">Sprekers</div>
                 </div>
-                <div className="w-px h-12 bg-white/20" />
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">50+</div>
-                  <div className="text-sm text-primary-300 mt-1">Thema's</div>
+                <div className="text-accent-400 text-2xl">|</div>
+                <div className="hit-counter px-4 py-2 bevel-inset">
+                  <div className="text-2xl md:text-3xl font-mono font-bold">050+</div>
+                  <div className="text-xs uppercase tracking-wider text-green-400">Thema&apos;s</div>
                 </div>
               </div>
+              <p className="text-center text-warm-500 text-xs font-mono mt-3">
+                U bent bezoeker #001337 | Online sinds 1997
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#faf9f7"/>
-          </svg>
-        </div>
+        {/* 3D groove divider */}
+        <div className="hr-groove" />
       </section>
 
       {/* Features Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-        <div className="grid sm:grid-cols-3 gap-6 md:gap-8">
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
-              <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9 12h.01M12 12h.01M15 12h.01" />
-              </svg>
+      <section className="max-w-5xl mx-auto px-4 py-12 md:py-16">
+        <div className="text-center mb-8">
+          <h2 className="font-heading text-2xl md:text-3xl font-black text-warm-950 uppercase text-shadow-3d mb-2">
+            ✦ Mogelijkheden ✦
+          </h2>
+        </div>
+        
+        <div className="grid sm:grid-cols-3 gap-4">
+          {/* Feature 1 */}
+          <div className="window-90s">
+            <div className="window-90s-titlebar text-sm">
+              <span>🔊 audio.exe</span>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Audio & Tekst</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Luister naar preken of lees de transcripties op je eigen tempo.</p>
+            <div className="window-90s-content">
+              <div className="w-12 h-12 bevel-outset bg-primary-600 flex items-center justify-center mb-3">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9 12h.01M12 12h.01M15 12h.01" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-warm-950 mb-2 uppercase">Audio & Tekst</h3>
+              <p className="text-warm-700 text-sm">Luister naar preken of lees de transcripties op je eigen tempo.</p>
+            </div>
           </div>
           
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
-              <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+          {/* Feature 2 */}
+          <div className="window-90s">
+            <div className="window-90s-titlebar text-sm">
+              <span>🔍 search.exe</span>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Slim Zoeken</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Vind snel de preek die je zoekt via spreker, thema of bijbeltekst.</p>
+            <div className="window-90s-content">
+              <div className="w-12 h-12 bevel-outset bg-accent-500 flex items-center justify-center mb-3">
+                <svg className="w-6 h-6 text-warm-950" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-warm-950 mb-2 uppercase">Slim Zoeken</h3>
+              <p className="text-warm-700 text-sm">Vind snel de preek die je zoekt via spreker, thema of bijbeltekst.</p>
+            </div>
           </div>
           
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
-              <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
+          {/* Feature 3 */}
+          <div className="window-90s">
+            <div className="window-90s-titlebar text-sm">
+              <span>📖 bible.exe</span>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Bijbelreferenties</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Elke preek met duidelijke bijbeltekst voor diepere studie.</p>
+            <div className="window-90s-content">
+              <div className="w-12 h-12 bevel-outset bg-green-600 flex items-center justify-center mb-3">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-warm-950 mb-2 uppercase">Bijbelreferenties</h3>
+              <p className="text-warm-700 text-sm">Elke preek met duidelijke bijbeltekst voor diepere studie.</p>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* 3D groove divider */}
+      <div className="hr-groove" />
+
       {/* Latest Sermons */}
-      <section className="bg-warm-100/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+      <section className="bg-warm-100">
+        <div className="max-w-5xl mx-auto px-4 py-12 md:py-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <span className="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm uppercase tracking-wider mb-3">
-                <span className="w-8 h-px bg-primary-600" />
-                Archief
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-warm-900 font-serif">Recente Preken</h2>
+              <h2 className="font-heading text-2xl md:text-3xl font-black text-warm-950 uppercase text-shadow-3d">
+                📼 Recente Preken
+              </h2>
             </div>
             <Link
               href="/sermons"
-              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold group"
+              className="btn-90s inline-flex items-center gap-2"
             >
-              Bekijk alle preken
-              <svg 
-                className="w-5 h-5 transition-transform group-hover:translate-x-1" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              Bekijk alle preken →
             </Link>
           </div>
 
           {sermons.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sermons.map((sermon) => (
                 <SermonCard key={sermon.id} sermon={sermon} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
-              <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
+            <div className="window-90s">
+              <div className="window-90s-titlebar">
+                <span>⚠️ Melding</span>
               </div>
-              <p className="text-warm-700 text-xl font-medium mb-2">
-                Er zijn nog geen preken gepubliceerd.
-              </p>
-              <p className="text-warm-500">
-                Voeg preken toe via het Strapi admin panel.
-              </p>
+              <div className="window-90s-content text-center py-12">
+                <div className="w-16 h-16 bevel-outset bg-warm-200 flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-warm-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                </div>
+                <p className="text-warm-700 text-lg font-bold mb-2">
+                  Er zijn nog geen preken gepubliceerd.
+                </p>
+                <p className="text-warm-500">
+                  Voeg preken toe via het Strapi admin panel.
+                </p>
+              </div>
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="relative bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-8 md:p-12 lg:p-16 overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/30 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-400/20 rounded-full blur-2xl" />
-          
-          <div className="relative text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 font-serif">
-              Klaar om geïnspireerd te worden?
-            </h2>
-            <p className="text-primary-100 mb-8 text-lg">
-              Doorzoek ons complete archief en ontdek preken die je raken.
-            </p>
-            <Link
-              href="/sermons"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-700 rounded-xl font-semibold hover:bg-primary-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-            >
-              Start met verkennen
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+      {/* 3D groove divider */}
+      <div className="hr-groove" />
+
+      {/* CTA Section with Construction Stripes */}
+      <section className="bg-construction py-4">
+        <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
+          <div className="window-90s">
+            <div className="window-90s-titlebar">
+              <span>🚧 ACTIE VEREIST! 🚧</span>
+            </div>
+            <div className="window-90s-content text-center py-8">
+              <h2 className="font-heading text-2xl md:text-3xl font-black text-warm-950 uppercase text-shadow-3d mb-4">
+                Klaar om geïnspireerd te worden?
+              </h2>
+              <p className="text-warm-700 mb-6 text-lg max-w-xl mx-auto">
+                Doorzoek ons complete archief en ontdek preken die je raken.
+              </p>
+              <Link
+                href="/sermons"
+                className="btn-90s-primary inline-flex items-center gap-3 px-8 py-4 text-lg"
+              >
+                ▶ Start met verkennen
+              </Link>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Decorative Color Squares - 90s excess! */}
+      <div className="flex justify-center py-4 bg-warm-300">
+        <div className="flex gap-1">
+          <div className="w-6 h-6 bevel-outset bg-red-600" />
+          <div className="w-6 h-6 bevel-outset bg-yellow-400" />
+          <div className="w-6 h-6 bevel-outset bg-green-500" />
+          <div className="w-6 h-6 bevel-outset bg-blue-600" />
+          <div className="w-6 h-6 bevel-outset bg-purple-600" />
+          <div className="w-6 h-6 bevel-outset bg-pink-500" />
+          <div className="w-6 h-6 bevel-outset bg-primary-600" />
+        </div>
+      </div>
     </div>
   );
 }

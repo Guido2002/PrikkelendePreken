@@ -15,93 +15,84 @@ export default function SermonCard({ sermon }: SermonCardProps) {
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
 
   return (
-    <article className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60">
-      {/* Hover gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
-
-      <div className="block relative">
-        <div className="p-5 sm:p-6">
-          {/* Top row: Date & Audio badge */}
-          <div className="flex items-center justify-between mb-4">
-            <time dateTime={date} className="flex items-center gap-1.5 text-sm text-warm-500">
-              <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              {formatDate(date)}
-            </time>
-            {audio && (
-              <span className="flex items-center gap-1.5 px-2.5 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-medium">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
-                </span>
-                Audio
-              </span>
-            )}
-          </div>
-
-          {/* Title */}
-          <h2 className="text-xl font-bold text-warm-900 group-hover:text-primary-700 transition-colors line-clamp-2 font-serif mb-4 leading-snug">
-            <Link href={`/sermons/${slug}`} className="hover:underline decoration-primary-300 underline-offset-4">
-              {title}
-            </Link>
-          </h2>
-
-          {/* Summary */}
-          {summary && (
-            <p className="text-warm-600 text-sm leading-relaxed line-clamp-2 mb-5">
-              {summary}
-            </p>
+    <article className="window-90s">
+      {/* Title bar - Windows 95 style */}
+      <div className="window-90s-titlebar flex items-center justify-between text-sm">
+        <span className="truncate flex items-center gap-1">
+          📄 {title.substring(0, 30)}{title.length > 30 ? '...' : ''}.txt
+        </span>
+        <div className="flex gap-1 flex-shrink-0">
+          {audio && (
+            <span className="w-4 h-4 bevel-outset bg-green-500 text-white text-xs flex items-center justify-center" title="Audio beschikbaar">
+              🔊
+            </span>
           )}
+        </div>
+      </div>
 
-          {/* Meta tags */}
-          <div className="flex flex-wrap items-center gap-2">
-            {speakerName && speakerSlug ? (
-              <Link
-                href={`/dominees/${speakerSlug}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 text-warm-700 rounded-lg text-sm font-medium border border-warm-100 hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 transition-colors"
-              >
-                <svg className="w-3.5 h-3.5 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                {speakerName}
-              </Link>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 text-warm-400 rounded-lg text-sm border border-warm-100">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Onbekend
-              </span>
-            )}
-            {displayBibleText && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium border border-primary-100">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                {displayBibleText}
-              </span>
-            )}
-          </div>
+      {/* Content area */}
+      <div className="window-90s-content">
+        {/* Date & Audio badge row */}
+        <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-warm-200">
+          <time dateTime={date} className="font-mono text-xs text-warm-600">
+            📅 {formatDate(date)}
+          </time>
+          {audio && (
+            <span className="bevel-outset bg-accent-400 text-warm-950 px-2 py-0.5 text-xs font-bold uppercase animate-pulse-glow">
+              ★ Audio
+            </span>
+          )}
         </div>
 
-        {/* Bottom action bar */}
-        <div className="px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
-          <Link
-            href={`/sermons/${slug}`}
-            className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm"
-          >
-            Bekijk preek
-            <svg 
-              className="w-4 h-4 transition-transform group-hover:translate-x-1" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+        {/* Title */}
+        <h2 className="font-bold text-warm-950 text-lg mb-3 leading-snug line-clamp-2">
+          <Link href={`/sermons/${slug}`} className="link-90s hover:text-primary-500">
+            {title}
           </Link>
+        </h2>
+
+        {/* Summary */}
+        {summary && (
+          <p className="text-warm-700 text-sm line-clamp-2 mb-4 leading-relaxed">
+            {summary}
+          </p>
+        )}
+
+        {/* Meta tags - table-like layout */}
+        <div className="bevel-inset bg-warm-50 p-2 mb-3">
+          <table className="w-full text-sm">
+            <tbody>
+              {speakerName && (
+                <tr className="border-b border-warm-200">
+                  <td className="py-1 text-warm-600 font-bold w-20">Spreker:</td>
+                  <td className="py-1">
+                    {speakerSlug ? (
+                      <Link href={`/dominees/${speakerSlug}`} className="link-90s">
+                        {speakerName}
+                      </Link>
+                    ) : (
+                      <span className="text-warm-500">{speakerName}</span>
+                    )}
+                  </td>
+                </tr>
+              )}
+              {displayBibleText && (
+                <tr>
+                  <td className="py-1 text-warm-600 font-bold">Tekst:</td>
+                  <td className="py-1 text-primary-700 font-bold">{displayBibleText}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
+
+        {/* Action button */}
+        <Link
+          href={`/sermons/${slug}`}
+          className="btn-90s-primary w-full text-center text-sm"
+        >
+          ▶ Bekijk preek
+        </Link>
       </div>
     </article>
   );

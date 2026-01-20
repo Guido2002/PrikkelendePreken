@@ -2,50 +2,221 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   90s RETRO DESIGN SYSTEM - PRIKKELENDE PREKEN
+   ============================================ */
+
 /* Base styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-warm-50 text-warm-800 antialiased overflow-x-hidden;
+  @apply bg-warm-200 text-warm-950 overflow-x-hidden;
+  /* 90s tiled background pattern */
+  background-image:
+    linear-gradient(45deg, #d6cfc5 25%, transparent 25%),
+    linear-gradient(-45deg, #d6cfc5 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d6cfc5 75%),
+    linear-gradient(-45deg, transparent 75%, #d6cfc5 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
 }
 
-/* Selection color */
+/* 90s Selection color - burgundy background, white text */
 ::selection {
-  @apply bg-primary-100 text-primary-900;
+  background: #781f3c;
+  color: #ffffff;
 }
 
-/* Focus styles for accessibility */
+/* Focus styles - 90s dotted outline */
 a:focus-visible,
-button:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary-500 rounded;
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px dotted #000000;
+  outline-offset: 2px;
+  border-radius: 0;
 }
 
-/* Improved scrollbar */
+/* 90s Scrollbar - chunky and beveled */
 ::-webkit-scrollbar {
-  @apply w-2;
+  width: 16px;
+  height: 16px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-warm-100;
+  background: #e8e4de;
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-warm-300 rounded-full hover:bg-warm-400 transition-colors;
+  background: #d6cfc5;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8ad9e;
+}
+
+::-webkit-scrollbar-button {
+  background: #d6cfc5;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  height: 16px;
+  width: 16px;
+}
+
+/* ============================================
+   90s ANIMATIONS
+   ============================================ */
+
+/* Rainbow text animation */
+@keyframes rainbow {
+  0% { color: #df4d70; }
+  17% { color: #f4c542; }
+  33% { color: #00aa00; }
+  50% { color: #0080ff; }
+  67% { color: #781f3c; }
+  83% { color: #a92349; }
+  100% { color: #df4d70; }
+}
+
+.text-rainbow {
+  animation: rainbow 4s linear infinite;
+}
+
+/* Pulse glow for badges */
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(223, 77, 112, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 2px rgba(223, 77, 112, 0.5);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* 90s Blink effect (use sparingly!) */
+@keyframes blink-90s {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink-90s 1s step-end infinite;
+}
+
+/* ============================================
+   90s BEVEL UTILITIES
+   ============================================ */
+
+/* Outset (raised) bevel - buttons, cards */
+.bevel-outset {
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow: inset -1px -1px 0 #404040, inset 1px 1px 0 #dfdfdf;
+}
+
+/* Enhanced outset bevel */
+.bevel-outset-deep {
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow:
+    inset -2px -2px 0 #808080,
+    inset 2px 2px 0 #fff,
+    inset -4px -4px 0 #404040,
+    inset 4px 4px 0 #dfdfdf;
+}
+
+/* Inset (sunken) bevel - inputs, content areas */
+.bevel-inset {
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+}
+
+/* Active/pressed state */
+.bevel-pressed {
+  border-color: #808080 #ffffff #ffffff #808080 !important;
+  box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf !important;
+  transform: translate(1px, 1px);
+}
+
+/* Primary color bevels (burgundy) */
+.bevel-primary-outset {
+  border: 2px solid;
+  border-color: #ec7894 #420c1e #420c1e #ec7894;
+  box-shadow: inset -1px -1px 0 #781f3c, inset 1px 1px 0 #f4a9ba;
+}
+
+.bevel-primary-pressed {
+  border-color: #420c1e #ec7894 #ec7894 #420c1e !important;
+  box-shadow: inset 1px 1px 0 #781f3c, inset -1px -1px 0 #f4a9ba !important;
+  transform: translate(1px, 1px);
+}
+
+/* ============================================
+   90s DECORATIVE ELEMENTS
+   ============================================ */
+
+/* Horizontal rule - 3D groove effect */
+.hr-groove {
+  border: none;
+  height: 4px;
+  background: linear-gradient(
+    to bottom,
+    #808080 0%, #808080 50%,
+    #ffffff 50%, #ffffff 100%
+  );
+}
+
+/* Construction stripe background */
+.bg-construction {
+  background: repeating-linear-gradient(
+    45deg,
+    #f4c542,
+    #f4c542 10px,
+    #2d2a26 10px,
+    #2d2a26 20px
+  );
+}
+
+/* Title bar gradient (Windows 95 style with your colors) */
+.bg-titlebar {
+  background: linear-gradient(to right, #781f3c, #a92349);
+}
+
+/* Panel backgrounds */
+.bg-panel-light {
+  background-color: #fef9e7;
+}
+
+/* ============================================
+   90s TYPOGRAPHY
+   ============================================ */
 
 /* Rich text content styling */
 .prose {
-  @apply text-warm-700 leading-relaxed;
+  @apply text-warm-900 leading-relaxed;
 }
 
 .prose h2 {
-  @apply text-2xl font-bold mt-12 mb-5 text-warm-900 font-serif;
+  @apply text-2xl font-black mt-12 mb-5 text-warm-950 uppercase tracking-wide;
+  font-family: "Arial Black", Impact, Haettenschweiler, sans-serif;
+  text-shadow: 2px 2px 0 #808080;
 }
 
 .prose h3 {
-  @apply text-xl font-semibold mt-10 mb-4 text-warm-900 font-serif;
+  @apply text-xl font-bold mt-10 mb-4 text-warm-950;
+  font-family: "Arial Black", Impact, Haettenschweiler, sans-serif;
 }
 
 .prose p {
@@ -65,20 +236,34 @@ button:focus-visible {
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary-400 pl-6 py-2 my-8 text-warm-600 italic bg-gradient-to-r from-warm-100/80 to-transparent rounded-r-xl;
+  @apply border-l-4 border-primary-600 pl-6 py-2 my-8 text-warm-700 italic bg-warm-100;
 }
 
 .prose a {
-  @apply text-primary-600 hover:text-primary-700 underline underline-offset-4 decoration-primary-300 hover:decoration-primary-500 transition-all break-words;
+  @apply text-primary-700 underline;
+}
+
+.prose a:hover {
+  @apply text-primary-500;
+}
+
+.prose a:visited {
+  color: #781f3c;
 }
 
 .prose img {
-  @apply max-w-full h-auto rounded-2xl;
+  @apply max-w-full h-auto;
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
 }
 
 .prose strong {
-  @apply font-semibold text-warm-900;
+  @apply font-bold text-warm-950;
 }
+
+/* ============================================
+   90s UTILITY CLASSES
+   ============================================ */
 
 /* Line clamp utility */
 .line-clamp-2 {
@@ -97,46 +282,113 @@ button:focus-visible {
   overflow: hidden;
 }
 
-/* Smooth transitions */
-.transition-smooth {
-  @apply transition-all duration-300 ease-out;
+/* 90s link styling */
+.link-90s {
+  @apply text-primary-700 underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
-/* Gradient text */
-.gradient-text {
-  @apply bg-gradient-to-r from-primary-700 to-primary-500 bg-clip-text text-transparent;
+.link-90s:hover {
+  @apply text-primary-500;
 }
 
-/* Loading skeleton animation */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
+.link-90s:visited {
+  color: #781f3c;
+}
+
+/* Hit counter style */
+.hit-counter {
+  font-family: "Courier New", Courier, monospace;
+  color: #00ff00;
+  background: #1a1a1a;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+/* 3D text shadow */
+.text-shadow-3d {
+  text-shadow: 2px 2px 0 #808080;
+}
+
+/* ============================================
+   90s BUTTON STYLES
+   ============================================ */
+
+.btn-90s {
+  @apply px-4 py-2 font-bold uppercase tracking-wide text-sm;
+  @apply bevel-outset bg-warm-200 text-warm-950;
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: none;
+}
+
+.btn-90s:hover {
+  @apply bg-warm-100;
+}
+
+.btn-90s:active {
+  @apply bevel-pressed;
+}
+
+.btn-90s-primary {
+  @apply px-4 py-2 font-bold uppercase tracking-wide text-sm;
+  @apply bevel-primary-outset bg-primary-600 text-white;
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: none;
+}
+
+.btn-90s-primary:hover {
+  @apply bg-primary-500;
+}
+
+.btn-90s-primary:active {
+  @apply bevel-primary-pressed;
+}
+
+/* ============================================
+   90s INPUT STYLES
+   ============================================ */
+
+.input-90s {
+  @apply bevel-inset bg-white text-warm-950 px-2 py-1;
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.input-90s::placeholder {
+  @apply text-warm-500;
+}
+
+/* ============================================
+   90s CARD/WINDOW STYLES
+   ============================================ */
+
+.window-90s {
+  @apply bevel-outset bg-warm-200;
+}
+
+.window-90s-titlebar {
+  @apply bg-titlebar text-white font-bold px-2 py-1;
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.window-90s-content {
+  @apply bevel-inset bg-white p-4 m-1;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .text-rainbow {
+    animation: none;
+    color: #df4d70;
   }
-  100% {
-    background-position: 200% 0;
+  
+  .animate-pulse-glow {
+    animation: none;
   }
-}
-
-.skeleton {
-  @apply bg-gradient-to-r from-warm-100 via-warm-200 to-warm-100 bg-[length:200%_100%] rounded-lg;
-  animation: shimmer 1.5s infinite ease-in-out;
-}
-
-/* Card hover lift effect */
-.hover-lift {
-  @apply transition-all duration-300;
-}
-
-.hover-lift:hover {
-  @apply -translate-y-1 shadow-soft-lg;
-}
-
-/* Glass morphism effect */
-.glass {
-  @apply bg-white/80 backdrop-blur-md border border-white/20;
-}
-
-/* Button press effect */
-.btn-press:active {
-  @apply scale-[0.98];
+  
+  .animate-blink {
+    animation: none;
+  }
 }

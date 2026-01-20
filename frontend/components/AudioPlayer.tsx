@@ -224,143 +224,149 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
   let playButtonIcon: React.ReactNode;
   if (isLoading) {
-    playButtonIcon = (
-      <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-      </svg>
-    );
+    playButtonIcon = <span className="animate-spin text-xl">⏳</span>;
   } else if (isPlaying) {
-    playButtonIcon = (
-      <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-      </svg>
-    );
+    playButtonIcon = <span className="text-2xl">⏸</span>;
   } else {
-    playButtonIcon = (
-      <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M8 5v14l11-7z" />
-      </svg>
-    );
+    playButtonIcon = <span className="text-2xl ml-0.5">▶</span>;
   }
 
   return (
-    <div className="bg-gradient-to-br from-warm-900 via-primary-900 to-warm-900 rounded-2xl p-4 sm:p-6 shadow-xl">
-      {/* Hidden audio element */}
-      <audio
-        ref={audioRef}
-        preload="metadata"
-        aria-label={`Audio: ${title}`}
-      >
-        <source src={fullUrl} type="audio/mpeg" />
-        <source src={fullUrl} type="audio/ogg" />
-        <track kind="captions" />
-      </audio>
-
-      {/* Player header */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-900/50">
-          <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-          </svg>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-white font-semibold truncate">{title}</p>
-          <p className="text-primary-300 text-sm">Luister naar de preek</p>
-        </div>
-        {/* Playback rate button */}
-        <button
-          onClick={cyclePlaybackRate}
-          className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
-          title="Afspeelsnelheid aanpassen"
-        >
-          {playbackRate}x
-        </button>
-      </div>
-
-      {/* Progress bar */}
-      <button
-        type="button"
-        ref={progressRef}
-        onClick={handleSeek}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-        onKeyDown={handleSeekKeyDown}
-        className="relative h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
-        aria-label="Spring naar een ander tijdstip"
-        role="slider"
-        aria-valuemin={0}
-        aria-valuemax={duration || 0}
-        aria-valuenow={currentTime}
-        aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
-      >
-        {/* Buffered indicator would go here */}
-        <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all"
-          style={{ width: `${progress}%` }}
-        />
-        {/* Scrubber handle */}
-        <div
-          className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg transition-all ${
-            isScrubbing ? 'opacity-100 scale-110' : 'opacity-90 group-hover:scale-110'
-          }`}
-          style={{ left: `calc(${progress}% - 8px)` }}
-        />
-      </button>
-
-      {/* Time display */}
-      <div className="flex items-center justify-between text-sm text-primary-200 mb-5">
-        <span className="font-mono">{formatTime(currentTime)}</span>
-        <span className="font-mono">{formatTime(duration)}</span>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-3 sm:gap-4">
-        {/* Skip back */}
-        <button
-          onClick={() => skip(-10)}
-          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
-          title="10 seconden terug"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
-          </svg>
-        </button>
-
-        {/* Play/Pause */}
-        <button
-          onClick={togglePlay}
-          disabled={!url}
-          className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-400 hover:to-primary-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-primary-900/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-wait"
-          aria-label={isPlaying ? 'Pauzeren' : 'Afspelen'}
-        >
-          {playButtonIcon}
-        </button>
-
-        {/* Skip forward */}
-        <button
-          onClick={() => skip(10)}
-          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
-          title="10 seconden vooruit"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Keyboard hints */}
-      <div className="hidden md:flex mt-5 pt-4 border-t border-white/10 items-center justify-center gap-4 text-xs text-white/40">
-        <span className="flex items-center gap-1.5">
-          <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Space</kbd>
-          <span>Afspelen/Pauzeren</span>
+    <div className="window-90s">
+      {/* Title bar */}
+      <div className="window-90s-titlebar flex items-center justify-between">
+        <span className="flex items-center gap-2">
+          <span>🎵</span>
+          <span className="truncate">mediaplayer.exe - {title}</span>
         </span>
-        <span className="flex items-center gap-1.5">
-          <kbd className="px-1.5 py-0.5 bg-white/10 rounded">← →</kbd>
-          <span>±10s</span>
-        </span>
+        <div className="flex gap-1">
+          <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">_</span>
+          <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">□</span>
+          <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">×</span>
+        </div>
+      </div>
+      
+      {/* Content area */}
+      <div className="window-90s-content">
+        {/* Hidden audio element */}
+        <audio
+          ref={audioRef}
+          preload="metadata"
+          aria-label={`Audio: ${title}`}
+        >
+          <source src={fullUrl} type="audio/mpeg" />
+          <source src={fullUrl} type="audio/ogg" />
+          <track kind="captions" />
+        </audio>
+
+        {/* Player header */}
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b-2 border-warm-200">
+          <div className="w-10 h-10 bevel-outset bg-primary-600 flex items-center justify-center">
+            <span className="text-white text-lg">🎧</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-warm-950 truncate text-sm">{title}</p>
+            <p className="text-warm-600 text-xs">Luister naar de preek</p>
+          </div>
+          {/* Playback rate button */}
+          <button
+            onClick={cyclePlaybackRate}
+            className="btn-90s text-xs px-2 py-1"
+            title="Afspeelsnelheid aanpassen"
+          >
+            {playbackRate}x
+          </button>
+        </div>
+
+        {/* Progress bar - 90s style */}
+        <div className="mb-3">
+          <button
+            type="button"
+            ref={progressRef}
+            onClick={handleSeek}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onKeyDown={handleSeekKeyDown}
+            className="relative w-full h-5 bevel-inset bg-warm-950 cursor-pointer touch-none"
+            aria-label="Spring naar een ander tijdstip"
+            role="slider"
+            aria-valuemin={0}
+            aria-valuemax={duration || 0}
+            aria-valuenow={currentTime}
+            aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
+          >
+            {/* Progress fill - 90s green LED style */}
+            <div
+              className="absolute inset-y-0 left-0 bg-green-500"
+              style={{ 
+                width: `${progress}%`,
+                boxShadow: 'inset 0 1px 0 #00ff00, inset 0 -1px 0 #006600'
+              }}
+            />
+            {/* Scrubber handle */}
+            <div
+              className={`absolute top-1/2 -translate-y-1/2 w-3 h-6 bevel-outset bg-warm-200 ${
+                isScrubbing ? 'bg-warm-100' : ''
+              }`}
+              style={{ left: `calc(${progress}% - 6px)` }}
+            />
+          </button>
+        </div>
+
+        {/* Time display - LED style */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="bevel-inset bg-black px-2 py-1">
+            <span className="hit-counter text-sm">{formatTime(currentTime)}</span>
+          </div>
+          <div className="bevel-inset bg-black px-2 py-1">
+            <span className="hit-counter text-sm">{formatTime(duration)}</span>
+          </div>
+        </div>
+
+        {/* Controls - 90s button style */}
+        <div className="flex items-center justify-center gap-2">
+          {/* Skip back */}
+          <button
+            onClick={() => skip(-10)}
+            className="btn-90s px-3 py-2"
+            title="10 seconden terug"
+          >
+            ⏪ -10s
+          </button>
+
+          {/* Play/Pause */}
+          <button
+            onClick={togglePlay}
+            disabled={!url}
+            className="btn-90s-primary px-4 py-2 min-w-[80px] disabled:opacity-50"
+            aria-label={isPlaying ? 'Pauzeren' : 'Afspelen'}
+          >
+            {playButtonIcon}
+          </button>
+
+          {/* Skip forward */}
+          <button
+            onClick={() => skip(10)}
+            className="btn-90s px-3 py-2"
+            title="10 seconden vooruit"
+          >
+            +10s ⏩
+          </button>
+        </div>
+
+        {/* Keyboard hints - 90s style */}
+        <div className="hidden md:flex mt-4 pt-3 border-t-2 border-warm-200 items-center justify-center gap-4 text-xs text-warm-600">
+          <span className="flex items-center gap-1">
+            <kbd className="px-1 py-0.5 bevel-outset bg-warm-100 font-mono">Space</kbd>
+            <span>Afspelen</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-1 py-0.5 bevel-outset bg-warm-100 font-mono">← →</kbd>
+            <span>±10s</span>
+          </span>
+        </div>
       </div>
     </div>
   );

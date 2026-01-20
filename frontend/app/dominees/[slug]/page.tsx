@@ -60,45 +60,44 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
     // Avoid failing static export when Strapi is temporarily unavailable.
     // We show a friendly message instead of a hard 404.
     return (
-      <div>
-        <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div className="bg-warm-100 min-h-screen">
+        <section className="bg-warm-200 border-b-4 border-warm-400">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
             <nav className="mb-6" aria-label="Breadcrumb">
-              <ol className="flex items-center gap-2 text-sm">
-                <li>
-                  <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </li>
-                <li>
-                  <Link href="/dominees" className="text-warm-500 hover:text-primary-600 transition-colors">
-                    Dominees
-                  </Link>
-                </li>
-              </ol>
+              <div className="bevel-inset bg-white p-2 inline-block">
+                <ol className="flex items-center gap-1 text-sm font-mono">
+                  <li>
+                    <Link href="/" className="link-90s">
+                      📁 Home
+                    </Link>
+                  </li>
+                  <li className="text-warm-600">\</li>
+                  <li>
+                    <Link href="/dominees" className="link-90s">
+                      📂 Dominees
+                    </Link>
+                  </li>
+                </ol>
+              </div>
             </nav>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-warm-900 font-serif mb-4">Dominee tijdelijk niet beschikbaar</h1>
-            <p className="text-warm-600 text-lg leading-relaxed">
-              We kunnen dit dominee-profiel nu niet laden (Strapi is tijdelijk onbereikbaar). Probeer het later opnieuw.
-            </p>
-            <p className="text-warm-500 text-sm mt-3">Slug: {slug}</p>
+            <div className="window-90s">
+              <div className="window-90s-titlebar">
+                <span>⚠️ error.exe</span>
+              </div>
+              <div className="window-90s-content">
+                <h1 className="text-2xl font-bold text-warm-900 font-heading mb-4">❌ Dominee tijdelijk niet beschikbaar</h1>
+                <p className="text-warm-600 leading-relaxed">
+                  We kunnen dit dominee-profiel nu niet laden (Strapi is tijdelijk onbereikbaar). Probeer het later opnieuw.
+                </p>
+                <p className="text-warm-500 text-sm mt-3 font-mono">Bestand: {slug}.profile</p>
 
-            <div className="mt-8">
-              <Link
-                href="/dominees"
-                className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"
-              >
-                <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                </svg>
-                Terug naar alle dominees
-              </Link>
+                <div className="mt-6">
+                  <Link href="/dominees" className="btn-90s">
+                    ⬅️ Terug naar alle dominees
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -118,132 +117,130 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
   }
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative min-h-[70vh] md:min-h-[78vh] border-b border-warm-200 overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          {speaker.profilePicture?.url ? (
-            <img
-              src={getStrapiMediaUrl(speaker.profilePicture.url)}
-              alt={speaker.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary-200/40 via-warm-100 to-primary-100" />
-          )}
-          {/* Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-warm-950/55 via-warm-950/30 to-warm-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),rgba(255,255,255,0))]" />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-12 md:pb-16">
+    <div className="bg-warm-100">
+      {/* Hero - 90s style with image */}
+      <section className="relative border-b-4 border-warm-400 overflow-hidden bg-warm-200">
+        {/* Background image area */}
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
           {/* Breadcrumb */}
-          <nav className="mb-8" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm">
-              <li>
-                <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </li>
-              <li>
-                <Link href="/dominees" className="text-white/80 hover:text-white transition-colors">
-                  Dominees
-                </Link>
-              </li>
-              <li>
-                <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </li>
-              <li className="text-white font-medium truncate max-w-[240px]">{speaker.name}</li>
-            </ol>
+          <nav className="mb-6" aria-label="Breadcrumb">
+            <div className="bevel-inset bg-white p-2 inline-block">
+              <ol className="flex items-center gap-1 text-sm font-mono">
+                <li>
+                  <Link href="/" className="link-90s flex items-center gap-1">
+                    📁 Home
+                  </Link>
+                </li>
+                <li className="text-warm-600">\</li>
+                <li>
+                  <Link href="/dominees" className="link-90s">
+                    📂 Dominees
+                  </Link>
+                </li>
+                <li className="text-warm-600">\</li>
+                <li className="text-warm-800 font-bold truncate max-w-[200px]">👤 {speaker.name}</li>
+              </ol>
+            </div>
           </nav>
 
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 font-serif leading-tight drop-shadow-sm">
-              {speaker.name}
-            </h1>
+          {/* Profile window */}
+          <div className="window-90s">
+            <div className="window-90s-titlebar flex items-center justify-between">
+              <span>👤 {speaker.name.toLowerCase().replace(/\s+/g, '_')}.profile</span>
+              <div className="flex gap-1">
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">_</span>
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">□</span>
+                <span className="w-4 h-4 bevel-outset bg-warm-200 text-warm-950 text-xs flex items-center justify-center">×</span>
+              </div>
+            </div>
+            <div className="window-90s-content">
+              <div className="flex flex-col md:flex-row gap-6">
+                {/* Profile image */}
+                <div className="w-full md:w-48 flex-shrink-0">
+                  <div className="bevel-inset p-1 bg-warm-950">
+                    {speaker.profilePicture?.url ? (
+                      <img
+                        src={getStrapiMediaUrl(speaker.profilePicture.url)}
+                        alt={speaker.name}
+                        className="w-full h-48 md:h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-48 md:h-48 bg-warm-200 flex items-center justify-center text-7xl">
+                        👤
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-            {speaker.bio ? (
-              <p className="text-white/90 text-lg md:text-xl leading-relaxed">
-                {speaker.bio}
-              </p>
-            ) : (
-              <p className="text-white/80 text-lg md:text-xl leading-relaxed">Geen bio beschikbaar.</p>
-            )}
+                {/* Profile info */}
+                <div className="flex-1">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-warm-900 font-heading mb-4">
+                    {speaker.name}
+                  </h1>
 
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur border border-white/15 rounded-xl text-sm font-medium text-white">
-                <svg className="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-                {totalSermons} preken
-              </span>
+                  {speaker.bio ? (
+                    <p className="text-warm-700 leading-relaxed mb-4">
+                      {speaker.bio}
+                    </p>
+                  ) : (
+                    <p className="text-warm-500 mb-4">Geen bio beschikbaar.</p>
+                  )}
 
-              <Link
-                href="#preken"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all"
-              >
-                Bekijk preken
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="bevel-inset bg-warm-100 px-3 py-1 text-sm font-mono">
+                      🎙️ {totalSermons} preken
+                    </span>
+
+                    <a
+                      href="#preken"
+                      className="btn-90s-primary inline-flex items-center gap-2"
+                    >
+                      ⬇️ Bekijk preken
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Sermons */}
-      <section id="preken" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <section id="preken" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {sermons.length > 0 ? (
           <>
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-warm-500 text-sm">Toon {sermons.length} van {totalSermons} preken</p>
+            <div className="bevel-inset bg-white px-3 py-2 mb-6 inline-flex items-center justify-between w-full">
+              <p className="text-warm-600 text-sm font-mono">Toon {sermons.length} van {totalSermons} preken</p>
               <Link
                 href="/sermons"
-                className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+                className="link-90s text-sm font-bold"
               >
-                Bekijk alle preken
+                📂 Bekijk alle preken
               </Link>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {sermons.map((sermon) => (
                 <SermonCard key={sermon.id} sermon={sermon} />
               ))}
             </div>
           </>
         ) : (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
-            <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
+          <div className="window-90s max-w-md mx-auto">
+            <div className="window-90s-titlebar">
+              <span>⚠️ Melding</span>
             </div>
-            <p className="text-warm-700 text-xl font-medium mb-2">Geen preken gevonden.</p>
-            <p className="text-warm-500">Er zijn (nog) geen preken gekoppeld aan deze dominee.</p>
+            <div className="window-90s-content text-center">
+              <div className="text-5xl mb-4">📭</div>
+              <p className="text-warm-700 font-bold mb-2">Geen preken gevonden.</p>
+              <p className="text-warm-500 text-sm">Er zijn (nog) geen preken gekoppeld aan deze dominee.</p>
+            </div>
           </div>
         )}
 
         {/* Back link */}
-        <div className="mt-20 pt-10 border-t border-warm-200">
-          <Link
-            href="/dominees"
-            className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"
-          >
-            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-            </svg>
-            Terug naar alle dominees
+        <div className="mt-12 pt-8 border-t-2 border-warm-300">
+          <Link href="/dominees" className="btn-90s inline-flex items-center gap-2">
+            ⬅️ Terug naar alle dominees
           </Link>
         </div>
       </section>

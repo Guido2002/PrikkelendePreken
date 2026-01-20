@@ -44,34 +44,51 @@ module.exports = {
           700: '#a16207',
         },
       },
+      // 90s System fonts
       fontFamily: {
-        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        sans: ['"MS Sans Serif"', '"Segoe UI"', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', '"Times New Roman"', 'serif'],
+        heading: ['"Arial Black"', 'Impact', 'Haettenschweiler', 'sans-serif'],
+        mono: ['"Courier New"', 'Courier', 'monospace'],
+        comic: ['"Comic Sans MS"', 'cursive'],
       },
-      boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 2px 10px -2px rgba(0, 0, 0, 0.04)',
-        'soft-xl': '0 20px 50px -12px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 0, 0, 0.06)',
+      // 90s has NO border-radius, but keep 0 available
+      borderRadius: {
+        'none': '0',
+        DEFAULT: '0',
       },
       spacing: {
         '18': '4.5rem',
       },
+      // 90s animations
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'scale-in': 'scaleIn 0.3s ease-out',
+        'rainbow': 'rainbow 4s linear infinite',
+        'pulse-glow': 'pulse-glow 1.5s ease-in-out infinite',
+        'blink': 'blink-90s 1s step-end infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        rainbow: {
+          '0%': { color: '#df4d70' },
+          '17%': { color: '#f4c542' },
+          '33%': { color: '#00aa00' },
+          '50%': { color: '#0080ff' },
+          '67%': { color: '#781f3c' },
+          '83%': { color: '#a92349' },
+          '100%': { color: '#df4d70' },
         },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'pulse-glow': {
+          '0%, 100%': { 
+            transform: 'scale(1)',
+            boxShadow: '0 0 0 0 rgba(223, 77, 112, 0.7)',
+          },
+          '50%': { 
+            transform: 'scale(1.05)',
+            boxShadow: '0 0 10px 2px rgba(223, 77, 112, 0.5)',
+          },
         },
-        scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(0.95)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
+        'blink-90s': {
+          '0%, 49%': { opacity: '1' },
+          '50%, 100%': { opacity: '0' },
         },
       },
     },
