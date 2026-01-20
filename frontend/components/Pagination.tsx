@@ -48,75 +48,83 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
   const pages = getPageNumbers();
 
   return (
-    <nav className="mt-12" aria-label="Paginering">
-      {/* 90s Window-style pagination */}
-      <div className="window-90s inline-block mx-auto">
-        <div className="window-90s-titlebar text-xs">
-          📄 Pagina {currentPage} van {totalPages}
-        </div>
-        <div className="window-90s-content p-2">
-          <div className="flex items-center gap-1">
-            {/* Previous button */}
-            {currentPage > 1 ? (
-              <Link
-                href={currentPage === 2 ? '/sermons' : `/sermons/page/${currentPage - 1}`}
-                className="btn-90s text-xs px-3 py-1"
-              >
-                ◄ Vorige
-              </Link>
+    <nav className="mt-12 flex justify-center" aria-label="Paginering">
+      <div className="inline-flex items-center gap-2">
+        {/* Previous button */}
+        {currentPage > 1 ? (
+          <Link
+            href={currentPage === 2 ? '/sermons' : `/sermons/page/${currentPage - 1}`}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-300 hover:text-bronze-400 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            <span className="hidden sm:inline">Vorige</span>
+          </Link>
+        ) : (
+          <span className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-500/40 cursor-not-allowed">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            <span className="hidden sm:inline">Vorige</span>
+          </span>
+        )}
+
+        {/* Divider */}
+        <div className="w-px h-6 bg-gradient-to-b from-transparent via-bronze-600/30 to-transparent mx-1" />
+
+        {/* Page numbers */}
+        <div className="flex items-center gap-1">
+          {pages.map((page, index) => (
+            page === 'ellipsis' ? (
+              <span key={`ellipsis-${index}`} className="px-2 text-cream-500/50">
+                ···
+              </span>
             ) : (
-              <span className="btn-90s text-xs px-3 py-1 opacity-50 cursor-not-allowed">
-                ◄ Vorige
-              </span>
-            )}
-
-            {/* Page numbers */}
-            <div className="hidden sm:flex items-center gap-1 mx-2">
-              {pages.map((page, index) => (
-                page === 'ellipsis' ? (
-                  <span key={`ellipsis-${index}`} className="px-2 text-warm-500 font-mono">
-                    ...
-                  </span>
-                ) : (
-                  <Link
-                    key={page}
-                    href={page === 1 ? '/sermons' : `/sermons/page/${page}`}
-                    className={`w-8 h-8 flex items-center justify-center font-bold text-sm ${
-                      page === currentPage
-                        ? 'bevel-inset bg-primary-600 text-white'
-                        : 'btn-90s'
-                    }`}
-                    aria-current={page === currentPage ? 'page' : undefined}
-                  >
-                    {page}
-                  </Link>
-                )
-              ))}
-            </div>
-
-            {/* Mobile: Current page display */}
-            <div className="sm:hidden mx-2">
-              <span className="bevel-inset bg-primary-600 text-white w-8 h-8 flex items-center justify-center font-bold text-sm">
-                {currentPage}
-              </span>
-            </div>
-
-            {/* Next button */}
-            {currentPage < totalPages ? (
               <Link
-                href={`/sermons/page/${currentPage + 1}`}
-                className="btn-90s text-xs px-3 py-1"
+                key={page}
+                href={page === 1 ? '/sermons' : `/sermons/page/${page}`}
+                className={`w-10 h-10 flex items-center justify-center text-sm rounded transition-all duration-300 ${
+                  page === currentPage
+                    ? 'bg-gradient-to-br from-bronze-500 to-bronze-700 text-wood-950 font-semibold shadow-glow'
+                    : 'text-cream-300 hover:text-bronze-400 hover:bg-wood-800/50'
+                }`}
+                aria-current={page === currentPage ? 'page' : undefined}
               >
-                Volgende ►
+                {page}
               </Link>
-            ) : (
-              <span className="btn-90s text-xs px-3 py-1 opacity-50 cursor-not-allowed">
-                Volgende ►
-              </span>
-            )}
-          </div>
+            )
+          ))}
         </div>
+
+        {/* Divider */}
+        <div className="w-px h-6 bg-gradient-to-b from-transparent via-bronze-600/30 to-transparent mx-1" />
+
+        {/* Next button */}
+        {currentPage < totalPages ? (
+          <Link
+            href={`/sermons/page/${currentPage + 1}`}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-300 hover:text-bronze-400 transition-colors"
+          >
+            <span className="hidden sm:inline">Volgende</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </Link>
+        ) : (
+          <span className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-500/40 cursor-not-allowed">
+            <span className="hidden sm:inline">Volgende</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </span>
+        )}
       </div>
+
+      {/* Page indicator for accessibility */}
+      <span className="sr-only">
+        Pagina {currentPage} van {totalPages}
+      </span>
     </nav>
   );
 }

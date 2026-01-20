@@ -51,7 +51,16 @@ export default async function RootLayout({
 
   return (
     <html lang="nl">
-      <body className="min-h-screen flex flex-col bg-warm-200">
+      <head>
+        {/* Google Fonts for 70s typography */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
+      <body className="min-h-screen flex flex-col">
         <ClientWrapper searchIndex={searchIndex}>
           <Header />
           <main className="flex-grow">{children}</main>
