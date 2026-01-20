@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
+import FavoriteButton from '@/components/FavoriteButton';
 import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference } from '@/lib/strapi';
 
 interface PageProps {
@@ -132,6 +133,16 @@ export default async function SermonDetailPage({ params }: PageProps) {
                 {displayBibleText}
               </span>
             )}
+
+            <FavoriteButton
+              item={{
+                slug,
+                title,
+                date,
+                speakerName: speaker?.name,
+                bibleText: displayBibleText,
+              }}
+            />
           </div>
 
           {/* Themes */}

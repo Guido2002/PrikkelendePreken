@@ -93,6 +93,20 @@ export default function Header() {
               )}
             </Link>
 
+            <Link 
+              href="/favorieten" 
+              className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                isActive('/favorieten')
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+              }`}
+            >
+              Favorieten
+              {isActive('/favorieten') && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
+              )}
+            </Link>
+
             {/* Divider */}
             <div className="w-px h-6 bg-warm-200 mx-2" />
 
@@ -192,6 +206,20 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               Dominees
+            </Link>
+
+            <Link 
+              href="/favorieten" 
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
+                isActive('/favorieten')
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-700 hover:bg-warm-50'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.995 20.25s-7.245-4.397-9.338-8.343C1.17 9.032 2.02 6.44 4.23 5.26c1.68-.9 3.92-.57 5.29.86l2.475 2.575 2.475-2.575c1.37-1.43 3.61-1.76 5.29-.86 2.21 1.18 3.06 3.772 1.573 6.647-2.093 3.946-9.338 8.343-9.338 8.343z" />
+              </svg>
+              Favorieten
             </Link>
           </div>
         </div>

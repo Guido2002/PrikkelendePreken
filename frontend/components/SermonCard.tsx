@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Sermon } from '@/lib/types';
 import { formatDate, formatBibleReference } from '@/lib/strapi';
+import FavoriteButton from '@/components/FavoriteButton';
 
 interface SermonCardProps {
   sermon: Sermon;
@@ -22,22 +23,34 @@ export default function SermonCard({ sermon }: SermonCardProps) {
       <div className="block relative">
         <div className="p-5 sm:p-6">
           {/* Top row: Date & Audio badge */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-3">
             <time dateTime={date} className="flex items-center gap-1.5 text-sm text-warm-500">
               <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               {formatDate(date)}
             </time>
-            {audio && (
-              <span className="flex items-center gap-1.5 px-2.5 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-medium">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
+            <div className="flex items-center gap-2">
+              {audio && (
+                <span className="flex items-center gap-1.5 px-2.5 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-medium">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
+                  </span>
+                  Audio
                 </span>
-                Audio
-              </span>
-            )}
+              )}
+              <FavoriteButton
+                item={{
+                  slug,
+                  title,
+                  date,
+                  speakerName,
+                  bibleText: displayBibleText,
+                }}
+                className="w-9 h-9 rounded-xl border border-warm-200 bg-white text-warm-500 hover:text-primary-700 hover:border-primary-200 hover:bg-primary-50/40 transition-colors inline-flex items-center justify-center"
+              />
+            </div>
           </div>
 
           {/* Title */}
