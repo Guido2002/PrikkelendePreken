@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import SermonCard from '@/components/SermonCard';
 import SearchTrigger from '@/components/SearchTrigger';
-import { getLatestSermons } from '@/lib/strapi';
+import { getLatestSermons, getSermons, getSpeakers, getThemes } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
 import Marquee from '@/components/Marquee';
 
@@ -10,12 +10,23 @@ export const dynamic = 'force-static';
 
 export default async function HomePage() {
   let sermons: Sermon[] = [];
+  let totalSermons = 0;
+  let totalSpeakers = 0;
+  let totalThemes = 0;
   
   try {
-    const response = await getLatestSermons(6);
-    sermons = response.data;
+    const [sermonsResponse, allSermonsResponse, speakersResponse, themesResponse] = await Promise.all([
+      getLatestSermons(6),
+      getSermons({ page: 1, pageSize: 1 }), // Just to get total count
+      getSpeakers(),
+      getThemes(),
+    ]);
+    sermons = sermonsResponse.data;
+    totalSermons = allSermonsResponse.meta.pagination?.total || 0;
+    totalSpeakers = speakersResponse.data.length;
+    totalThemes = themesResponse.data.length;
   } catch (error) {
-    console.error('Error fetching sermons:', error);
+    console.error('Error fetching data:', error);
   }
 
   return (
@@ -91,23 +102,20 @@ export default async function HomePage() {
             <div className="bevel-inset bg-black p-4">
               <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-center">
                 <div className="hit-counter px-4 py-2 bevel-inset">
-                  <div className="text-2xl md:text-3xl font-mono font-bold">100+</div>
+                  <div className="text-2xl md:text-3xl font-mono font-bold">{String(totalSermons).padStart(3, '0')}</div>
                   <div className="text-xs uppercase tracking-wider text-green-400">Preken</div>
                 </div>
                 <div className="text-accent-400 text-2xl">|</div>
                 <div className="hit-counter px-4 py-2 bevel-inset">
-                  <div className="text-2xl md:text-3xl font-mono font-bold">020+</div>
+                  <div className="text-2xl md:text-3xl font-mono font-bold">{String(totalSpeakers).padStart(3, '0')}</div>
                   <div className="text-xs uppercase tracking-wider text-green-400">Sprekers</div>
                 </div>
                 <div className="text-accent-400 text-2xl">|</div>
                 <div className="hit-counter px-4 py-2 bevel-inset">
-                  <div className="text-2xl md:text-3xl font-mono font-bold">050+</div>
+                  <div className="text-2xl md:text-3xl font-mono font-bold">{String(totalThemes).padStart(3, '0')}</div>
                   <div className="text-xs uppercase tracking-wider text-green-400">Thema&apos;s</div>
                 </div>
               </div>
-              <p className="text-center text-warm-500 text-xs font-mono mt-3">
-                U bent bezoeker #001337 | Online sinds 1997
-              </p>
             </div>
           </div>
         </div>
