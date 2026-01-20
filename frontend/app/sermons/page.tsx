@@ -32,52 +32,53 @@ export default async function SermonsPage() {
   return (
     <div>
       {/* Page Header */}
-      <section className="relative py-16 bg-gradient-to-b from-wood-900/50 to-wood-950">
-        {/* Warm glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-gradient-radial from-bronze-600/8 to-transparent rounded-full blur-3xl" />
-        
-        <div className="relative max-w-5xl mx-auto px-4">
+      <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           {/* Breadcrumb */}
           <nav className="mb-6" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm text-cream-400/60">
+            <ol className="flex items-center gap-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-bronze-400 transition-colors">
+                <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                   Home
                 </Link>
               </li>
               <li>
-                <span className="mx-2">/</span>
+                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </li>
-              <li className="text-cream-200">Preken</li>
+              <li className="text-warm-800 font-medium">Preken</li>
             </ol>
           </nav>
 
           {/* Title & description */}
-          <h1 className="font-display text-4xl md:text-5xl font-semibold text-cream-100 mb-4">
-            Alle Preken
-          </h1>
-          <p className="text-cream-300/70 text-lg max-w-2xl">
-            Doorzoek ons complete archief van inspirerende preken.
-            {totalSermons > 0 && (
-              <span className="text-bronze-400"> {totalSermons} preken beschikbaar.</span>
-            )}
-          </p>
+          <div className="max-w-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 font-serif mb-4">Alle Preken</h1>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              Doorzoek ons complete archief van inspirerende preken. 
+              {totalSermons > 0 && (
+                <span className="text-primary-600 font-medium"> {totalSermons} preken beschikbaar.</span>
+              )}
+            </p>
+          </div>
         </div>
-        
-        {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-wood-950 to-transparent" />
       </section>
 
       {/* Sermons Grid */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {sermons.length > 0 ? (
           <>
             {/* Results count */}
-            <p className="text-cream-400/60 text-sm mb-8">
-              Toon {sermons.length} van {totalSermons} preken
-            </p>
+            <div className="flex items-center justify-between mb-8">
+              <p className="text-warm-500 text-sm">
+                Toon {sermons.length} van {totalSermons} preken
+              </p>
+            </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {sermons.map((sermon) => (
                 <SermonCard key={sermon.id} sermon={sermon} />
               ))}
@@ -86,17 +87,14 @@ export default async function SermonsPage() {
             <Pagination currentPage={1} totalPages={totalPages} />
           </>
         ) : (
-          <div className="card-70s max-w-md mx-auto p-10 text-center">
-            <div className="w-16 h-16 rounded-full bg-wood-800/50 flex items-center justify-center mx-auto mb-5">
-              <svg className="w-8 h-8 text-cream-500/40" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+          <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
+            <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
-            <p className="font-display text-cream-200 text-lg mb-2">Geen preken gevonden</p>
-            <p className="text-cream-400/60 text-sm mb-6">Er zijn nog geen preken gepubliceerd.</p>
-            <Link href="/" className="btn-70s">
-              Terug naar Home
-            </Link>
+            <p className="text-warm-700 text-xl font-medium mb-2">Geen preken gevonden.</p>
+            <p className="text-warm-500">Er zijn nog geen preken gepubliceerd.</p>
           </div>
         )}
       </section>

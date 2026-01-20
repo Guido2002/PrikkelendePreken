@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
 import { getSermons } from '@/lib/strapi';
 import { buildSearchIndex } from '@/lib/searchIndex';
 import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourusername.github.io';
 const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'PrikkelendePreken';
@@ -51,16 +54,7 @@ export default async function RootLayout({
 
   return (
     <html lang="nl">
-      <head>
-        {/* Google Fonts for 70s typography */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" 
-          rel="stylesheet" 
-        />
-      </head>
-      <body className="min-h-screen flex flex-col">
+      <body className={`${inter.className} min-h-screen flex flex-col bg-warm-50`}>
         <ClientWrapper searchIndex={searchIndex}>
           <Header />
           <main className="flex-grow">{children}</main>

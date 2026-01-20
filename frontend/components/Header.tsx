@@ -29,33 +29,24 @@ export default function Header() {
   };
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-500 ${
+    <header className={`sticky top-0 z-40 transition-all duration-300 ${
       scrolled 
-        ? 'bg-wood-950/98 shadow-warm backdrop-blur-sm' 
-        : 'bg-gradient-to-b from-wood-950/95 to-wood-950/90'
+        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-warm-100' 
+        : 'bg-white/80 backdrop-blur-md border-b border-warm-200/50'
     }`}>
-      {/* Subtle warm glow at top */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bronze-500/30 to-transparent" />
-      
-      <nav className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-18">
           {/* Logo */}
           <Link 
             href="/" 
-            className="group flex items-center gap-3 relative z-50"
+            className="group flex items-center gap-2.5 relative z-50"
           >
-            {/* Elegant monogram */}
-            <span className="w-10 h-10 rounded-sm bg-gradient-to-br from-bronze-500 to-bronze-700 flex items-center justify-center shadow-lg group-hover:shadow-glow transition-shadow duration-500">
-              <span className="font-display text-wood-950 font-bold text-lg">PP</span>
+            <span className="w-9 h-9 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200">
+              PP
             </span>
-            <div className="hidden sm:block">
-              <span className="font-display text-lg font-semibold text-cream-100 tracking-wide group-hover:text-bronze-400 transition-colors duration-300">
-                Prikkelende Preken
-              </span>
-              <span className="block text-xs text-cream-400/60 tracking-widest uppercase">
-                Preek Archief
-              </span>
-            </div>
+            <span className="text-lg font-bold text-warm-900 group-hover:text-primary-700 transition-colors hidden sm:block">
+              Prikkelende Preken
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -63,48 +54,61 @@ export default function Header() {
             {/* Nav Links */}
             <Link 
               href="/" 
-              className={`px-4 py-2 text-sm font-body transition-all duration-300 rounded ${
+              className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/') && pathname === '/'
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
               }`}
             >
               Home
+              {isActive('/') && pathname === '/' && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
+              )}
             </Link>
             <Link 
               href="/sermons" 
-              className={`px-4 py-2 text-sm font-body transition-all duration-300 rounded ${
+              className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/sermons')
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
               }`}
             >
               Preken
+              {isActive('/sermons') && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
+              )}
             </Link>
+
             <Link 
               href="/dominees" 
-              className={`px-4 py-2 text-sm font-body transition-all duration-300 rounded ${
+              className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/dominees')
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
               }`}
             >
               Dominees
+              {isActive('/dominees') && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-600 rounded-full" />
+              )}
             </Link>
 
             {/* Divider */}
-            <div className="w-px h-6 bg-gradient-to-b from-transparent via-bronze-600/40 to-transparent mx-3" />
+            <div className="w-px h-6 bg-warm-200 mx-2" />
 
             {/* Search Button */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-body text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30 rounded transition-all duration-300"
+              className="flex items-center gap-2.5 px-4 py-2 bg-warm-50 hover:bg-warm-100 text-warm-600 rounded-xl transition-all duration-200 group border border-warm-200/50 hover:border-warm-300"
               aria-label="Zoeken"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg className="w-4 h-4 text-warm-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span>Zoeken</span>
+              <span className="text-sm text-warm-500">Zoeken...</span>
+              <kbd className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 bg-white text-warm-400 rounded-md text-xs font-mono border border-warm-200">
+                <span className="text-[10px]">⌘</span>K
+              </kbd>
             </button>
           </div>
 
@@ -112,81 +116,86 @@ export default function Header() {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={openSearch}
-              className="p-2 text-cream-200 hover:text-bronze-400 transition-colors"
+              className="p-2.5 text-warm-500 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all"
               aria-label="Zoeken"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 relative z-50 transition-colors ${
-                mobileMenuOpen ? 'text-bronze-400' : 'text-cream-200 hover:text-bronze-400'
-              }`}
+              className="relative p-2.5 text-warm-600 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all z-50"
               aria-label={mobileMenuOpen ? 'Sluit menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
             >
-              <div className="w-5 h-5 relative flex items-center justify-center">
-                {mobileMenuOpen ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                  </svg>
-                )}
+              <div className="w-5 h-5 relative">
+                <span className={`absolute left-0 block w-5 h-0.5 bg-current transform transition-all duration-300 ${
+                  mobileMenuOpen ? 'top-[9px] rotate-45' : 'top-1'
+                }`} />
+                <span className={`absolute left-0 top-[9px] block w-5 h-0.5 bg-current transition-all duration-300 ${
+                  mobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+                }`} />
+                <span className={`absolute left-0 block w-5 h-0.5 bg-current transform transition-all duration-300 ${
+                  mobileMenuOpen ? 'top-[9px] -rotate-45' : 'top-[17px]'
+                }`} />
               </div>
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu - Warm wood panel */}
-      <div className={`md:hidden absolute inset-x-0 top-full transition-all duration-300 ${
+      {/* Mobile Menu */}
+      <div className={`md:hidden absolute inset-x-0 top-full transition-all duration-300 ease-out ${
         mobileMenuOpen 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 -translate-y-2 pointer-events-none'
+          ? 'opacity-100 translate-y-0 pointer-events-auto' 
+          : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="mx-4 mt-2 card-70s overflow-hidden">
-          <div className="p-4 space-y-1">
+        <div className="bg-white/95 backdrop-blur-md border-b border-warm-200 shadow-lg">
+          <div className="px-4 py-4 space-y-1">
             <Link 
               href="/" 
-              className={`block px-4 py-3 rounded transition-all duration-300 ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/') && pathname === '/'
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-700 hover:bg-warm-50'
               }`}
             >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
               Home
             </Link>
             <Link 
               href="/sermons" 
-              className={`block px-4 py-3 rounded transition-all duration-300 ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/sermons')
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-700 hover:bg-warm-50'
               }`}
             >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
               Preken
             </Link>
+
             <Link 
               href="/dominees" 
-              className={`block px-4 py-3 rounded transition-all duration-300 ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/dominees')
-                  ? 'text-bronze-400 bg-wood-900/50'
-                  : 'text-cream-200 hover:text-bronze-400 hover:bg-wood-900/30'
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-warm-700 hover:bg-warm-50'
               }`}
             >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
               Dominees
             </Link>
           </div>
         </div>
       </div>
-
-      {/* Bottom border glow */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-bronze-600/20 to-transparent" />
     </header>
   );
 }

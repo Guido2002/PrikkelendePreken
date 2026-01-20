@@ -16,6 +16,8 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  // "Loading" here means: not enough info/buffer to start/continue smoothly.
+  // We flip it off once metadata is available so users can press play sooner on mobile.
   const [isLoading, setIsLoading] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isScrubbing, setIsScrubbing] = useState(false);
@@ -34,6 +36,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     if (isPlaying) {
       audioRef.current.pause();
     } else {
+      // play() can reject on some browsers; keep UI consistent.
       audioRef.current.play().catch(() => {
         setIsPlaying(false);
       });
@@ -94,6 +97,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
+      // Toggle play from the progress bar for keyboard users.
       togglePlay();
       return;
     }
@@ -162,6 +166,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
       setIsLoading(false);
     };
     const handleWaiting = () => {
+      // Waiting fires during playback when buffer runs dry; show spinner then.
       if (!audio.paused) {
         setIsLoading(true);
       }
@@ -217,8 +222,30 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   const effectiveDurationForUi = getEffectiveDuration();
   const progress = effectiveDurationForUi > 0 ? (currentTime / effectiveDurationForUi) * 100 : 0;
 
+  let playButtonIcon: React.ReactNode;
+  if (isLoading) {
+    playButtonIcon = (
+      <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+      </svg>
+    );
+  } else if (isPlaying) {
+    playButtonIcon = (
+      <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+      </svg>
+    );
+  } else {
+    playButtonIcon = (
+      <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    );
+  }
+
   return (
-    <div className="audio-player-70s p-6">
+    <div className="bg-gradient-to-br from-warm-900 via-primary-900 to-warm-900 rounded-2xl p-4 sm:p-6 shadow-xl">
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
@@ -231,127 +258,107 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
       </audio>
 
       {/* Player header */}
-      <div className="flex items-center gap-4 mb-6">
-        {/* Vinyl/disc icon */}
-        <div className={`w-14 h-14 rounded-full bg-gradient-to-br from-wood-800 to-wood-950 flex items-center justify-center shadow-lg ${isPlaying ? 'animate-vinyl-spin' : ''}`}>
-          <div className="w-5 h-5 rounded-full bg-bronze-500" />
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-900/50">
+          <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+          </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-display text-cream-100 truncate">{title}</p>
-          <p className="text-cream-400/60 text-sm">Luister naar de preek</p>
+          <p className="text-white font-semibold truncate">{title}</p>
+          <p className="text-primary-300 text-sm">Luister naar de preek</p>
         </div>
         {/* Playback rate button */}
         <button
           onClick={cyclePlaybackRate}
-          className="px-3 py-1.5 text-sm text-cream-300 hover:text-bronze-400 border border-bronze-700/30 rounded hover:border-bronze-600/50 transition-all"
+          className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
           title="Afspeelsnelheid aanpassen"
         >
-          {playbackRate}×
+          {playbackRate}x
         </button>
       </div>
 
-      {/* Progress bar - warm amber glow */}
-      <div className="mb-4">
-        <button
-          type="button"
-          ref={progressRef}
-          onClick={handleSeek}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-          onKeyDown={handleSeekKeyDown}
-          className="relative w-full h-2 bg-wood-900 rounded-full cursor-pointer touch-none overflow-hidden"
-          aria-label="Spring naar een ander tijdstip"
-          role="slider"
-          aria-valuemin={0}
-          aria-valuemax={duration || 0}
-          aria-valuenow={currentTime}
-          aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
-        >
-          {/* Background glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-bronze-900/20 via-bronze-700/10 to-bronze-900/20" />
-          
-          {/* Progress fill - warm amber */}
-          <div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-bronze-600 to-bronze-400 rounded-full transition-all duration-100"
-            style={{ width: `${progress}%` }}
-          />
-          
-          {/* Scrubber handle */}
-          <div
-            className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-gradient-to-br from-cream-100 to-cream-300 rounded-full shadow-lg transition-transform ${
-              isScrubbing ? 'scale-125' : 'scale-100'
-            }`}
-            style={{ left: `calc(${progress}% - 8px)` }}
-          />
-        </button>
-      </div>
+      {/* Progress bar */}
+      <button
+        type="button"
+        ref={progressRef}
+        onClick={handleSeek}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onKeyDown={handleSeekKeyDown}
+        className="relative h-2 bg-white/20 rounded-full cursor-pointer group mb-4 touch-none"
+        aria-label="Spring naar een ander tijdstip"
+        role="slider"
+        aria-valuemin={0}
+        aria-valuemax={duration || 0}
+        aria-valuenow={currentTime}
+        aria-valuetext={`${formatTime(currentTime)} van ${formatTime(duration)}`}
+      >
+        {/* Buffered indicator would go here */}
+        <div
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all"
+          style={{ width: `${progress}%` }}
+        />
+        {/* Scrubber handle */}
+        <div
+          className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg transition-all ${
+            isScrubbing ? 'opacity-100 scale-110' : 'opacity-90 group-hover:scale-110'
+          }`}
+          style={{ left: `calc(${progress}% - 8px)` }}
+        />
+      </button>
 
       {/* Time display */}
-      <div className="flex items-center justify-between mb-6 text-sm font-mono text-cream-400/70">
-        <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
+      <div className="flex items-center justify-between text-sm text-primary-200 mb-5">
+        <span className="font-mono">{formatTime(currentTime)}</span>
+        <span className="font-mono">{formatTime(duration)}</span>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-3 sm:gap-4">
         {/* Skip back */}
         <button
           onClick={() => skip(-10)}
-          className="p-3 text-cream-300 hover:text-bronze-400 transition-colors"
+          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
           title="10 seconden terug"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z" />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
           </svg>
-          <span className="sr-only">10 seconden terug</span>
         </button>
 
         {/* Play/Pause */}
         <button
           onClick={togglePlay}
           disabled={!url}
-          className="w-16 h-16 rounded-full bg-gradient-to-br from-bronze-500 to-bronze-700 text-wood-950 flex items-center justify-center shadow-lg hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-400 hover:to-primary-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-primary-900/50 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-wait"
           aria-label={isPlaying ? 'Pauzeren' : 'Afspelen'}
         >
-          {isLoading ? (
-            <svg className="w-7 h-7 animate-spin" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-          ) : isPlaying ? (
-            <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-            </svg>
-          ) : (
-            <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-            </svg>
-          )}
+          {playButtonIcon}
         </button>
 
         {/* Skip forward */}
         <button
           onClick={() => skip(10)}
-          className="p-3 text-cream-300 hover:text-bronze-400 transition-colors"
+          className="p-2.5 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all"
           title="10 seconden vooruit"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062A1.125 1.125 0 013 16.81V8.688zM12.75 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062a1.125 1.125 0 01-1.683-.977V8.688z" />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
           </svg>
-          <span className="sr-only">10 seconden vooruit</span>
         </button>
       </div>
 
       {/* Keyboard hints */}
-      <div className="hidden md:flex mt-6 pt-4 border-t border-bronze-800/30 items-center justify-center gap-6 text-xs text-cream-500/50">
-        <span className="flex items-center gap-2">
-          <kbd className="px-2 py-1 bg-wood-900 border border-bronze-800/30 rounded text-cream-400">Space</kbd>
-          <span>Afspelen</span>
+      <div className="hidden md:flex mt-5 pt-4 border-t border-white/10 items-center justify-center gap-4 text-xs text-white/40">
+        <span className="flex items-center gap-1.5">
+          <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Space</kbd>
+          <span>Afspelen/Pauzeren</span>
         </span>
-        <span className="flex items-center gap-2">
-          <kbd className="px-2 py-1 bg-wood-900 border border-bronze-800/30 rounded text-cream-400">← →</kbd>
+        <span className="flex items-center gap-1.5">
+          <kbd className="px-1.5 py-0.5 bg-white/10 rounded">← →</kbd>
           <span>±10s</span>
         </span>
       </div>

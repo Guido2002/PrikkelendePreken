@@ -61,69 +61,76 @@ export default async function SermonDetailPage({ params }: PageProps) {
   return (
     <div>
       {/* Page Header */}
-      <div className="relative py-16 bg-gradient-to-b from-wood-900/50 to-wood-950">
-        {/* Warm glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-radial from-bronze-600/10 to-transparent rounded-full blur-3xl" />
+      <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200 overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] bg-primary-100/30 rounded-full blur-3xl" />
+        </div>
         
-        <div className="relative max-w-4xl mx-auto px-4">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           {/* Breadcrumb */}
-          <nav className="mb-6" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm text-cream-400/60">
+          <nav className="mb-8" aria-label="Breadcrumb">
+            <ol className="flex items-center gap-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-bronze-400 transition-colors">
+                <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                   Home
                 </Link>
               </li>
-              <li><span className="mx-2">/</span></li>
               <li>
-                <Link href="/sermons" className="hover:text-bronze-400 transition-colors">
+                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </li>
+              <li>
+                <Link href="/sermons" className="text-warm-500 hover:text-primary-600 transition-colors">
                   Preken
                 </Link>
               </li>
-              <li><span className="mx-2">/</span></li>
-              <li className="text-cream-200 truncate max-w-[200px]">{title}</li>
+              <li>
+                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </li>
+              <li className="text-warm-800 font-medium truncate max-w-[140px] sm:max-w-[240px]">{title}</li>
             </ol>
           </nav>
 
           {/* Title */}
-          <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-cream-100 mb-6 text-shadow-warm">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-8 font-serif leading-tight">
             {title}
           </h1>
 
-          {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-cream-300/70">
-            <time dateTime={date} className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-bronze-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          {/* Metadata pills */}
+          <div className="flex flex-wrap items-center gap-3">
+            <time dateTime={date} className="inline-flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-warm-200 rounded-xl text-sm font-medium text-warm-700">
+              <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               {formatDate(date)}
             </time>
-            
+
             {speaker && (
-              <>
-                <span className="text-bronze-600/40">·</span>
-                <Link 
-                  href={`/dominees/${speaker.slug}`} 
-                  className="flex items-center gap-2 text-bronze-400 hover:text-bronze-300 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                  </svg>
-                  {speaker.name}
-                </Link>
-              </>
+              <Link
+                href={`/dominees/${speaker.slug}`}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-warm-200 rounded-xl text-sm font-medium text-warm-700 hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 transition-colors"
+              >
+                <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {speaker.name}
+              </Link>
             )}
-            
+
             {displayBibleText && (
-              <>
-                <span className="text-bronze-600/40">·</span>
-                <span className="flex items-center gap-2 text-cream-200 italic">
-                  <svg className="w-4 h-4 text-bronze-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                  </svg>
-                  {displayBibleText}
-                </span>
-              </>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 shadow-sm border border-primary-200 rounded-xl text-sm font-medium text-primary-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                {displayBibleText}
+              </span>
             )}
           </div>
 
@@ -133,7 +140,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
               {themes.map((theme) => (
                 <span
                   key={theme.id}
-                  className="tag-70s"
+                  className="px-3 py-1.5 bg-accent-100 text-accent-700 rounded-lg text-sm font-medium"
                 >
                   {theme.name}
                 </span>
@@ -141,16 +148,13 @@ export default async function SermonDetailPage({ params }: PageProps) {
             </div>
           )}
         </div>
-        
-        {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-wood-950 to-transparent" />
       </div>
 
       {/* Content Area */}
-      <article className="max-w-4xl mx-auto px-4 py-12">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Audio Player */}
         {audio && (
-          <div className="mb-10">
+          <div className="mb-12">
             <AudioPlayer
               url={audio.url}
               title={title}
@@ -160,30 +164,40 @@ export default async function SermonDetailPage({ params }: PageProps) {
 
         {/* Summary */}
         {summary && (
-          <div className="card-70s p-6 mb-10">
-            <h2 className="font-display text-lg text-bronze-400 mb-3">Samenvatting</h2>
-            <p className="text-cream-200/80 leading-relaxed">{summary}</p>
+          <div className="relative bg-gradient-to-br from-primary-50 via-warm-50 to-primary-50/30 rounded-2xl p-5 sm:p-8 mb-12 border border-primary-100/50 overflow-hidden">
+            {/* Decorative element */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-100/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+            
+            <div className="relative">
+              <h2 className="text-lg font-semibold text-warm-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </span>
+                Samenvatting
+              </h2>
+              <p className="text-warm-700 leading-relaxed text-base sm:text-lg">{summary}</p>
+            </div>
           </div>
         )}
 
         {/* Content */}
         {content && (
-          <div className="card-70s p-6 md:p-8">
-            <div
-              className="prose-70s"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
-          </div>
+          <div
+            className="prose prose-warm max-w-none prose-headings:font-serif prose-headings:text-warm-900 prose-p:text-warm-700 prose-a:text-primary-600 prose-strong:text-warm-800 prose-lg"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         )}
 
         {/* Back link */}
-        <div className="mt-12 pt-8 border-t border-bronze-800/30">
-          <Link 
-            href="/sermons" 
-            className="inline-flex items-center gap-2 text-bronze-400 hover:text-bronze-300 transition-colors"
+        <div className="mt-20 pt-10 border-t border-warm-200">
+          <Link
+            href="/sermons"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
             </svg>
             Terug naar alle preken
           </Link>

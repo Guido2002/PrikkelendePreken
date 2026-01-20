@@ -2,51 +2,43 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4 relative">
-      {/* Warm ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-radial from-bronze-600/10 to-transparent rounded-full blur-3xl" />
-      
-      <div className="card-70s max-w-md w-full p-8 text-center relative">
+    <div className="min-h-[70vh] flex items-center justify-center px-4">
+      <div className="max-w-md w-full text-center">
         {/* Decorative 404 */}
-        <div className="mb-8">
-          <div className="relative inline-block">
-            <span className="text-7xl md:text-9xl font-display font-bold text-bronze-600/20">
-              404
-            </span>
-            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl md:text-5xl font-display font-bold text-cream-200">
-              404
-            </span>
+        <div className="relative mb-8">
+          <span className="text-[150px] md:text-[200px] font-bold text-warm-100 leading-none select-none">
+            404
+          </span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-24 h-24 bg-primary-50 rounded-2xl flex items-center justify-center">
+              <svg className="w-12 h-12 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
           </div>
         </div>
 
-        {/* Icon */}
-        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-wood-800/50 flex items-center justify-center">
-          <svg className="w-8 h-8 text-bronze-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-          </svg>
-        </div>
-
-        <h1 className="text-xl md:text-2xl font-display font-semibold text-cream-100 mb-3">
+        <h1 className="text-2xl md:text-3xl font-bold text-warm-900 mb-3 font-serif">
           Pagina niet gevonden
         </h1>
-        <p className="text-cream-300/70 mb-8 leading-relaxed">
+        <p className="text-warm-600 mb-8 leading-relaxed">
           De pagina die je zoekt bestaat niet of is verplaatst naar een andere locatie.
         </p>
         
-        {/* Divider */}
-        <div className="divider-70s mb-8" />
-
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link href="/" className="btn-70s-primary inline-flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-primary-600/25 hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
             Terug naar home
           </Link>
-          <Link href="/sermons" className="btn-70s inline-flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-            </svg>
+          <Link
+            href="/sermons"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold transition-all"
+          >
             Bekijk preken
           </Link>
         </div>

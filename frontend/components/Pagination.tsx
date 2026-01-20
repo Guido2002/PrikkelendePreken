@@ -48,46 +48,48 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
   const pages = getPageNumbers();
 
   return (
-    <nav className="mt-12 flex justify-center" aria-label="Paginering">
-      <div className="inline-flex items-center gap-2">
+    <nav className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-16" aria-label="Paginering">
+      {/* Page info for mobile */}
+      <div className="sm:hidden text-sm text-warm-500">
+        Pagina {currentPage} van {totalPages}
+      </div>
+
+      <div className="flex items-center gap-2">
         {/* Previous button */}
         {currentPage > 1 ? (
           <Link
             href={currentPage === 2 ? '/sermons' : `/sermons/page/${currentPage - 1}`}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-300 hover:text-bronze-400 transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Vorige</span>
           </Link>
         ) : (
-          <span className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-500/40 cursor-not-allowed">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          <span className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Vorige</span>
           </span>
         )}
 
-        {/* Divider */}
-        <div className="w-px h-6 bg-gradient-to-b from-transparent via-bronze-600/30 to-transparent mx-1" />
-
         {/* Page numbers */}
-        <div className="flex items-center gap-1">
+        <div className="hidden sm:flex items-center gap-1.5">
           {pages.map((page, index) => (
             page === 'ellipsis' ? (
-              <span key={`ellipsis-${index}`} className="px-2 text-cream-500/50">
-                ···
+              <span key={`ellipsis-${index}`} className="w-10 h-11 flex items-center justify-center text-warm-400">
+                •••
               </span>
             ) : (
               <Link
                 key={page}
                 href={page === 1 ? '/sermons' : `/sermons/page/${page}`}
-                className={`w-10 h-10 flex items-center justify-center text-sm rounded transition-all duration-300 ${
+                className={`min-w-[44px] h-11 flex items-center justify-center rounded-xl font-semibold transition-all ${
                   page === currentPage
-                    ? 'bg-gradient-to-br from-bronze-500 to-bronze-700 text-wood-950 font-semibold shadow-glow'
-                    : 'text-cream-300 hover:text-bronze-400 hover:bg-wood-800/50'
+                    ? 'bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-md shadow-primary-600/25'
+                    : 'bg-white border border-warm-200 text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 shadow-sm'
                 }`}
                 aria-current={page === currentPage ? 'page' : undefined}
               >
@@ -97,34 +99,33 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
           ))}
         </div>
 
-        {/* Divider */}
-        <div className="w-px h-6 bg-gradient-to-b from-transparent via-bronze-600/30 to-transparent mx-1" />
+        {/* Current page indicator for mobile */}
+        <div className="sm:hidden flex items-center gap-1">
+          <span className="min-w-[44px] h-11 flex items-center justify-center rounded-xl font-semibold bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-md">
+            {currentPage}
+          </span>
+        </div>
 
         {/* Next button */}
         {currentPage < totalPages ? (
           <Link
             href={`/sermons/page/${currentPage + 1}`}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-300 hover:text-bronze-400 transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-warm-200 rounded-xl text-warm-700 hover:bg-warm-50 hover:border-primary-300 hover:text-primary-700 transition-all font-medium shadow-sm group"
           >
             <span className="hidden sm:inline">Volgende</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         ) : (
-          <span className="flex items-center gap-1.5 px-4 py-2 text-sm text-cream-500/40 cursor-not-allowed">
+          <span className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-warm-50 border border-warm-100 rounded-xl text-warm-400 font-medium cursor-not-allowed">
             <span className="hidden sm:inline">Volgende</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </span>
         )}
       </div>
-
-      {/* Page indicator for accessibility */}
-      <span className="sr-only">
-        Pagina {currentPage} van {totalPages}
-      </span>
     </nav>
   );
 }
