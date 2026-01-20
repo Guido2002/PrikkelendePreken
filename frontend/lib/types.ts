@@ -51,10 +51,6 @@ export interface Sermon {
   date: string;
   bibleText: string | null;
   bibleReference: BibleReference | null;
-  // API.Bible linkage (optional)
-  bibleId?: string | null;
-  bookId?: string | null;
-  chapterId?: string | null;
   audio: StrapiMedia | null;
   speaker: Speaker | null;
   themes: Theme[];

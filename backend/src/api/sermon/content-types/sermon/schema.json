@@ -38,18 +38,6 @@
       "component": "shared.bible-reference",
       "repeatable": false
     },
-    "bibleId": {
-      "type": "string",
-      "required": false
-    },
-    "bookId": {
-      "type": "string",
-      "required": false
-    },
-    "chapterId": {
-      "type": "string",
-      "required": false
-    },
     "audio": {
       "type": "media",
       "multiple": false,
