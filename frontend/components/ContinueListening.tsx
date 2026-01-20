@@ -24,7 +24,7 @@ export default function ContinueListening() {
   if (visible.length === 0) return null;
 
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-12">
+    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-8 md:pb-12">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
           <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">Verder luisteren</span>
