@@ -2,7 +2,6 @@
 
 import { SearchProvider } from '@/components/SearchProvider';
 import SearchModal from '@/components/SearchModal';
-import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import { SearchDocument } from '@/lib/search';
 
 interface ClientWrapperProps {
@@ -15,7 +14,6 @@ export default function ClientWrapper({ children, searchIndex }: ClientWrapperPr
     <SearchProvider searchIndex={searchIndex}>
       {children}
       <SearchModal />
-      <ServiceWorkerRegister />
     </SearchProvider>
   );
 }

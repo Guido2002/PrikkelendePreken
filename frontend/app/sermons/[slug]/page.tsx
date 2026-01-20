@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
 import FavoriteButton from '@/components/FavoriteButton';
+import ShareButton from '@/components/ShareButton';
+import BibleReader from '@/components/BibleReader';
 import { getSermonBySlug, getAllSermonSlugs, formatDate, formatBibleReference } from '@/lib/strapi';
 
 interface PageProps {
@@ -143,6 +145,8 @@ export default async function SermonDetailPage({ params }: PageProps) {
                 bibleText: displayBibleText,
               }}
             />
+
+            <ShareButton title={title} />
           </div>
 
           {/* Themes */}
@@ -204,6 +208,8 @@ export default async function SermonDetailPage({ params }: PageProps) {
             dangerouslySetInnerHTML={{ __html: content }}
           />
         )}
+
+        <BibleReader bibleReference={bibleReference} fallbackBibleText={displayBibleText} />
 
         {/* Back link */}
         <div className="mt-20 pt-10 border-t border-warm-200">

@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { getStrapiMediaUrl } from '@/lib/strapi';
-import OfflineButton from '@/components/OfflineButton';
 import {
   clearListeningEntry,
   getListeningEntry,
@@ -383,8 +382,6 @@ export default function AudioPlayer({ url, title, sermonSlug, speakerName, date,
             Verder luisteren
           </button>
         )}
-
-        <OfflineButton url={fullUrl} />
 
         {/* Playback rate button */}
         <button
