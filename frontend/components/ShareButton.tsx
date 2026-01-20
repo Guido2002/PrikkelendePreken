@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 function getBasePath(): string {
   const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'PrikkelendePreken';
@@ -25,6 +25,9 @@ export default function ShareButton({
 }>) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuId = useId();
 
   const url = useMemo(() => {
     if (typeof window === 'undefined') return '';
@@ -37,6 +40,33 @@ export default function ShareButton({
     const t = setTimeout(() => setCopied(false), 1200);
     return () => clearTimeout(t);
   }, [copied]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
+      const el = containerRef.current;
+      if (!el) return;
+      if (e.target instanceof Node && el.contains(e.target)) return;
+      setOpen(false);
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('touchstart', onPointerDown, { passive: true });
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('touchstart', onPointerDown);
+    };
+  }, [open]);
 
   const shareText = `${title}`;
 
@@ -84,10 +114,14 @@ export default function ShareButton({
   const encoded = encodeURIComponent(`${shareText}\n${url}`);
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <button
+        ref={buttonRef}
         type="button"
         onClick={onShare}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
         className="inline-flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-warm-200 rounded-xl text-sm font-medium text-warm-700 hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 transition-colors"
         title="Delen"
       >
@@ -98,10 +132,16 @@ export default function ShareButton({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 bg-white border border-warm-200 rounded-xl shadow-xl overflow-hidden z-10">
+        <div
+          id={menuId}
+          role="menu"
+          aria-label="Delen"
+          className="absolute right-0 mt-2 w-60 bg-white border border-warm-200 rounded-2xl shadow-2xl overflow-hidden z-50"
+        >
           <button
             type="button"
             onClick={onCopy}
+            role="menuitem"
             className="w-full text-left px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
           >
             {copied ? 'Link gekopieerd' : 'Kopieer link'}
@@ -110,12 +150,14 @@ export default function ShareButton({
             href={`https://wa.me/?text=${encoded}`}
             target="_blank"
             rel="noreferrer"
+            role="menuitem"
             className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
           >
             WhatsApp
           </a>
           <a
             href={`mailto:?subject=${encodeURIComponent(title)}&body=${encoded}`}
+            role="menuitem"
             className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
           >
             E-mail
@@ -124,6 +166,7 @@ export default function ShareButton({
             href={`https://x.com/intent/tweet?text=${encoded}`}
             target="_blank"
             rel="noreferrer"
+            role="menuitem"
             className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
           >
             X (Twitter)

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import SermonCard from '@/components/SermonCard';
 import SearchTrigger from '@/components/SearchTrigger';
 import ContinueListening from '@/components/ContinueListening';
-import { getLatestSermons } from '@/lib/strapi';
+import { getContentCounts, getLatestSermons } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
 
 // Generate static page at build time
@@ -10,13 +10,24 @@ export const dynamic = 'force-static';
 
 export default async function HomePage() {
   let sermons: Sermon[] = [];
+  let counts: { sermons: number | null; speakers: number | null; themes: number | null } = {
+    sermons: null,
+    speakers: null,
+    themes: null,
+  };
   
   try {
-    const response = await getLatestSermons(6);
-    sermons = response.data;
+    const [sermonsResponse, countsResponse] = await Promise.all([
+      getLatestSermons(6),
+      getContentCounts(),
+    ]);
+    sermons = sermonsResponse.data;
+    counts = countsResponse;
   } catch (error) {
     console.error('Error fetching sermons:', error);
   }
+
+  const formatCount = (value: number | null) => (typeof value === 'number' ? value.toLocaleString('nl-NL') : '—');
 
   return (
     <div>
@@ -76,23 +87,33 @@ export default async function HomePage() {
             </div>
 
             {/* Stats */}
-            <div className="mt-16 pt-10 border-t border-white/10">
-              <div className="flex items-center justify-center gap-8 md:gap-16">
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">100+</div>
-                  <div className="text-sm text-primary-300 mt-1">Preken</div>
+            <div className="mt-14 pt-10 border-t border-white/10">
+              <dl className="grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
+                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
+                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Preken</dt>
+                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
+                    {formatCount(counts.sermons)}
+                  </dd>
                 </div>
-                <div className="w-px h-12 bg-white/20" />
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">20+</div>
-                  <div className="text-sm text-primary-300 mt-1">Sprekers</div>
+                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
+                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Sprekers</dt>
+                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
+                    {formatCount(counts.speakers)}
+                  </dd>
                 </div>
-                <div className="w-px h-12 bg-white/20" />
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white">50+</div>
-                  <div className="text-sm text-primary-300 mt-1">Thema's</div>
+                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
+                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Thema&apos;s</dt>
+                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
+                    {formatCount(counts.themes)}
+                  </dd>
                 </div>
-              </div>
+              </dl>
+
+              {(counts.sermons === null || counts.speakers === null || counts.themes === null) && (
+                <p className="mt-4 text-xs text-primary-200/80 text-center">
+                  Statistieken tijdelijk niet beschikbaar.
+                </p>
+              )}
             </div>
           </div>
         </div>

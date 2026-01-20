@@ -47,6 +47,39 @@ async function fetchAPI<T>(endpoint: string): Promise<T> {
   }
 }
 
+async function fetchTotal(collection: 'sermons' | 'speakers' | 'themes'): Promise<number> {
+  const queryParams = new URLSearchParams({
+    'pagination[page]': '1',
+    'pagination[pageSize]': '1',
+    'fields[0]': 'id',
+  });
+
+  const response = await fetchAPI<StrapiResponse<Array<{ id: number }>>>(
+    `/${collection}?${queryParams}`
+  );
+
+  return response.meta.pagination?.total ?? 0;
+}
+
+export async function getContentCounts(): Promise<{
+  sermons: number | null;
+  speakers: number | null;
+  themes: number | null;
+}> {
+  try {
+    const [sermons, speakers, themes] = await Promise.all([
+      fetchTotal('sermons'),
+      fetchTotal('speakers'),
+      fetchTotal('themes'),
+    ]);
+
+    return { sermons, speakers, themes };
+  } catch (error) {
+    console.error('Error fetching content counts from Strapi:', error);
+    return { sermons: null, speakers: null, themes: null };
+  }
+}
+
 /**
  * Get all sermons with pagination
  */

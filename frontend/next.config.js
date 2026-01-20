@@ -24,6 +24,11 @@ const nextConfig = {
 
   // Allow dev origins for local network access
   allowedDevOrigins: ['192.168.2.37'],
+
+  // Silence workspace-root inference warning when multiple lockfiles exist
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 module.exports = nextConfig;

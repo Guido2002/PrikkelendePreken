@@ -112,7 +112,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Page Header */}
-      <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200 overflow-hidden">
+      <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
         {/* Decorative background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] bg-primary-100/30 rounded-full blur-3xl" />

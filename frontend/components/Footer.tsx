@@ -2,8 +2,15 @@
 
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({
+  counts,
+}: Readonly<{
+  counts?: { sermons: number | null; speakers: number | null; themes: number | null };
+}>) {
   const currentYear = new Date().getFullYear();
+
+  const formatCount = (value: number | null | undefined) =>
+    typeof value === 'number' ? value.toLocaleString('nl-NL') : '—';
 
   return (
     <footer className="bg-gradient-to-b from-warm-900 to-warm-950 text-warm-300 mt-auto">
@@ -27,15 +34,18 @@ export default function Footer() {
               Luister, lees en laat je raken door Gods Woord.
             </p>
             {/* Social proof / stats */}
-            <div className="flex items-center gap-6 text-sm">
-              <div>
-                <div className="text-2xl font-bold text-white">100+</div>
-                <div className="text-warm-500">Preken</div>
+            <div className="grid grid-cols-3 gap-3 max-w-sm">
+              <div className="rounded-2xl bg-warm-800/40 border border-warm-700/60 px-3 py-3">
+                <div className="text-xl font-bold text-white tabular-nums">{formatCount(counts?.sermons)}</div>
+                <div className="text-warm-500 text-xs">Preken</div>
               </div>
-              <div className="w-px h-10 bg-warm-800" />
-              <div>
-                <div className="text-2xl font-bold text-white">20+</div>
-                <div className="text-warm-500">Sprekers</div>
+              <div className="rounded-2xl bg-warm-800/40 border border-warm-700/60 px-3 py-3">
+                <div className="text-xl font-bold text-white tabular-nums">{formatCount(counts?.speakers)}</div>
+                <div className="text-warm-500 text-xs">Sprekers</div>
+              </div>
+              <div className="rounded-2xl bg-warm-800/40 border border-warm-700/60 px-3 py-3">
+                <div className="text-xl font-bold text-white tabular-nums">{formatCount(counts?.themes)}</div>
+                <div className="text-warm-500 text-xs">Thema&apos;s</div>
               </div>
             </div>
           </div>

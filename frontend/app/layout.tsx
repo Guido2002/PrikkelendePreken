@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
-import { getSermons } from '@/lib/strapi';
+import { getContentCounts, getSermons } from '@/lib/strapi';
 import { buildSearchIndex } from '@/lib/searchIndex';
 import './globals.css';
 
@@ -50,7 +50,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const searchIndex = await getSearchIndex();
+  const [searchIndex, counts] = await Promise.all([getSearchIndex(), getContentCounts()]);
 
   return (
     <html lang="nl">
@@ -58,7 +58,7 @@ export default async function RootLayout({
         <ClientWrapper searchIndex={searchIndex}>
           <Header />
           <main className="flex-grow">{children}</main>
-          <Footer />
+          <Footer counts={counts} />
         </ClientWrapper>
       </body>
     </html>
