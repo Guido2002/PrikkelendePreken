@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSearch } from './SearchProvider';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const { openSearch } = useSearch();
@@ -31,8 +32,8 @@ export default function Header() {
   return (
     <header className={`sticky top-0 z-40 transition-all duration-300 ${
       scrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-warm-100' 
-        : 'bg-white/80 backdrop-blur-md border-b border-warm-200/50'
+        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-warm-100 dark:bg-warm-950/90 dark:border-warm-800/70' 
+        : 'bg-white/80 backdrop-blur-md border-b border-warm-200/50 dark:bg-warm-950/70 dark:border-warm-800/50'
     }`}>
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-18">
@@ -56,8 +57,8 @@ export default function Header() {
               href="/" 
               className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/') && pathname === '/'
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50 dark:text-warm-200 dark:hover:text-primary-200 dark:hover:bg-warm-900/40'
               }`}
             >
               Home
@@ -69,8 +70,8 @@ export default function Header() {
               href="/sermons" 
               className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/sermons')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50 dark:text-warm-200 dark:hover:text-primary-200 dark:hover:bg-warm-900/40'
               }`}
             >
               Preken
@@ -83,8 +84,8 @@ export default function Header() {
               href="/dominees" 
               className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/dominees')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50 dark:text-warm-200 dark:hover:text-primary-200 dark:hover:bg-warm-900/40'
               }`}
             >
               Dominees
@@ -97,8 +98,8 @@ export default function Header() {
               href="/favorieten" 
               className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                 isActive('/favorieten')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-600 hover:text-primary-700 hover:bg-primary-50/50 dark:text-warm-200 dark:hover:text-primary-200 dark:hover:bg-warm-900/40'
               }`}
             >
               Favorieten
@@ -108,19 +109,21 @@ export default function Header() {
             </Link>
 
             {/* Divider */}
-            <div className="w-px h-6 bg-warm-200 mx-2" />
+            <div className="w-px h-6 bg-warm-200 mx-2 dark:bg-warm-800" />
+
+            <ThemeToggle />
 
             {/* Search Button */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2.5 px-4 py-2 bg-warm-50 hover:bg-warm-100 text-warm-600 rounded-xl transition-all duration-200 group border border-warm-200/50 hover:border-warm-300"
+              className="flex items-center gap-2.5 px-4 py-2 bg-warm-50 hover:bg-warm-100 text-warm-600 rounded-xl transition-all duration-200 group border border-warm-200/50 hover:border-warm-300 dark:bg-warm-900/30 dark:hover:bg-warm-800/50 dark:text-warm-200 dark:border-warm-800/60"
               aria-label="Zoeken"
             >
               <svg className="w-4 h-4 text-warm-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span className="text-sm text-warm-500">Zoeken...</span>
-              <kbd className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 bg-white text-warm-400 rounded-md text-xs font-mono border border-warm-200">
+              <span className="text-sm text-warm-500 dark:text-warm-300">Zoeken...</span>
+              <kbd className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 bg-white text-warm-400 rounded-md text-xs font-mono border border-warm-200 dark:bg-warm-950 dark:text-warm-300 dark:border-warm-800">
                 <span className="text-[10px]">⌘</span>K
               </kbd>
             </button>
@@ -128,9 +131,10 @@ export default function Header() {
 
           {/* Mobile: Search + Menu buttons */}
           <div className="flex md:hidden items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={openSearch}
-              className="p-2.5 text-warm-500 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all"
+              className="p-2.5 text-warm-500 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all dark:text-warm-200 dark:hover:bg-warm-900/40"
               aria-label="Zoeken"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +143,7 @@ export default function Header() {
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="relative p-2.5 text-warm-600 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all z-50"
+              className="relative p-2.5 text-warm-600 hover:text-primary-600 hover:bg-warm-100 rounded-xl transition-all z-50 dark:text-warm-200 dark:hover:bg-warm-900/40"
               aria-label={mobileMenuOpen ? 'Sluit menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
             >
@@ -165,14 +169,14 @@ export default function Header() {
           ? 'opacity-100 translate-y-0 pointer-events-auto' 
           : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="bg-white/95 backdrop-blur-md border-b border-warm-200 shadow-lg">
+        <div className="bg-white/95 backdrop-blur-md border-b border-warm-200 shadow-lg dark:bg-warm-950/95 dark:border-warm-800/70">
           <div className="px-4 py-4 space-y-1">
             <Link 
               href="/" 
               className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/') && pathname === '/'
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-700 hover:bg-warm-50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-700 hover:bg-warm-50 dark:text-warm-200 dark:hover:bg-warm-900/40'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,8 +188,8 @@ export default function Header() {
               href="/sermons" 
               className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/sermons')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-700 hover:bg-warm-50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-700 hover:bg-warm-50 dark:text-warm-200 dark:hover:bg-warm-900/40'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,8 +202,8 @@ export default function Header() {
               href="/dominees" 
               className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/dominees')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-700 hover:bg-warm-50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-700 hover:bg-warm-50 dark:text-warm-200 dark:hover:bg-warm-900/40'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,8 +216,8 @@ export default function Header() {
               href="/favorieten" 
               className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive('/favorieten')
-                  ? 'text-primary-700 bg-primary-50'
-                  : 'text-warm-700 hover:bg-warm-50'
+                  ? 'text-primary-700 bg-primary-50 dark:bg-warm-900/40 dark:text-primary-200'
+                  : 'text-warm-700 hover:bg-warm-50 dark:text-warm-200 dark:hover:bg-warm-900/40'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -53,8 +54,22 @@ export default async function RootLayout({
   const [searchIndex, counts] = await Promise.all([getSearchIndex(), getContentCounts()]);
 
   return (
-    <html lang="nl">
-      <body className={`${inter.className} min-h-screen flex flex-col bg-warm-50`}>
+    <html lang="nl" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen flex flex-col bg-warm-50 dark:bg-warm-950`}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){
+            try {
+              var stored = localStorage.getItem('theme');
+              var theme = stored === 'dark' || stored === 'light' ? stored : null;
+              if (!theme) {
+                theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              }
+              var root = document.documentElement;
+              if (theme === 'dark') root.classList.add('dark');
+              else root.classList.remove('dark');
+            } catch (e) {}
+          })();`}
+        </Script>
         <ClientWrapper searchIndex={searchIndex}>
           <Header />
           <main className="flex-grow">{children}</main>
