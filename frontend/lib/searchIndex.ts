@@ -34,6 +34,7 @@ export function sermonToSearchDocument(sermon: Sermon): SearchDocument {
     content: contentText,
     bibleText: displayBibleText,
     date: sermon.date,
+    hasAudio: Boolean(sermon.audio?.url),
     speakerName: sermon.speaker?.name || null,
     speakerId: sermon.speaker?.id || null,
     themes: sermon.themes?.map(t => ({ id: t.id, name: t.name })) || [],

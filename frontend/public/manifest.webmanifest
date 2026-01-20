@@ -1,0 +1,9 @@
+{
+  "name": "Prikkelende Preken",
+  "short_name": "Preken",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#7c3aed",
+  "description": "Luister naar en lees preken uit ons archief. Download audio voor offline luisteren."
+}

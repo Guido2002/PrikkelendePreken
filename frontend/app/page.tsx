@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import SermonCard from '@/components/SermonCard';
 import SearchTrigger from '@/components/SearchTrigger';
+import ContinueListening from '@/components/ContinueListening';
 import { getLatestSermons } from '@/lib/strapi';
 import { Sermon } from '@/lib/types';
 
@@ -103,6 +104,8 @@ export default async function HomePage() {
           </svg>
         </div>
       </section>
+
+      <ContinueListening />
 
       {/* Features Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">

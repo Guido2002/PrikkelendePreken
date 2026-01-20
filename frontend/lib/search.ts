@@ -9,6 +9,7 @@ export interface SearchDocument {
   content: string | null;
   bibleText: string | null;
   date: string;
+  hasAudio: boolean;
   speakerName: string | null;
   speakerId: number | null;
   themes: { id: number; name: string }[];
@@ -40,12 +41,15 @@ export interface SearchFilters {
   hasAudio?: boolean;
 }
 
+export type SearchSort = 'relevance' | 'newest' | 'oldest';
+
 // Search options
 export interface SearchOptions {
   query: string;
   filters?: SearchFilters;
   limit?: number;
   threshold?: number;
+  sort?: SearchSort;
 }
 
 // Fuse.js configuration for optimal sermon search
@@ -57,6 +61,8 @@ const fuseOptions: IFuseOptions<SearchDocument> = {
     { name: 'speakerName', weight: 0.15 },
     { name: 'summary', weight: 0.1 },
     { name: 'themes.name', weight: 0.1 },
+    // Broad catch-all text that includes content.
+    { name: 'searchableText', weight: 0.1 },
   ],
   // Search configuration
   threshold: 0.3, // Lower = stricter matching
@@ -73,20 +79,26 @@ const fuseOptions: IFuseOptions<SearchDocument> = {
 export class SermonSearchEngine {
   private fuse: Fuse<SearchDocument>;
   private documents: SearchDocument[];
+  private currentThreshold: number;
 
   constructor(documents: SearchDocument[]) {
     this.documents = documents;
     this.fuse = new Fuse(documents, fuseOptions);
+    this.currentThreshold = fuseOptions.threshold ?? 0.3;
+  }
+
+  private updateThresholdIfNeeded(threshold: number | undefined) {
+    if (threshold === undefined) return;
+    if (threshold === this.currentThreshold) return;
+    this.currentThreshold = threshold;
+    this.fuse = new Fuse(this.documents, { ...fuseOptions, threshold });
   }
 
   // Main search method
   search(options: SearchOptions): SearchResult[] {
-    const { query, filters, limit = 20, threshold } = options;
+    const { query, filters, limit = 20, threshold, sort = 'relevance' } = options;
 
-    // Update threshold if provided
-    if (threshold !== undefined) {
-      this.fuse.setCollection(this.documents);
-    }
+    this.updateThresholdIfNeeded(threshold);
 
     let results: FuseResult<SearchDocument>[];
 
@@ -95,8 +107,15 @@ export class SermonSearchEngine {
       results = this.fuse.search(query, { limit: limit * 2 });
     } else {
       // No query - return all documents sorted by date
-      results = this.documents
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      const sortedDocs = [...this.documents].sort((a, b) => {
+        const aTime = new Date(a.date).getTime();
+        const bTime = new Date(b.date).getTime();
+        if (sort === 'oldest') return aTime - bTime;
+        // default for empty query: newest first
+        return bTime - aTime;
+      });
+
+      results = sortedDocs
         .slice(0, limit * 2)
         .map((doc, index) => ({
           item: doc,
@@ -127,7 +146,21 @@ export class SermonSearchEngine {
           return false;
         }
 
+        // Audio filter
+        if (filters.hasAudio && !item.hasAudio) {
+          return false;
+        }
+
         return true;
+      });
+    }
+
+    // Optional sorting when the user requests date ordering.
+    if (sort !== 'relevance') {
+      filtered = [...filtered].sort((a, b) => {
+        const aTime = new Date(a.item.date).getTime();
+        const bTime = new Date(b.item.date).getTime();
+        return sort === 'oldest' ? aTime - bTime : bTime - aTime;
       });
     }
 

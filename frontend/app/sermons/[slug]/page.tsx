@@ -169,6 +169,10 @@ export default async function SermonDetailPage({ params }: PageProps) {
             <AudioPlayer
               url={audio.url}
               title={title}
+              sermonSlug={slug}
+              speakerName={speaker?.name ?? undefined}
+              date={date}
+              bibleText={displayBibleText}
             />
           </div>
         )}

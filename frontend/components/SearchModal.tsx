@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSearch } from './SearchProvider';
-import { SearchResult, highlightMatches } from '@/lib/search';
+import { SearchResult, SearchSort, highlightMatches } from '@/lib/search';
 import { formatDate } from '@/lib/strapi';
 
 export default function SearchModal() {
+  const router = useRouter();
   const {
     isOpen,
     closeSearch,
@@ -14,6 +16,8 @@ export default function SearchModal() {
     setQuery,
     filters,
     setFilters,
+    sort,
+    setSort,
     clearFilters,
     results,
     suggestions,
@@ -61,7 +65,13 @@ export default function SearchModal() {
           e.preventDefault();
           const slug = results[selectedIndex].document.slug;
           closeSearch();
-          window.location.href = `/sermons/${slug}`;
+          router.push(`/sermons/${slug}`);
+        } else if (results[0]) {
+          // If nothing is selected, open the first result.
+          e.preventDefault();
+          const slug = results[0].document.slug;
+          closeSearch();
+          router.push(`/sermons/${slug}`);
         }
         break;
       case 'Tab':
@@ -71,7 +81,7 @@ export default function SearchModal() {
         }
         break;
     }
-  }, [results, selectedIndex, suggestions, selectSuggestion, closeSearch]);
+  }, [results, selectedIndex, suggestions, selectSuggestion, closeSearch, router]);
 
   // Scroll selected result into view
   useEffect(() => {
@@ -85,23 +95,23 @@ export default function SearchModal() {
 
   // Count active filters
   const activeFilterCount = Object.values(filters).filter(v => v !== undefined && v !== '').length;
+  const shouldShowResults = query.trim().length > 0 || activeFilterCount > 0;
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
-      <div 
+      <button
+        type="button"
+        aria-label="Sluit zoeken"
         className="fixed inset-0 bg-warm-900/60 backdrop-blur-sm transition-opacity"
         onClick={closeSearch}
       />
 
       {/* Modal */}
       <div className="relative min-h-screen flex items-start justify-center p-4 pt-[10vh]">
-        <div 
-          className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all"
-          onClick={e => e.stopPropagation()}
-        >
+        <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
           {/* Search Header */}
           <div className="relative border-b border-warm-100">
             {/* Search icon */}
@@ -162,10 +172,41 @@ export default function SearchModal() {
           {showFilters && (
             <div className="border-b border-warm-100 bg-warm-50/50 p-4">
               <div className="flex flex-wrap gap-4">
+                {/* Sort */}
+                <div className="flex-1 min-w-[180px]">
+                  <label htmlFor="pp-search-sort" className="block text-xs font-medium text-warm-600 mb-1.5">Sorteren</label>
+                  <select
+                    id="pp-search-sort"
+                    value={sort}
+                    onChange={e => setSort(e.target.value as SearchSort)}
+                    className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                  >
+                    <option value="relevance">Relevantie</option>
+                    <option value="newest">Nieuwste eerst</option>
+                    <option value="oldest">Oudste eerst</option>
+                  </select>
+                </div>
+
+                {/* Has audio */}
+                <div className="flex-1 min-w-[180px]">
+                  <label htmlFor="pp-search-has-audio" className="block text-xs font-medium text-warm-600 mb-1.5">Audio</label>
+                  <label className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      id="pp-search-has-audio"
+                      type="checkbox"
+                      checked={Boolean(filters.hasAudio)}
+                      onChange={e => setFilters({ ...filters, hasAudio: e.target.checked ? true : undefined })}
+                      className="accent-primary-600"
+                    />
+                    Alleen met audio
+                  </label>
+                </div>
+
                 {/* Speaker filter */}
                 <div className="flex-1 min-w-[180px]">
-                  <label className="block text-xs font-medium text-warm-600 mb-1.5">Spreker</label>
+                  <label htmlFor="pp-search-speaker" className="block text-xs font-medium text-warm-600 mb-1.5">Spreker</label>
                   <select
+                    id="pp-search-speaker"
                     value={filters.speaker || ''}
                     onChange={e => setFilters({ ...filters, speaker: e.target.value || undefined })}
                     className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
@@ -179,8 +220,9 @@ export default function SearchModal() {
 
                 {/* Theme filter */}
                 <div className="flex-1 min-w-[180px]">
-                  <label className="block text-xs font-medium text-warm-600 mb-1.5">Thema</label>
+                  <label htmlFor="pp-search-theme" className="block text-xs font-medium text-warm-600 mb-1.5">Thema</label>
                   <select
+                    id="pp-search-theme"
                     value={filters.theme || ''}
                     onChange={e => setFilters({ ...filters, theme: e.target.value || undefined })}
                     className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
@@ -194,11 +236,12 @@ export default function SearchModal() {
 
                 {/* Year range */}
                 <div className="flex-1 min-w-[180px]">
-                  <label className="block text-xs font-medium text-warm-600 mb-1.5">Jaar</label>
+                  <span className="block text-xs font-medium text-warm-600 mb-1.5">Jaar</span>
                   <div className="flex gap-2 items-center">
                     <select
+                      aria-label="Jaar van"
                       value={filters.yearFrom || ''}
-                      onChange={e => setFilters({ ...filters, yearFrom: e.target.value ? parseInt(e.target.value) : undefined })}
+                      onChange={e => setFilters({ ...filters, yearFrom: e.target.value ? Number.parseInt(e.target.value, 10) : undefined })}
                       className="flex-1 px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                     >
                       <option value="">Van</option>
@@ -208,8 +251,9 @@ export default function SearchModal() {
                     </select>
                     <span className="text-warm-400">-</span>
                     <select
+                      aria-label="Jaar tot"
                       value={filters.yearTo || ''}
-                      onChange={e => setFilters({ ...filters, yearTo: e.target.value ? parseInt(e.target.value) : undefined })}
+                      onChange={e => setFilters({ ...filters, yearTo: e.target.value ? Number.parseInt(e.target.value, 10) : undefined })}
                       className="flex-1 px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                     >
                       <option value="">Tot</option>
@@ -243,7 +287,7 @@ export default function SearchModal() {
                 <span>Suggesties:</span>
                 {suggestions.map((suggestion, index) => (
                   <button
-                    key={index}
+                    key={suggestion}
                     onClick={() => selectSuggestion(suggestion)}
                     className="px-2 py-0.5 bg-white border border-warm-200 rounded text-warm-700 hover:border-primary-300 hover:text-primary-600 transition-colors"
                   >
@@ -258,7 +302,7 @@ export default function SearchModal() {
           {/* Results / Recent Searches */}
           <div ref={resultsRef} className="max-h-[50vh] overflow-y-auto">
             {/* No query - show recent searches */}
-            {!query && recentSearches.length > 0 && (
+            {!query && activeFilterCount === 0 && recentSearches.length > 0 && (
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-medium text-warm-600">Recente zoekopdrachten</h3>
@@ -272,7 +316,7 @@ export default function SearchModal() {
                 <div className="space-y-1">
                   {recentSearches.map((search, index) => (
                     <button
-                      key={index}
+                      key={search}
                       onClick={() => setQuery(search)}
                       className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-warm-700 hover:bg-warm-50 transition-colors"
                     >
@@ -287,7 +331,7 @@ export default function SearchModal() {
             )}
 
             {/* No query and no recent - show hint */}
-            {!query && recentSearches.length === 0 && (
+            {!query && activeFilterCount === 0 && recentSearches.length === 0 && (
               <div className="p-8 text-center">
                 <div className="w-12 h-12 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -302,7 +346,7 @@ export default function SearchModal() {
             )}
 
             {/* Search results */}
-            {query && results.length > 0 && (
+            {shouldShowResults && results.length > 0 && (
               <div className="py-2">
                 <div className="px-4 py-2 text-xs text-warm-500">
                   {results.length} resultaten gevonden
@@ -319,7 +363,7 @@ export default function SearchModal() {
             )}
 
             {/* No results */}
-            {query && results.length === 0 && !isLoading && (
+            {shouldShowResults && results.length === 0 && !isLoading && (
               <div className="p-8 text-center">
                 <div className="w-12 h-12 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -365,11 +409,11 @@ function SearchResultItem({
   result, 
   isSelected, 
   onClick 
-}: { 
+}: Readonly<{ 
   result: SearchResult; 
   isSelected: boolean;
   onClick: () => void;
-}) {
+}>) {
   const { document, matches } = result;
 
   // Find title match for highlighting
@@ -377,6 +421,8 @@ function SearchResultItem({
   const titleParts = titleMatch 
     ? highlightMatches(document.title, titleMatch.indices)
     : [{ text: document.title, highlighted: false }];
+
+  let titleOffset = 0;
 
   return (
     <Link
@@ -402,15 +448,17 @@ function SearchResultItem({
         <div className="flex-1 min-w-0">
           {/* Title with highlights */}
           <h4 className="font-semibold text-warm-900 truncate">
-            {titleParts.map((part, index) => (
-              part.highlighted ? (
-                <mark key={index} className="bg-primary-200/50 text-primary-900 rounded px-0.5">
+            {titleParts.map((part) => {
+              const key = `${titleOffset}-${part.highlighted}`;
+              titleOffset += part.text.length;
+              return part.highlighted ? (
+                <mark key={key} className="bg-primary-200/50 text-primary-900 rounded px-0.5">
                   {part.text}
                 </mark>
               ) : (
-                <span key={index}>{part.text}</span>
-              )
-            ))}
+                <span key={key}>{part.text}</span>
+              );
+            })}
           </h4>
 
           {/* Metadata */}

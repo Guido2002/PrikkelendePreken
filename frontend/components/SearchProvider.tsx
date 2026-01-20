@@ -1,13 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
-import { SermonSearchEngine, SearchDocument, SearchResult, SearchFilters, getRecentSearches, addRecentSearch, clearRecentSearches } from '@/lib/search';
+import { SermonSearchEngine, SearchDocument, SearchResult, SearchFilters, SearchSort, getRecentSearches, addRecentSearch, clearRecentSearches } from '@/lib/search';
 
 interface SearchContextType {
   // State
   isOpen: boolean;
   query: string;
   filters: SearchFilters;
+  sort: SearchSort;
   results: SearchResult[];
   suggestions: string[];
   recentSearches: string[];
@@ -25,6 +26,7 @@ interface SearchContextType {
   closeSearch: () => void;
   setQuery: (query: string) => void;
   setFilters: (filters: SearchFilters) => void;
+  setSort: (sort: SearchSort) => void;
   clearFilters: () => void;
   search: (query: string, filters?: SearchFilters) => void;
   clearRecentSearches: () => void;
@@ -50,6 +52,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>({});
+  const [sort, setSort] = useState<SearchSort>('relevance');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -108,6 +111,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
       const searchResults = searchEngine.search({
         query: searchQuery,
         filters: searchFilters || filters,
+        sort,
         limit: 20,
       });
       
@@ -120,14 +124,14 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
         setRecentSearches(getRecentSearches());
       }
     }, 50);
-  }, [searchEngine, filters]);
+  }, [searchEngine, filters, sort]);
 
   // Auto-search when query or filters change
   useEffect(() => {
     if (isOpen) {
       search(query, filters);
     }
-  }, [query, filters, isOpen, search]);
+  }, [query, filters, sort, isOpen, search]);
 
   const openSearch = useCallback(() => {
     setIsOpen(true);
@@ -157,6 +161,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
     isOpen,
     query,
     filters,
+    sort,
     results,
     suggestions,
     recentSearches,
@@ -170,6 +175,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
     closeSearch,
     setQuery,
     setFilters,
+    setSort,
     clearFilters: clearFiltersAction,
     search,
     clearRecentSearches: handleClearRecentSearches,

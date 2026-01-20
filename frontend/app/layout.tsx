@@ -11,6 +11,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourusername.github.io';
 const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'PrikkelendePreken';
+const isProduction = process.env.NODE_ENV === 'production';
+const basePath = isProduction ? `/${repoName}` : '';
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteUrl}/${repoName}`),
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
     template: '%s | Prikkelende Preken',
   },
   description: 'Luister naar en lees preken uit ons archief. Doorzoek preken op spreker, thema en bijbeltekst.',
+  manifest: `${basePath}/manifest.webmanifest`,
   keywords: ['preken', 'sermons', 'bijbel', 'christelijk', 'archief', 'kerk'],
   authors: [{ name: 'Prikkelende Preken' }],
   openGraph: {
@@ -47,9 +50,9 @@ async function getSearchIndex() {
 
 export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const searchIndex = await getSearchIndex();
 
   return (

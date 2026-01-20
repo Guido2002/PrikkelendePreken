@@ -2,13 +2,23 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { getStrapiMediaUrl } from '@/lib/strapi';
+import OfflineButton from '@/components/OfflineButton';
+import {
+  clearListeningEntry,
+  getListeningEntry,
+  upsertListeningEntry,
+} from '@/lib/listeningHistory';
 
 interface AudioPlayerProps {
   url: string;
   title: string;
+  sermonSlug?: string;
+  speakerName?: string;
+  date?: string;
+  bibleText?: string | null;
 }
 
-export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) {
+export default function AudioPlayer({ url, title, sermonSlug, speakerName, date, bibleText }: Readonly<AudioPlayerProps>) {
   const fullUrl = getStrapiMediaUrl(url);
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLButtonElement>(null);
@@ -21,6 +31,9 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
   const [isLoading, setIsLoading] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isScrubbing, setIsScrubbing] = useState(false);
+  const [resumeFromSec, setResumeFromSec] = useState<number | null>(null);
+  const appliedResumeRef = useRef(false);
+  const lastPersistMsRef = useRef(0);
 
   // Format time in mm:ss
   const formatTime = (time: number) => {
@@ -151,13 +164,75 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     const audio = audioRef.current;
     if (!audio) return;
 
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    if (sermonSlug) {
+      const entry = getListeningEntry(sermonSlug);
+      if (entry && Number.isFinite(entry.positionSec) && entry.positionSec > 0) {
+        setResumeFromSec(entry.positionSec);
+      } else {
+        setResumeFromSec(null);
+      }
+      appliedResumeRef.current = false;
+    }
+
+    const maybePersist = (force: boolean) => {
+      if (!sermonSlug) return;
+      const effectiveDuration = Number.isFinite(audio.duration) ? audio.duration : duration;
+      if (!effectiveDuration || !Number.isFinite(effectiveDuration) || effectiveDuration <= 0) return;
+
+      const pos = audio.currentTime;
+      if (!Number.isFinite(pos) || pos < 0) return;
+
+      const now = Date.now();
+      const isPlayingNow = !audio.paused;
+      const shouldWrite = force || (isPlayingNow && now - lastPersistMsRef.current >= 2000);
+      if (!shouldWrite) return;
+      lastPersistMsRef.current = now;
+
+      upsertListeningEntry({
+        slug: sermonSlug,
+        title,
+        speakerName,
+        date,
+        bibleText,
+        positionSec: pos,
+        durationSec: effectiveDuration,
+        updatedAt: now,
+      });
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      if (!isScrubbing) {
+        maybePersist(false);
+      }
+    };
     const handleDurationChange = () => setDuration(audio.duration);
     const handleLoadedMetadata = () => {
       if (Number.isFinite(audio.duration)) {
         setDuration(audio.duration);
       }
       setIsLoading(false);
+
+      // Apply resume position once we know duration.
+      if (sermonSlug && !appliedResumeRef.current) {
+        const entry = getListeningEntry(sermonSlug);
+        const resume = entry?.positionSec;
+        const dur = audio.duration;
+        if (
+          typeof resume === 'number' &&
+          Number.isFinite(resume) &&
+          typeof dur === 'number' &&
+          Number.isFinite(dur) &&
+          dur > 0 &&
+          resume > 2 &&
+          resume < dur - 2
+        ) {
+          audio.currentTime = resume;
+          setCurrentTime(resume);
+          setResumeFromSec(resume);
+        }
+        appliedResumeRef.current = true;
+      }
     };
     const handleCanPlay = () => {
       if (Number.isFinite(audio.duration)) {
@@ -171,9 +246,18 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
         setIsLoading(true);
       }
     };
-    const handleEnded = () => setIsPlaying(false);
+    const handleEnded = () => {
+      setIsPlaying(false);
+      if (sermonSlug) {
+        clearListeningEntry(sermonSlug);
+        setResumeFromSec(null);
+      }
+    };
     const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+    const handlePause = () => {
+      setIsPlaying(false);
+      maybePersist(true);
+    };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('durationchange', handleDurationChange);
@@ -185,6 +269,8 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
     audio.addEventListener('pause', handlePause);
 
     return () => {
+      // Best-effort persist on unmount.
+      maybePersist(true);
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('durationchange', handleDurationChange);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -194,7 +280,7 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
     };
-  }, []);
+  }, [bibleText, date, duration, isScrubbing, sermonSlug, speakerName, title]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -221,6 +307,25 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
 
   const effectiveDurationForUi = getEffectiveDuration();
   const progress = effectiveDurationForUi > 0 ? (currentTime / effectiveDurationForUi) * 100 : 0;
+
+  const showResume =
+    typeof resumeFromSec === 'number' &&
+    Number.isFinite(resumeFromSec) &&
+    resumeFromSec > 2 &&
+    effectiveDurationForUi > 0 &&
+    resumeFromSec < effectiveDurationForUi - 2;
+
+  const handleResume = async () => {
+    if (!audioRef.current) return;
+    if (!showResume || typeof resumeFromSec !== 'number') return;
+    audioRef.current.currentTime = resumeFromSec;
+    setCurrentTime(resumeFromSec);
+    try {
+      await audioRef.current.play();
+    } catch {
+      // Ignore autoplay restrictions; user can press play.
+    }
+  };
 
   let playButtonIcon: React.ReactNode;
   if (isLoading) {
@@ -268,6 +373,19 @@ export default function AudioPlayer({ url, title }: Readonly<AudioPlayerProps>) 
           <p className="text-white font-semibold truncate">{title}</p>
           <p className="text-primary-300 text-sm">Luister naar de preek</p>
         </div>
+        {showResume && (
+          <button
+            type="button"
+            onClick={handleResume}
+            className="self-start sm:self-auto px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors"
+            title="Verder luisteren"
+          >
+            Verder luisteren
+          </button>
+        )}
+
+        <OfflineButton url={fullUrl} />
+
         {/* Playback rate button */}
         <button
           onClick={cyclePlaybackRate}
