@@ -144,8 +144,13 @@ export async function getSermonBySlug(slug: string): Promise<Sermon | null> {
     'populate': '*',
   });
 
-  const response = await fetchAPI<StrapiResponse<Sermon[]>>(`/sermons?${queryParams}`);
-  return response.data[0] || null;
+  try {
+    const response = await fetchAPI<StrapiResponse<Sermon[]>>(`/sermons?${queryParams}`);
+    return response.data[0] || null;
+  } catch (error) {
+    console.error(`Error fetching sermon by slug "${slug}" (returning null):`, error);
+    return null;
+  }
 }
 
 /**
@@ -157,8 +162,15 @@ export async function getAllSermonSlugs(): Promise<string[]> {
     'pagination[pageSize]': '1000',
   });
 
-  const response = await fetchAPI<StrapiResponse<Sermon[]>>(`/sermons?${queryParams}`);
-  return response.data.map((sermon) => sermon.slug);
+  try {
+    const response = await fetchAPI<StrapiResponse<Sermon[]>>(`/sermons?${queryParams}`);
+    return response.data.map((sermon) => sermon.slug);
+  } catch (error) {
+    // For `output: 'export'`, returning an empty array can break export for dynamic routes.
+    // We fall back to a single placeholder page.
+    console.error('Error fetching sermon slugs from Strapi (using fallback placeholder):', error);
+    return ['sermon'];
+  }
 }
 
 /**

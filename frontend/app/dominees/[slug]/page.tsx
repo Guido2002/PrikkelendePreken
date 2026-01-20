@@ -120,7 +120,7 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-[70vh] md:min-h-[78vh] border-b border-warm-200 overflow-hidden">
+      <section className="relative min-h-[72vh] md:min-h-[86vh] border-b border-warm-200 overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
           {speaker.profilePicture?.url ? (
@@ -128,16 +128,18 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
               src={getStrapiMediaUrl(speaker.profilePicture.url)}
               alt={speaker.name}
               className="w-full h-full object-cover"
+              decoding="async"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary-200/40 via-warm-100 to-primary-100" />
           )}
           {/* Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-warm-950/55 via-warm-950/30 to-warm-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),rgba(255,255,255,0))]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-warm-950/70 via-warm-950/45 to-warm-950/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-warm-950/35 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.12),rgba(255,255,255,0))]" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-12 md:pb-16">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-12 md:pb-16 min-h-[72vh] md:min-h-[86vh] flex flex-col">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center gap-2 text-sm">
@@ -168,52 +170,75 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
             </ol>
           </nav>
 
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 font-serif leading-tight drop-shadow-sm">
-              {speaker.name}
-            </h1>
+          <div className="mt-auto max-w-3xl">
+            <div className="rounded-3xl bg-white/[0.08] backdrop-blur-md border border-white/15 shadow-[0_18px_70px_rgba(0,0,0,0.35)] p-6 sm:p-7 md:p-8">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-serif leading-tight tracking-tight drop-shadow-sm">
+                {speaker.name}
+              </h1>
 
-            {speaker.bio ? (
-              <p className="text-white/90 text-lg md:text-xl leading-relaxed">
-                {speaker.bio}
-              </p>
-            ) : (
-              <p className="text-white/80 text-lg md:text-xl leading-relaxed">Geen bio beschikbaar.</p>
-            )}
+              {speaker.bio ? (
+                <p className="text-white/90 text-base sm:text-lg md:text-xl leading-relaxed">
+                  {speaker.bio}
+                </p>
+              ) : (
+                <p className="text-white/80 text-base sm:text-lg md:text-xl leading-relaxed">Geen bio beschikbaar.</p>
+              )}
 
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur border border-white/15 rounded-xl text-sm font-medium text-white">
-                <svg className="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-                {totalSermons} preken
-              </span>
+              <div className="flex flex-wrap items-center gap-3 mt-7">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur border border-white/15 rounded-xl text-sm font-medium text-white">
+                  <svg className="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                  {totalSermons} preken
+                </span>
 
-              <Link
-                href="#preken"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all"
-              >
-                Bekijk preken
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
+                <Link
+                  href="#preken"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all"
+                >
+                  Bekijk preken
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </Link>
+
+                <Link
+                  href="/dominees"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-xl font-semibold border border-white/15 hover:bg-white/15 transition-colors"
+                >
+                  Alle dominees
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Sermons */}
-      <section id="preken" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <section id="preken" className="bg-warm-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {sermons.length > 0 ? (
           <>
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-warm-500 text-sm">Toon {sermons.length} van {totalSermons} preken</p>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+              <div>
+                <span className="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm uppercase tracking-wider">
+                  <span className="w-8 h-px bg-primary-600" aria-hidden="true" />
+                  <span>Preken</span>
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-warm-900 mt-2 font-serif">Preken van {speaker.name}</h2>
+                <p className="text-warm-600 text-sm mt-1">Toon {sermons.length} van {totalSermons} preken</p>
+              </div>
               <Link
                 href="/sermons"
-                className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white border border-warm-200 text-primary-700 font-semibold hover:bg-primary-50/40 hover:border-primary-200 transition-colors"
               >
                 Bekijk alle preken
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -245,6 +270,7 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
             </svg>
             Terug naar alle dominees
           </Link>
+        </div>
         </div>
       </section>
     </div>
