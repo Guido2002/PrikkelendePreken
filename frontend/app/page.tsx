@@ -88,42 +88,40 @@ export default async function HomePage() {
 
             {/* Stats */}
             <div className="mt-14 pt-10 border-t border-white/10">
-              <dl className="grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
-                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
-                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Preken</dt>
-                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
-                    {formatCount(counts.sermons)}
-                  </dd>
-                </div>
-                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
-                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Sprekers</dt>
-                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
-                    {formatCount(counts.speakers)}
-                  </dd>
-                </div>
-                <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-4 sm:px-4 sm:py-5 text-center">
-                  <dt className="text-xs sm:text-sm text-primary-200 font-medium">Thema&apos;s</dt>
-                  <dd className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
-                    {formatCount(counts.themes)}
-                  </dd>
-                </div>
-              </dl>
+              <div className="inline-flex flex-col items-center gap-3">
+                <dl className="inline-flex items-center justify-center gap-6 sm:gap-8 rounded-2xl bg-white/[0.06] border border-white/10 px-5 py-4 backdrop-blur-sm shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
+                  <div className="text-center min-w-[84px]">
+                    <dt className="text-[11px] sm:text-xs text-primary-200/90 font-medium tracking-wide">Preken</dt>
+                    <dd className="mt-1 text-2xl sm:text-3xl font-bold text-white tabular-nums leading-none">
+                      {formatCount(counts.sermons)}
+                    </dd>
+                  </div>
+                  <div className="w-px h-10 bg-white/10" />
+                  <div className="text-center min-w-[84px]">
+                    <dt className="text-[11px] sm:text-xs text-primary-200/90 font-medium tracking-wide">Sprekers</dt>
+                    <dd className="mt-1 text-2xl sm:text-3xl font-bold text-white tabular-nums leading-none">
+                      {formatCount(counts.speakers)}
+                    </dd>
+                  </div>
+                  <div className="w-px h-10 bg-white/10" />
+                  <div className="text-center min-w-[84px]">
+                    <dt className="text-[11px] sm:text-xs text-primary-200/90 font-medium tracking-wide">Thema&apos;s</dt>
+                    <dd className="mt-1 text-2xl sm:text-3xl font-bold text-white tabular-nums leading-none">
+                      {formatCount(counts.themes)}
+                    </dd>
+                  </div>
+                </dl>
 
-              {(counts.sermons === null || counts.speakers === null || counts.themes === null) && (
-                <p className="mt-4 text-xs text-primary-200/80 text-center">
-                  Statistieken tijdelijk niet beschikbaar.
-                </p>
-              )}
+                {(counts.sermons === null || counts.speakers === null || counts.themes === null) && (
+                  <p className="text-xs text-primary-200/80 text-center">
+                    Statistieken tijdelijk niet beschikbaar.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#faf9f7"/>
-          </svg>
-        </div>
       </section>
 
       <ContinueListening />
