@@ -47,7 +47,7 @@ export default function ContinueListening() {
           return (
             <article
               key={e.slug}
-              className="group bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 dark:border-warm-800/60 hover:border-primary-200/60 dark:hover:border-primary-400/40"
+              className="group bg-white dark:bg-warm-900/55 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 dark:border-warm-800/70 hover:border-primary-200/60 dark:hover:border-primary-400/40 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
             >
               <div className="p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -59,7 +59,7 @@ export default function ContinueListening() {
                   <button
                     type="button"
                     onClick={() => clearListeningEntry(e.slug)}
-                    className="shrink-0 w-9 h-9 rounded-xl border border-warm-200 dark:border-warm-800 bg-warm-50 dark:bg-warm-950/40 text-warm-500 dark:text-warm-300 hover:text-primary-700 dark:hover:text-primary-200 hover:border-primary-200 dark:hover:border-primary-400/40 hover:bg-warm-100/70 dark:hover:bg-primary-900/20 transition-colors inline-flex items-center justify-center"
+                    className="shrink-0 w-9 h-9 rounded-xl border border-warm-200/80 bg-warm-50/80 text-warm-500 hover:bg-warm-100/70 hover:text-primary-700 hover:border-primary-200 transition-colors inline-flex items-center justify-center dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white dark:hover:border-white/20"
                     aria-label="Verwijder uit verder luisteren"
                     title="Verwijder"
                   >
@@ -79,13 +79,13 @@ export default function ContinueListening() {
 
                 {e.bibleText && <p className="text-primary-700 dark:text-primary-200 text-sm font-medium mb-4">{e.bibleText}</p>}
 
-                <div className="h-2 bg-warm-100 dark:bg-warm-900/40 rounded-full overflow-hidden border border-warm-100 dark:border-warm-800/60">
+                <div className="h-2.5 bg-warm-100 dark:bg-warm-950/50 rounded-full overflow-hidden ring-1 ring-warm-200/70 dark:ring-white/10">
                   <div className="h-full bg-gradient-to-r from-primary-500 to-primary-600" style={{ width: `${pct}%` }} />
                 </div>
-                <p className="mt-2 text-xs text-warm-500 dark:text-warm-300">{Math.round(pct)}% beluisterd</p>
+                <p className="mt-2 text-xs text-warm-500 dark:text-white/60">{Math.round(pct)}% beluisterd</p>
               </div>
 
-              <div className="px-5 sm:px-6 py-4 bg-warm-50/50 dark:bg-warm-950/30 border-t border-warm-100 dark:border-warm-800/60 group-hover:bg-primary-50/30 dark:group-hover:bg-primary-900/15 transition-colors">
+              <div className="px-5 sm:px-6 py-4 bg-warm-50/60 dark:bg-warm-950/40 border-t border-warm-100 dark:border-warm-800/60 group-hover:bg-primary-50/30 dark:group-hover:bg-primary-900/15 transition-colors">
                 <Link
                   href={`/sermons/${e.slug}`}
                   className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-200 group-hover:text-primary-700 dark:group-hover:text-primary-100 font-semibold text-sm"
