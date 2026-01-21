@@ -6,7 +6,7 @@ export default function Loading() {
       <Skeleton className="h-6 w-60 mb-8" />
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-warm-100 overflow-hidden">
+          <div className="bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 overflow-hidden">
             <Skeleton className="h-72 w-full rounded-none" />
             <div className="p-6">
               <Skeleton className="h-8 w-2/3" />
@@ -19,7 +19,7 @@ export default function Loading() {
           </div>
         </div>
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-warm-100 p-6 sm:p-8">
+          <div className="bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 p-6 sm:p-8">
             <Skeleton className="h-7 w-48" />
             <div className="space-y-3 mt-5">
               <Skeleton className="h-4 w-full" />

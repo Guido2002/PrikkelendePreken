@@ -122,7 +122,7 @@ export default function ShareButton({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-warm-200 rounded-xl text-sm font-medium text-warm-700 hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-warm-950/40 shadow-sm border border-warm-200 dark:border-warm-800 rounded-xl text-sm font-medium text-warm-700 dark:text-warm-100 hover:border-primary-200 dark:hover:border-primary-400/40 hover:bg-primary-50/40 dark:hover:bg-primary-900/20 hover:text-primary-700 dark:hover:text-primary-200 transition-colors"
         title="Delen"
       >
         <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,13 +136,13 @@ export default function ShareButton({
           id={menuId}
           role="menu"
           aria-label="Delen"
-          className="absolute right-0 mt-2 w-60 bg-white border border-warm-200 rounded-2xl shadow-2xl overflow-hidden z-50"
+          className="absolute right-0 mt-2 w-60 bg-white dark:bg-warm-950 border border-warm-200 dark:border-warm-800 rounded-2xl shadow-2xl overflow-hidden z-50"
         >
           <button
             type="button"
             onClick={onCopy}
             role="menuitem"
-            className="w-full text-left px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
+            className="w-full text-left px-4 py-3 text-sm text-warm-800 dark:text-warm-100 hover:bg-warm-50 dark:hover:bg-warm-900/30 transition-colors"
           >
             {copied ? 'Link gekopieerd' : 'Kopieer link'}
           </button>
@@ -151,14 +151,14 @@ export default function ShareButton({
             target="_blank"
             rel="noreferrer"
             role="menuitem"
-            className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
+            className="block px-4 py-3 text-sm text-warm-800 dark:text-warm-100 hover:bg-warm-50 dark:hover:bg-warm-900/30 transition-colors"
           >
             WhatsApp
           </a>
           <a
             href={`mailto:?subject=${encodeURIComponent(title)}&body=${encoded}`}
             role="menuitem"
-            className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
+            className="block px-4 py-3 text-sm text-warm-800 dark:text-warm-100 hover:bg-warm-50 dark:hover:bg-warm-900/30 transition-colors"
           >
             E-mail
           </a>
@@ -167,7 +167,7 @@ export default function ShareButton({
             target="_blank"
             rel="noreferrer"
             role="menuitem"
-            className="block px-4 py-3 text-sm text-warm-800 hover:bg-warm-50 transition-colors"
+            className="block px-4 py-3 text-sm text-warm-800 dark:text-warm-100 hover:bg-warm-50 dark:hover:bg-warm-900/30 transition-colors"
           >
             X (Twitter)
           </a>

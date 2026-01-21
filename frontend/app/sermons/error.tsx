@@ -16,9 +16,9 @@ export default function SermonsError({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="bg-white border border-warm-100 rounded-2xl shadow-soft p-6 sm:p-10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 font-serif">Preken konden niet geladen worden</h1>
-        <p className="mt-3 text-warm-600">Controleer je verbinding en probeer opnieuw.</p>
+      <div className="bg-white dark:bg-warm-900/40 border border-warm-100 dark:border-warm-800/60 rounded-2xl shadow-soft p-6 sm:p-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 dark:text-warm-50 font-serif">Preken konden niet geladen worden</h1>
+        <p className="mt-3 text-warm-600 dark:text-warm-200">Controleer je verbinding en probeer opnieuw.</p>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-3">
           <button

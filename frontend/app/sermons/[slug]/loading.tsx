@@ -3,7 +3,7 @@ import Skeleton from '@/components/Skeleton';
 export default function Loading() {
   return (
     <div>
-      <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200 overflow-hidden">
+      <div className="relative bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 dark:from-warm-950 dark:via-warm-950 dark:to-warm-950 border-b border-warm-200 dark:border-warm-900/60 overflow-hidden">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <Skeleton className="h-5 w-60 mb-8" />
           <Skeleton className="h-12 w-3/4 mb-8" />
@@ -35,7 +35,7 @@ export default function Loading() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-warm-100 p-6 sm:p-8 mb-12">
+        <div className="bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 p-6 sm:p-8 mb-12">
           <Skeleton className="h-6 w-48" />
           <div className="space-y-3 mt-5">
             <Skeleton className="h-4 w-full" />

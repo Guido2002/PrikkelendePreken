@@ -17,9 +17,9 @@ export default function GlobalError({
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-16">
-      <div className="max-w-xl w-full bg-white border border-warm-100 rounded-2xl shadow-soft p-6 sm:p-10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 font-serif">Er ging iets mis</h1>
-        <p className="mt-3 text-warm-600">
+      <div className="max-w-xl w-full bg-white dark:bg-warm-900/40 border border-warm-100 dark:border-warm-800/60 rounded-2xl shadow-soft p-6 sm:p-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 dark:text-warm-50 font-serif">Er ging iets mis</h1>
+        <p className="mt-3 text-warm-600 dark:text-warm-200">
           Probeer het opnieuw, of ga terug naar de homepagina.
         </p>
 

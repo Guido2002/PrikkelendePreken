@@ -111,10 +111,10 @@ export default function SearchModal() {
 
       {/* Modal */}
       <div className="relative min-h-screen flex items-start justify-center p-4 pt-[10vh]">
-        <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+        <div className="relative w-full max-w-2xl bg-white dark:bg-warm-950 rounded-2xl shadow-2xl overflow-hidden transform transition-all border border-warm-100/0 dark:border-warm-800/60">
           <h2 id="pp-search-title" className="sr-only">Zoeken</h2>
           {/* Search Header */}
-          <div className="relative border-b border-warm-100">
+          <div className="relative border-b border-warm-100 dark:border-warm-800">
             {/* Search icon */}
             <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
               {isLoading ? (
@@ -123,7 +123,7 @@ export default function SearchModal() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : (
-                <svg className="w-5 h-5 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-warm-400 dark:text-warm-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               )}
@@ -137,7 +137,7 @@ export default function SearchModal() {
               onChange={e => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Zoek preken, bijbelteksten, sprekers..."
-              className="w-full pl-11 sm:pl-12 pr-24 sm:pr-32 py-3.5 sm:py-4 text-base sm:text-lg bg-transparent text-warm-900 placeholder-warm-400 focus:outline-none"
+              className="w-full pl-11 sm:pl-12 pr-24 sm:pr-32 py-3.5 sm:py-4 text-base sm:text-lg bg-transparent text-warm-900 dark:text-warm-50 placeholder-warm-400 dark:placeholder-warm-500 focus:outline-none"
             />
 
             {/* Right side buttons */}
@@ -149,8 +149,8 @@ export default function SearchModal() {
                 aria-controls="pp-search-filters"
                 className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                   showFilters || activeFilterCount > 0
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'bg-warm-100 text-warm-600 hover:bg-warm-200'
+                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-200'
+                    : 'bg-warm-100 text-warm-600 hover:bg-warm-200 dark:bg-warm-900/40 dark:text-warm-200 dark:hover:bg-warm-900/60'
                 }`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,16 +173,16 @@ export default function SearchModal() {
 
           {/* Filters Panel */}
           {showFilters && (
-            <div id="pp-search-filters" className="border-b border-warm-100 bg-warm-50/50 p-4">
+            <div id="pp-search-filters" className="border-b border-warm-100 dark:border-warm-800 bg-warm-50/50 dark:bg-warm-900/20 p-4">
               <div className="flex flex-wrap gap-4">
                 {/* Sort */}
                 <div className="flex-1 min-w-[180px]">
-                  <label htmlFor="pp-search-sort" className="block text-xs font-medium text-warm-600 mb-1.5">Sorteren</label>
+                  <label htmlFor="pp-search-sort" className="block text-xs font-medium text-warm-600 dark:text-warm-300 mb-1.5">Sorteren</label>
                   <select
                     id="pp-search-sort"
                     value={sort}
                     onChange={e => setSort(e.target.value as SearchSort)}
-                    className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                   >
                     <option value="relevance">Relevantie</option>
                     <option value="newest">Nieuwste eerst</option>
@@ -192,8 +192,8 @@ export default function SearchModal() {
 
                 {/* Has audio */}
                 <div className="flex-1 min-w-[180px]">
-                  <label htmlFor="pp-search-has-audio" className="block text-xs font-medium text-warm-600 mb-1.5">Audio</label>
-                  <label className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 flex items-center gap-2 cursor-pointer select-none">
+                  <label htmlFor="pp-search-has-audio" className="block text-xs font-medium text-warm-600 dark:text-warm-300 mb-1.5">Audio</label>
+                  <label className="w-full px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 flex items-center gap-2 cursor-pointer select-none">
                     <input
                       id="pp-search-has-audio"
                       type="checkbox"
@@ -207,12 +207,12 @@ export default function SearchModal() {
 
                 {/* Speaker filter */}
                 <div className="flex-1 min-w-[180px]">
-                  <label htmlFor="pp-search-speaker" className="block text-xs font-medium text-warm-600 mb-1.5">Spreker</label>
+                  <label htmlFor="pp-search-speaker" className="block text-xs font-medium text-warm-600 dark:text-warm-300 mb-1.5">Spreker</label>
                   <select
                     id="pp-search-speaker"
                     value={filters.speaker || ''}
                     onChange={e => setFilters({ ...filters, speaker: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                   >
                     <option value="">Alle sprekers</option>
                     {speakers.map(speaker => (
@@ -223,12 +223,12 @@ export default function SearchModal() {
 
                 {/* Theme filter */}
                 <div className="flex-1 min-w-[180px]">
-                  <label htmlFor="pp-search-theme" className="block text-xs font-medium text-warm-600 mb-1.5">Thema</label>
+                  <label htmlFor="pp-search-theme" className="block text-xs font-medium text-warm-600 dark:text-warm-300 mb-1.5">Thema</label>
                   <select
                     id="pp-search-theme"
                     value={filters.theme || ''}
                     onChange={e => setFilters({ ...filters, theme: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                   >
                     <option value="">Alle thema&apos;s</option>
                     {themes.map(theme => (
@@ -239,25 +239,25 @@ export default function SearchModal() {
 
                 {/* Year range */}
                 <div className="flex-1 min-w-[180px]">
-                  <span className="block text-xs font-medium text-warm-600 mb-1.5">Jaar</span>
+                  <span className="block text-xs font-medium text-warm-600 dark:text-warm-300 mb-1.5">Jaar</span>
                   <div className="flex gap-2 items-center">
                     <select
                       aria-label="Jaar van"
                       value={filters.yearFrom || ''}
                       onChange={e => setFilters({ ...filters, yearFrom: e.target.value ? Number.parseInt(e.target.value, 10) : undefined })}
-                      className="flex-1 px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                      className="flex-1 px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                     >
                       <option value="">Van</option>
                       {Array.from({ length: yearRange.max - yearRange.min + 1 }, (_, i) => yearRange.min + i).map(year => (
                         <option key={year} value={year}>{year}</option>
                       ))}
                     </select>
-                    <span className="text-warm-400">-</span>
+                    <span className="text-warm-400 dark:text-warm-500">-</span>
                     <select
                       aria-label="Jaar tot"
                       value={filters.yearTo || ''}
                       onChange={e => setFilters({ ...filters, yearTo: e.target.value ? Number.parseInt(e.target.value, 10) : undefined })}
-                      className="flex-1 px-3 py-2 bg-white border border-warm-200 rounded-lg text-sm text-warm-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+                      className="flex-1 px-3 py-2 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded-lg text-sm text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                     >
                       <option value="">Tot</option>
                       {Array.from({ length: yearRange.max - yearRange.min + 1 }, (_, i) => yearRange.min + i).map(year => (
@@ -272,7 +272,7 @@ export default function SearchModal() {
               {activeFilterCount > 0 && (
                 <button
                   onClick={clearFilters}
-                  className="mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                  className="mt-3 text-sm text-primary-600 dark:text-primary-200 hover:text-primary-700 dark:hover:text-primary-100 font-medium flex items-center gap-1"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -285,14 +285,14 @@ export default function SearchModal() {
 
           {/* Suggestions */}
           {suggestions.length > 0 && query && (
-            <div className="border-b border-warm-100 px-4 py-2 bg-warm-50/30">
+            <div className="border-b border-warm-100 dark:border-warm-800 px-4 py-2 bg-warm-50/30 dark:bg-warm-900/10">
               <div className="flex flex-wrap items-center gap-2 text-xs text-warm-500">
                 <span>Suggesties:</span>
                 {suggestions.map((suggestion, index) => (
                   <button
                     key={suggestion}
                     onClick={() => selectSuggestion(suggestion)}
-                    className="px-2 py-0.5 bg-white border border-warm-200 rounded text-warm-700 hover:border-primary-300 hover:text-primary-600 transition-colors"
+                    className="px-2 py-0.5 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded text-warm-700 dark:text-warm-100 hover:border-primary-300 dark:hover:border-primary-400/40 hover:text-primary-600 dark:hover:text-primary-200 transition-colors"
                   >
                     {suggestion}
                   </button>
@@ -308,10 +308,10 @@ export default function SearchModal() {
             {!query && activeFilterCount === 0 && recentSearches.length > 0 && (
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-medium text-warm-600">Recente zoekopdrachten</h3>
+                  <h3 className="text-sm font-medium text-warm-600 dark:text-warm-200">Recente zoekopdrachten</h3>
                   <button
                     onClick={clearRecentSearches}
-                    className="text-xs text-warm-400 hover:text-warm-600"
+                    className="text-xs text-warm-400 hover:text-warm-600 dark:hover:text-warm-200"
                   >
                     Wis geschiedenis
                   </button>
@@ -321,9 +321,9 @@ export default function SearchModal() {
                     <button
                       key={search}
                       onClick={() => setQuery(search)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-warm-700 hover:bg-warm-50 transition-colors"
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-warm-700 dark:text-warm-100 hover:bg-warm-50 dark:hover:bg-warm-900/30 transition-colors"
                     >
-                      <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-warm-400 dark:text-warm-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       {search}
@@ -336,13 +336,13 @@ export default function SearchModal() {
             {/* No query and no recent - show hint */}
             {!query && activeFilterCount === 0 && recentSearches.length === 0 && (
               <div className="p-8 text-center">
-                <div className="w-12 h-12 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-warm-400 dark:text-warm-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
-                <p className="text-warm-600 font-medium">Begin met zoeken</p>
-                <p className="text-warm-400 text-sm mt-1">
+                <p className="text-warm-600 dark:text-warm-100 font-medium">Begin met zoeken</p>
+                <p className="text-warm-400 dark:text-warm-400 text-sm mt-1">
                   Doorzoek {totalDocuments} preken op titel, bijbeltekst, spreker of thema
                 </p>
               </div>
@@ -351,7 +351,7 @@ export default function SearchModal() {
             {/* Search results */}
             {shouldShowResults && results.length > 0 && (
               <div className="py-2">
-                <div className="px-4 py-2 text-xs text-warm-500">
+                <div className="px-4 py-2 text-xs text-warm-500 dark:text-warm-300">
                   {results.length} resultaten gevonden
                 </div>
                 {results.map((result, index) => (
@@ -368,13 +368,13 @@ export default function SearchModal() {
             {/* No results */}
             {shouldShowResults && results.length === 0 && !isLoading && (
               <div className="p-8 text-center">
-                <div className="w-12 h-12 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-warm-400 dark:text-warm-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <p className="text-warm-600 font-medium">Geen resultaten</p>
-                <p className="text-warm-400 text-sm mt-1">
+                <p className="text-warm-600 dark:text-warm-100 font-medium">Geen resultaten</p>
+                <p className="text-warm-400 dark:text-warm-400 text-sm mt-1">
                   Probeer een andere zoekterm of pas de filters aan
                 </p>
               </div>
@@ -382,19 +382,19 @@ export default function SearchModal() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-warm-100 px-4 py-3 bg-warm-50/50">
+          <div className="border-t border-warm-100 dark:border-warm-800 px-4 py-3 bg-warm-50/50 dark:bg-warm-900/20">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-warm-500">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-warm-200 rounded">↑↓</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded">↑↓</kbd>
                   Navigeren
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-warm-200 rounded">Enter</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded">Enter</kbd>
                   Openen
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-warm-200 rounded">ESC</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 rounded">ESC</kbd>
                   Sluiten
                 </span>
               </div>
@@ -433,14 +433,14 @@ function SearchResultItem({
       onClick={onClick}
       className={`block px-4 py-3 transition-colors ${
         isSelected 
-          ? 'bg-primary-50 border-l-2 border-primary-500' 
-          : 'hover:bg-warm-50 border-l-2 border-transparent'
+          ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-500' 
+          : 'hover:bg-warm-50 dark:hover:bg-warm-900/30 border-l-2 border-transparent'
       }`}
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-          isSelected ? 'bg-primary-100' : 'bg-warm-100'
+          isSelected ? 'bg-primary-100 dark:bg-primary-900/25' : 'bg-warm-100 dark:bg-warm-900/40'
         }`}>
           <svg className={`w-5 h-5 ${isSelected ? 'text-primary-600' : 'text-warm-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -450,12 +450,12 @@ function SearchResultItem({
         {/* Content */}
         <div className="flex-1 min-w-0">
           {/* Title with highlights */}
-          <h4 className="font-semibold text-warm-900 truncate">
+          <h4 className="font-semibold text-warm-900 dark:text-warm-50 truncate">
             {titleParts.map((part) => {
               const key = `${titleOffset}-${part.highlighted}`;
               titleOffset += part.text.length;
               return part.highlighted ? (
-                <mark key={key} className="bg-primary-200/50 text-primary-900 rounded px-0.5">
+                <mark key={key} className="bg-primary-200/50 text-primary-900 dark:bg-primary-800/30 dark:text-primary-100 rounded px-0.5">
                   {part.text}
                 </mark>
               ) : (
@@ -465,18 +465,18 @@ function SearchResultItem({
           </h4>
 
           {/* Metadata */}
-          <div className="flex items-center gap-3 mt-1 text-sm text-warm-500">
+          <div className="flex items-center gap-3 mt-1 text-sm text-warm-500 dark:text-warm-300">
             <span>{formatDate(document.date)}</span>
             {document.speakerName && (
               <>
-                <span className="text-warm-300">•</span>
+                <span className="text-warm-300 dark:text-warm-600">•</span>
                 <span>{document.speakerName}</span>
               </>
             )}
             {document.bibleText && (
               <>
-                <span className="text-warm-300">•</span>
-                <span className="italic text-warm-600">{document.bibleText}</span>
+                <span className="text-warm-300 dark:text-warm-600">•</span>
+                <span className="italic text-warm-600 dark:text-warm-200">{document.bibleText}</span>
               </>
             )}
           </div>
@@ -487,7 +487,7 @@ function SearchResultItem({
               {document.themes.slice(0, 3).map(theme => (
                 <span
                   key={theme.id}
-                  className="px-2 py-0.5 bg-accent-100 text-accent-700 rounded text-xs"
+                  className="px-2 py-0.5 bg-accent-100 dark:bg-accent-700/20 text-accent-700 dark:text-accent-100 rounded text-xs"
                 >
                   {theme.name}
                 </span>
@@ -497,7 +497,7 @@ function SearchResultItem({
         </div>
 
         {/* Arrow */}
-        <svg className={`w-5 h-5 flex-shrink-0 ${isSelected ? 'text-primary-500' : 'text-warm-300'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-5 h-5 flex-shrink-0 ${isSelected ? 'text-primary-500' : 'text-warm-300 dark:text-warm-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </div>

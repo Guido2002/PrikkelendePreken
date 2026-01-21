@@ -18,8 +18,8 @@ export default function FavorietenPage() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
           <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">Bewaren</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-warm-900 mt-2 font-serif">Favorieten</h1>
-          <p className="text-warm-600 mt-3 max-w-2xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-warm-900 dark:text-warm-50 mt-2 font-serif">Favorieten</h1>
+          <p className="text-warm-600 dark:text-warm-200 mt-3 max-w-2xl">
             Preken die je bewaard hebt op dit apparaat.
           </p>
         </div>
@@ -28,7 +28,7 @@ export default function FavorietenPage() {
           <button
             type="button"
             onClick={() => clearFavorites()}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-warm-200 bg-white text-warm-600 hover:text-primary-700 hover:border-primary-200 hover:bg-primary-50/40 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-warm-200 dark:border-warm-800 bg-white dark:bg-warm-950/40 text-warm-600 dark:text-warm-200 hover:text-primary-700 dark:hover:text-primary-200 hover:border-primary-200 dark:hover:border-primary-400/40 hover:bg-primary-50/40 dark:hover:bg-primary-900/20 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -39,14 +39,14 @@ export default function FavorietenPage() {
       </div>
 
       {favorites.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl shadow-soft border border-warm-100">
-          <div className="w-16 h-16 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-16 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
+          <div className="w-16 h-16 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-warm-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.995 20.25s-7.245-4.397-9.338-8.343C1.17 9.032 2.02 6.44 4.23 5.26c1.68-.9 3.92-.57 5.29.86l2.475 2.575 2.475-2.575c1.37-1.43 3.61-1.76 5.29-.86 2.21 1.18 3.06 3.772 1.573 6.647-2.093 3.946-9.338 8.343-9.338 8.343z" />
             </svg>
           </div>
-          <p className="text-warm-600 text-lg font-medium mb-2">Nog geen favorieten</p>
-          <p className="text-warm-400 text-sm mb-8">Klik op het hartje bij een preek om ’m te bewaren.</p>
+          <p className="text-warm-600 dark:text-warm-100 text-lg font-medium mb-2">Nog geen favorieten</p>
+          <p className="text-warm-400 dark:text-warm-400 text-sm mb-8">Klik op het hartje bij een preek om ’m te bewaren.</p>
           <Link
             href="/sermons"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-all shadow-lg hover:shadow-xl"
@@ -62,17 +62,17 @@ export default function FavorietenPage() {
           {favorites.map((f) => (
             <article
               key={f.slug}
-              className="group bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60"
+              className="group bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 dark:border-warm-800/60 hover:border-primary-200/60 dark:hover:border-primary-400/40"
             >
               <div className="p-5 sm:p-6">
-                <h2 className="text-xl font-bold text-warm-900 group-hover:text-primary-700 transition-colors line-clamp-2 font-serif mb-3 leading-snug">
+                <h2 className="text-xl font-bold text-warm-900 dark:text-warm-50 group-hover:text-primary-700 dark:group-hover:text-primary-200 transition-colors line-clamp-2 font-serif mb-3 leading-snug">
                   <Link href={`/sermons/${f.slug}`} className="hover:underline decoration-primary-300 underline-offset-4">
                     {f.title}
                   </Link>
                 </h2>
 
                 {(f.speakerName || f.date) && (
-                  <p className="text-warm-600 text-sm mb-4">
+                  <p className="text-warm-600 dark:text-warm-200 text-sm mb-4">
                     {f.speakerName ? f.speakerName : null}
                     {f.speakerName && f.date ? ' · ' : null}
                     {f.date ? new Date(f.date).toLocaleDateString('nl-NL') : null}
@@ -86,10 +86,10 @@ export default function FavorietenPage() {
                 )}
               </div>
 
-              <div className="px-5 sm:px-6 py-4 bg-warm-50/50 border-t border-warm-100 group-hover:bg-primary-50/30 transition-colors">
+              <div className="px-5 sm:px-6 py-4 bg-warm-50/50 dark:bg-warm-950/30 border-t border-warm-100 dark:border-warm-800/60 group-hover:bg-primary-50/30 dark:group-hover:bg-primary-900/15 transition-colors">
                 <Link
                   href={`/sermons/${f.slug}`}
-                  className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm"
+                  className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-200 group-hover:text-primary-700 dark:group-hover:text-primary-100 font-semibold text-sm"
                 >
                   Open preek
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

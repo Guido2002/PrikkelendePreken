@@ -27,13 +27,13 @@ export default async function DomineesPage() {
   return (
     <div>
       {/* Page Header */}
-      <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
+      <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 dark:from-warm-950 dark:via-warm-950 dark:to-warm-950 border-b border-warm-200 dark:border-warm-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           {/* Breadcrumb */}
           <nav className="mb-6" aria-label="Breadcrumb">
             <ol className="flex items-center gap-2 text-sm">
               <li>
-                <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors flex items-center gap-1">
+                  <Link href="/" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors flex items-center gap-1">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
@@ -41,18 +41,18 @@ export default async function DomineesPage() {
                 </Link>
               </li>
               <li>
-                <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-warm-400 dark:text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </li>
-              <li className="text-warm-800 font-medium">Dominees</li>
+              <li className="text-warm-800 dark:text-warm-100 font-medium">Dominees</li>
             </ol>
           </nav>
 
           {/* Title & description */}
           <div className="max-w-2xl">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 font-serif mb-4">Dominees</h1>
-            <p className="text-warm-600 text-lg leading-relaxed">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 dark:text-warm-50 font-serif mb-4">Dominees</h1>
+            <p className="text-warm-600 dark:text-warm-200 text-lg leading-relaxed">
               Overzicht van alle dominees/sprekers in ons archief.
               {speakers.length > 0 && (
                 <span className="text-primary-600 font-medium"> {speakers.length} dominees beschikbaar.</span>
@@ -70,7 +70,7 @@ export default async function DomineesPage() {
               <Link
                 key={speaker.id}
                 href={`/dominees/${speaker.slug}`}
-                className="group relative bg-white rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 hover:border-primary-200/60"
+                className="group relative bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 dark:border-warm-800/60 hover:border-primary-200/60 dark:hover:border-primary-400/40"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50/30 group-hover:to-primary-100/20 transition-all duration-500 pointer-events-none" />
                 {/* Image */}
@@ -101,12 +101,12 @@ export default async function DomineesPage() {
                 {/* Body */}
                 <div className="relative p-6 pt-5">
                   {speaker.bio ? (
-                    <p className="text-warm-600 text-sm leading-relaxed line-clamp-3">{speaker.bio}</p>
+                    <p className="text-warm-600 dark:text-warm-200 text-sm leading-relaxed line-clamp-3">{speaker.bio}</p>
                   ) : (
-                    <p className="text-warm-500 text-sm leading-relaxed">Geen bio beschikbaar.</p>
+                    <p className="text-warm-500 dark:text-warm-300 text-sm leading-relaxed">Geen bio beschikbaar.</p>
                   )}
 
-                  <div className="mt-5 pt-4 border-t border-warm-100 flex items-center justify-between">
+                  <div className="mt-5 pt-4 border-t border-warm-100 dark:border-warm-800 flex items-center justify-between">
                     <span className="inline-flex items-center gap-2 text-primary-600 group-hover:text-primary-700 font-semibold text-sm">
                       Naar dominee
                       <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,14 +124,14 @@ export default async function DomineesPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
-            <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-20 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
+            <div className="w-20 h-20 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
-            <p className="text-warm-700 text-xl font-medium mb-2">Geen dominees gevonden.</p>
-            <p className="text-warm-500">Er zijn nog geen sprekers gepubliceerd.</p>
+            <p className="text-warm-700 dark:text-warm-100 text-xl font-medium mb-2">Geen dominees gevonden.</p>
+            <p className="text-warm-500 dark:text-warm-300">Er zijn nog geen sprekers gepubliceerd.</p>
           </div>
         )}
       </section>

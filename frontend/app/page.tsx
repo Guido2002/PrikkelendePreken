@@ -77,7 +77,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/sermons"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-800 rounded-xl font-semibold hover:bg-primary-50 transition-all shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 hover:-translate-y-0.5"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-800 dark:bg-white/10 dark:text-white dark:border dark:border-white/15 rounded-xl font-semibold hover:bg-primary-50 dark:hover:bg-white/15 transition-all shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 hover:-translate-y-0.5"
               >
                 Bekijk alle preken
                 <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,40 +129,40 @@ export default async function HomePage() {
       {/* Features Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
         <div className="grid sm:grid-cols-3 gap-6 md:gap-8">
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
+          <div className="group p-6 bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 hover:border-primary-200 dark:hover:border-primary-400/40 hover:shadow-soft transition-all">
+            <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors">
               <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9 12h.01M12 12h.01M15 12h.01" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Audio & Tekst</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Luister naar preken of lees de transcripties op je eigen tempo.</p>
+            <h3 className="text-lg font-semibold text-warm-900 dark:text-warm-50 mb-2">Audio & Tekst</h3>
+            <p className="text-warm-600 dark:text-warm-200 text-sm leading-relaxed">Luister naar preken of lees de transcripties op je eigen tempo.</p>
           </div>
           
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
+          <div className="group p-6 bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 hover:border-primary-200 dark:hover:border-primary-400/40 hover:shadow-soft transition-all">
+            <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors">
               <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Slim Zoeken</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Vind snel de preek die je zoekt via spreker, thema of bijbeltekst.</p>
+            <h3 className="text-lg font-semibold text-warm-900 dark:text-warm-50 mb-2">Slim Zoeken</h3>
+            <p className="text-warm-600 dark:text-warm-200 text-sm leading-relaxed">Vind snel de preek die je zoekt via spreker, thema of bijbeltekst.</p>
           </div>
           
-          <div className="group p-6 bg-white rounded-2xl border border-warm-100 hover:border-primary-200 hover:shadow-soft transition-all">
-            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
+          <div className="group p-6 bg-white dark:bg-warm-900/40 rounded-2xl border border-warm-100 dark:border-warm-800/60 hover:border-primary-200 dark:hover:border-primary-400/40 hover:shadow-soft transition-all">
+            <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors">
               <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-warm-900 mb-2">Bijbelreferenties</h3>
-            <p className="text-warm-600 text-sm leading-relaxed">Elke preek met duidelijke bijbeltekst voor diepere studie.</p>
+            <h3 className="text-lg font-semibold text-warm-900 dark:text-warm-50 mb-2">Bijbelreferenties</h3>
+            <p className="text-warm-600 dark:text-warm-200 text-sm leading-relaxed">Elke preek met duidelijke bijbeltekst voor diepere studie.</p>
           </div>
         </div>
       </section>
 
       {/* Latest Sermons */}
-      <section className="bg-warm-100/50">
+      <section className="bg-warm-100/50 dark:bg-warm-900/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
@@ -195,16 +195,16 @@ export default async function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
-              <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div className="text-center py-20 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
+              <div className="w-20 h-20 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
               </div>
-              <p className="text-warm-700 text-xl font-medium mb-2">
+              <p className="text-warm-700 dark:text-warm-100 text-xl font-medium mb-2">
                 Er zijn nog geen preken gepubliceerd.
               </p>
-              <p className="text-warm-500">
+              <p className="text-warm-500 dark:text-warm-300">
                 Voeg preken toe via het Strapi admin panel.
               </p>
             </div>
@@ -228,7 +228,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/sermons"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-700 rounded-xl font-semibold hover:bg-primary-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-primary-700 dark:bg-white/10 dark:text-white dark:border dark:border-white/15 rounded-xl font-semibold hover:bg-primary-50 dark:hover:bg-white/15 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Start met verkennen
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -61,33 +61,33 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
     // We show a friendly message instead of a hard 404.
     return (
       <div>
-        <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 border-b border-warm-200">
+        <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 dark:from-warm-950 dark:via-warm-950 dark:to-warm-950 border-b border-warm-200 dark:border-warm-800">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
             <nav className="mb-6" aria-label="Breadcrumb">
               <ol className="flex items-center gap-2 text-sm">
                 <li>
-                  <Link href="/" className="text-warm-500 hover:text-primary-600 transition-colors">
+                  <Link href="/" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <svg className="w-4 h-4 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-warm-400 dark:text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </li>
                 <li>
-                  <Link href="/dominees" className="text-warm-500 hover:text-primary-600 transition-colors">
+                  <Link href="/dominees" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors">
                     Dominees
                   </Link>
                 </li>
               </ol>
             </nav>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-warm-900 font-serif mb-4">Dominee tijdelijk niet beschikbaar</h1>
-            <p className="text-warm-600 text-lg leading-relaxed">
+            <h1 className="text-3xl md:text-4xl font-bold text-warm-900 dark:text-warm-50 font-serif mb-4">Dominee tijdelijk niet beschikbaar</h1>
+            <p className="text-warm-600 dark:text-warm-200 text-lg leading-relaxed">
               We kunnen dit dominee-profiel nu niet laden (Strapi is tijdelijk onbereikbaar). Probeer het later opnieuw.
             </p>
-            <p className="text-warm-500 text-sm mt-3">Slug: {slug}</p>
+            <p className="text-warm-500 dark:text-warm-300 text-sm mt-3">Slug: {slug}</p>
 
             <div className="mt-8">
               <Link
@@ -194,7 +194,7 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
 
                 <Link
                   href="#preken"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white text-warm-900 dark:bg-white/10 dark:text-white dark:border dark:border-white/15 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all dark:hover:bg-white/15"
                 >
                   Bekijk preken
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,7 +218,7 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
       </section>
 
       {/* Sermons */}
-      <section id="preken" className="bg-warm-50">
+      <section id="preken" className="bg-warm-50 dark:bg-warm-950">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {sermons.length > 0 ? (
           <>
@@ -228,12 +228,12 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
                   <span className="w-8 h-px bg-primary-600" aria-hidden="true" />
                   <span>Preken</span>
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-warm-900 mt-2 font-serif">Preken van {speaker.name}</h2>
-                <p className="text-warm-600 text-sm mt-1">Toon {sermons.length} van {totalSermons} preken</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-warm-900 dark:text-warm-50 mt-2 font-serif">Preken van {speaker.name}</h2>
+                <p className="text-warm-600 dark:text-warm-200 text-sm mt-1">Toon {sermons.length} van {totalSermons} preken</p>
               </div>
               <Link
                 href="/sermons"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white border border-warm-200 text-primary-700 font-semibold hover:bg-primary-50/40 hover:border-primary-200 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 text-primary-700 dark:text-primary-200 font-semibold hover:bg-primary-50/40 dark:hover:bg-primary-900/20 hover:border-primary-200 dark:hover:border-primary-400/40 transition-colors"
               >
                 Bekijk alle preken
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,19 +248,19 @@ export default async function DomineeDetailPage({ params }: Readonly<PageProps>)
             </div>
           </>
         ) : (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-soft border border-warm-100">
-            <div className="w-20 h-20 bg-warm-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-20 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
+            <div className="w-20 h-20 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
-            <p className="text-warm-700 text-xl font-medium mb-2">Geen preken gevonden.</p>
-            <p className="text-warm-500">Er zijn (nog) geen preken gekoppeld aan deze dominee.</p>
+            <p className="text-warm-700 dark:text-warm-100 text-xl font-medium mb-2">Geen preken gevonden.</p>
+            <p className="text-warm-500 dark:text-warm-300">Er zijn (nog) geen preken gekoppeld aan deze dominee.</p>
           </div>
         )}
 
         {/* Back link */}
-        <div className="mt-20 pt-10 border-t border-warm-200">
+        <div className="mt-20 pt-10 border-t border-warm-200 dark:border-warm-800">
           <Link
             href="/dominees"
             className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"

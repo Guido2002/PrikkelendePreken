@@ -16,9 +16,9 @@ export default function DomineesError({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="bg-white border border-warm-100 rounded-2xl shadow-soft p-6 sm:p-10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 font-serif">Dominees konden niet geladen worden</h1>
-        <p className="mt-3 text-warm-600">Controleer je verbinding en probeer opnieuw.</p>
+      <div className="bg-white dark:bg-warm-900/40 border border-warm-100 dark:border-warm-800/60 rounded-2xl shadow-soft p-6 sm:p-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-warm-900 dark:text-warm-50 font-serif">Dominees konden niet geladen worden</h1>
+        <p className="mt-3 text-warm-600 dark:text-warm-200">Controleer je verbinding en probeer opnieuw.</p>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-3">
           <button
@@ -30,7 +30,7 @@ export default function DomineesError({
           </button>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-warm-100 hover:bg-warm-200 text-warm-800 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/20"
+            className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-warm-100 hover:bg-warm-200 dark:bg-warm-900/50 dark:hover:bg-warm-900/70 text-warm-800 dark:text-warm-100 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/20"
           >
             Naar home
           </Link>

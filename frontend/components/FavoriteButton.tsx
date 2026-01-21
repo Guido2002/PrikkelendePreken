@@ -27,8 +27,8 @@ export default function FavoriteButton({ item, className }: Readonly<Props>) {
         className ??
         `inline-flex items-center justify-center w-10 h-10 rounded-xl border transition-colors ${
           active
-            ? 'bg-primary-50 border-primary-200 text-primary-700'
-            : 'bg-white border-warm-200 text-warm-500 hover:text-primary-700 hover:border-primary-200 hover:bg-primary-50/40'
+            ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/40 text-primary-700 dark:text-primary-200'
+            : 'bg-white dark:bg-warm-950/40 border-warm-200 dark:border-warm-800 text-warm-500 dark:text-warm-300 hover:text-primary-700 dark:hover:text-primary-200 hover:border-primary-200 dark:hover:border-primary-400/40 hover:bg-primary-50/40 dark:hover:bg-primary-900/20'
         }`
       }
       aria-pressed={active}
