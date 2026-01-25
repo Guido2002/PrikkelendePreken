@@ -49,6 +49,7 @@ export interface Sermon {
   summary: string | null;
   content: string | null;
   date: string;
+  plaats?: string | null;
   bibleText: string | null;
   bibleReference: BibleReference | null;
   audio: StrapiMedia | null;

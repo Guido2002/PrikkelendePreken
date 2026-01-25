@@ -115,7 +115,7 @@ export default async function SermonDetailPage({ params }: PageProps) {
     );
   }
 
-  const { title, date, bibleText, bibleReference, content, summary, audio, speaker, themes } = sermon;
+  const { title, date, bibleText, bibleReference, content, summary, audio, speaker, themes, plaats } = sermon;
   
   // Use structured bibleReference if available, otherwise fall back to bibleText
   const displayBibleText = formatBibleReference(bibleReference) || bibleText;
@@ -154,6 +154,12 @@ export default async function SermonDetailPage({ params }: PageProps) {
           contentUrl: audioUrl,
           encodingFormat: 'audio/mpeg',
           name: title,
+        }
+      : undefined,
+    contentLocation: plaats
+      ? {
+          '@type': 'Place',
+          name: plaats,
         }
       : undefined,
   };
@@ -215,6 +221,26 @@ export default async function SermonDetailPage({ params }: PageProps) {
               </svg>
               {formatDate(date)}
             </time>
+
+            {plaats && (
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-warm-950/40 shadow-sm border border-warm-200 dark:border-warm-800 rounded-xl text-sm font-medium text-warm-700 dark:text-warm-100">
+                <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10.5a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19.5 10.5c0 7.5-7.5 12-7.5 12s-7.5-4.5-7.5-12a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
+                {plaats}
+              </span>
+            )}
 
             {speaker && (
               <Link

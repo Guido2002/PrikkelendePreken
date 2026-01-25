@@ -8,7 +8,7 @@ interface SermonCardProps {
 }
 
 export default function SermonCard({ sermon }: SermonCardProps) {
-  const { title, slug, date, summary, bibleText, bibleReference, speaker, audio } = sermon;
+  const { title, slug, date, summary, bibleText, bibleReference, speaker, audio, plaats } = sermon;
   const speakerName = speaker?.name;
   const speakerSlug = speaker?.slug;
   
@@ -87,6 +87,27 @@ export default function SermonCard({ sermon }: SermonCardProps) {
                 Onbekend
               </span>
             )}
+
+            {plaats && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-50 dark:bg-warm-950/30 text-warm-700 dark:text-warm-100 rounded-lg text-sm font-medium border border-warm-100 dark:border-warm-800">
+                <svg className="w-3.5 h-3.5 text-warm-400 dark:text-warm-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10.5a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19.5 10.5c0 7.5-7.5 12-7.5 12s-7.5-4.5-7.5-12a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
+                {plaats}
+              </span>
+            )}
+
             {displayBibleText && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-200 rounded-lg text-sm font-medium border border-primary-100 dark:border-primary-800/40">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

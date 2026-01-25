@@ -455,6 +455,10 @@ export interface ApiSermonSermon extends Struct.CollectionTypeSchema {
       'api::sermon.sermon'
     > &
       Schema.Attribute.Private;
+    plaats: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     speaker: Schema.Attribute.Relation<'manyToOne', 'api::speaker.speaker'>;

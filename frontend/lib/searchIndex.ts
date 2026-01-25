@@ -20,6 +20,7 @@ export function sermonToSearchDocument(sermon: Sermon): SearchDocument {
   const searchableText = [
     sermon.title,
     displayBibleText,
+    sermon.plaats,
     sermon.summary,
     contentText,
     sermon.speaker?.name,
