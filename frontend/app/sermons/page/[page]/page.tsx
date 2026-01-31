@@ -1,0 +1,195 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import SermonCard from '@/components/SermonCard';
+import Pagination from '@/components/Pagination';
+import { getSermonPageCount, getSermons } from '@/lib/strapi';
+import { Sermon } from '@/lib/types';
+
+interface PageProps {
+  params: Promise<{ page: string }>;
+}
+
+// Required for static export - only allow pages from generateStaticParams
+export const dynamicParams = false;
+
+const PAGE_SIZE = 12;
+
+export async function generateStaticParams() {
+  try {
+    const totalPages = await getSermonPageCount(PAGE_SIZE);
+    const pages = Array.from({ length: Math.max(totalPages, 2) }, (_, index) => index + 1)
+      .filter((page) => page > 1)
+      .map((page) => ({ page: page.toString() }));
+
+    if (pages.length === 0) {
+      return [{ page: '2' }];
+    }
+
+    return pages;
+  } catch (error) {
+    console.error('Error generating sermon pagination params:', error);
+    return [{ page: '2' }];
+  }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { page } = await params;
+  const pageNumber = Number(page);
+  const titlePage = Number.isFinite(pageNumber) && pageNumber > 1 ? ` - Pagina ${pageNumber}` : '';
+
+  return {
+    title: `Alle Preken${titlePage}`,
+    description: 'Doorzoek ons complete archief van preken. Sorteer op datum en ontdek inspirerende boodschappen.',
+    alternates: {
+      canonical: `/sermons/page/${page}`,
+    },
+  };
+}
+
+// Generate static page at build time
+export const dynamic = 'force-static';
+
+export default async function SermonsPagedPage({ params }: Readonly<PageProps>) {
+  const { page } = await params;
+  const currentPage = Number(page);
+
+  let sermons: Sermon[] = [];
+  let totalPages = 1;
+  let totalSermons = 0;
+
+  try {
+    const response = await getSermons({
+      page: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
+      pageSize: PAGE_SIZE,
+    });
+    sermons = response.data;
+    totalPages = response.meta.pagination?.pageCount || 1;
+    totalSermons = response.meta.pagination?.total || 0;
+  } catch (error) {
+    console.error('Error fetching sermons:', error);
+  }
+
+  const isInvalidPage = !Number.isFinite(currentPage) || currentPage < 1 || currentPage > totalPages;
+
+  if (isInvalidPage) {
+    return (
+      <div>
+        <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 dark:from-warm-950 dark:via-warm-950 dark:to-warm-950 border-b border-warm-200 dark:border-warm-800">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <nav className="mb-6" aria-label="Breadcrumb">
+              <ol className="flex items-center gap-2 text-sm">
+                <li>
+                  <Link href="/" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <svg className="w-4 h-4 text-warm-400 dark:text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </li>
+                <li>
+                  <Link href="/sermons" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors">
+                    Preken
+                  </Link>
+                </li>
+              </ol>
+            </nav>
+
+            <h1 className="text-3xl md:text-4xl font-bold text-warm-900 dark:text-warm-50 font-serif mb-4">Pagina niet beschikbaar</h1>
+            <p className="text-warm-600 dark:text-warm-200 text-lg leading-relaxed">
+              Deze pagina bestaat niet of is nog niet beschikbaar. Kies een bestaande pagina uit het overzicht.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/sermons"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-warm-100 hover:bg-warm-200 text-warm-700 rounded-xl font-semibold group transition-all"
+              >
+                <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                </svg>
+                Terug naar alle preken
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Page Header */}
+      <section className="bg-gradient-to-b from-warm-100 via-warm-50 to-warm-50 dark:from-warm-950 dark:via-warm-950 dark:to-warm-950 border-b border-warm-200 dark:border-warm-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+          {/* Breadcrumb */}
+          <nav className="mb-6" aria-label="Breadcrumb">
+            <ol className="flex items-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-warm-500 dark:text-warm-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  Home
+                </Link>
+              </li>
+              <li>
+                <svg className="w-4 h-4 text-warm-400 dark:text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </li>
+              <li className="text-warm-800 dark:text-warm-100 font-medium">Preken</li>
+            </ol>
+          </nav>
+
+          {/* Title & description */}
+          <div className="max-w-2xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 dark:text-warm-50 font-serif mb-4">Alle Preken</h1>
+            <p className="text-warm-600 dark:text-warm-200 text-lg leading-relaxed">
+              Doorzoek ons complete archief van inspirerende preken.
+              {totalSermons > 0 && (
+                <span className="text-primary-600 font-medium"> {totalSermons} preken beschikbaar.</span>
+              )}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Sermons Grid */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {sermons.length > 0 ? (
+          <>
+            {/* Results count */}
+            <div className="flex items-center justify-between mb-8">
+              <p className="text-warm-500 dark:text-warm-300 text-sm">
+                Toon {sermons.length} van {totalSermons} preken
+              </p>
+              <p className="text-warm-500 dark:text-warm-300 text-sm">
+                Pagina {currentPage} van {totalPages}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {sermons.map((sermon) => (
+                <SermonCard key={sermon.id} sermon={sermon} />
+              ))}
+            </div>
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          </>
+        ) : (
+          <div className="text-center py-20 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
+            <div className="w-20 h-20 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </div>
+            <p className="text-warm-700 dark:text-warm-100 text-xl font-medium mb-2">Geen preken gevonden.</p>
+            <p className="text-warm-500 dark:text-warm-300">Er zijn nog geen preken gepubliceerd.</p>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
