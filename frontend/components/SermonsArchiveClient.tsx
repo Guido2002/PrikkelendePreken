@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SermonCard from '@/components/SermonCard';
 import Pagination from '@/components/Pagination';
-import type { Sermon, Speaker, Theme, StrapiResponse } from '@/lib/types';
+import { useSearch } from '@/components/SearchProvider';
+import type { SearchDocument } from '@/lib/search';
+import type { SermonCardData } from '@/components/SermonCard';
+import type { Sermon, Speaker, Theme } from '@/lib/types';
 
 type PaginationMeta = {
   page: number;
@@ -33,48 +36,45 @@ function getPageFromPathname(pathname: string): number {
   return 1;
 }
 
-function getStrapiBaseUrl(): string {
-  // Must be NEXT_PUBLIC_* for client bundles
-  return process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+function safeNumber(value: string | null): number | null {
+  if (!value) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
 }
 
-async function fetchSermonsClient(params: {
-  page: number;
-  pageSize: number;
-  speakerSlug?: string;
-  themeSlug?: string;
-  audioOnly?: boolean;
-}): Promise<StrapiResponse<Sermon[]>> {
-  const { page, pageSize, speakerSlug, themeSlug, audioOnly } = params;
+function normalizeQuery(text: string): string {
+  return text
+    .toLowerCase()
+    .replaceAll(/\s+/g, ' ')
+    .trim();
+}
 
-  const qs = new URLSearchParams({
-    populate: '*',
-    sort: 'date:desc',
-    'pagination[page]': String(page),
-    'pagination[pageSize]': String(pageSize),
-  });
+function matchesAllTokens(haystack: string, query: string): boolean {
+  const normalized = normalizeQuery(query);
+  if (!normalized) return true;
+  const tokens = normalized.split(' ').filter(Boolean);
+  if (tokens.length === 0) return true;
+  const h = normalizeQuery(haystack);
+  return tokens.every((t) => h.includes(t));
+}
 
-  if (speakerSlug) {
-    qs.append('filters[speaker][slug][$eq]', speakerSlug);
+function byDateDesc(a: SearchDocument, b: SearchDocument) {
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
+}
+
+function setOrDelete(params: URLSearchParams, key: string, value: string | null | undefined) {
+  const trimmed = value?.trim();
+  if (trimmed) params.set(key, trimmed);
+  else params.delete(key);
+}
+
+function setOrDeleteNumber(params: URLSearchParams, key: string, value: number | null | undefined) {
+  if (value === undefined) return;
+  if (value === null) {
+    params.delete(key);
+    return;
   }
-
-  if (themeSlug) {
-    qs.append('filters[themes][slug][$eq]', themeSlug);
-  }
-
-  if (audioOnly) {
-    // Works for media field and most optional fields in Strapi v4
-    qs.append('filters[audio][$notNull]', 'true');
-  }
-
-  const url = `${getStrapiBaseUrl()}/api/sermons?${qs.toString()}`;
-  const res = await fetch(url, { cache: 'no-store' });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch sermons: ${res.status} ${res.statusText}`);
-  }
-
-  return res.json();
+  params.set(key, String(value));
 }
 
 export default function SermonsArchiveClient({
@@ -87,105 +87,159 @@ export default function SermonsArchiveClient({
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { documents, yearRange, isIndexLoaded } = useSearch();
 
   const currentPage = useMemo(() => getPageFromPathname(pathname), [pathname]);
 
   const speakerSlug = searchParams.get('speaker') || '';
   const themeSlug = searchParams.get('theme') || '';
   const audioOnly = searchParams.get('audio') === '1' || searchParams.get('audio') === 'true';
-
-  const [sermons, setSermons] = useState<Sermon[]>(initialSermons);
-  const [pagination, setPagination] = useState<PaginationMeta>(initialPagination);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const lastRequestKeyRef = useRef<string>('');
-
-  const isUsingInitial =
-    !speakerSlug && !themeSlug && !audioOnly && currentPage === initialPagination.page;
-
-  useEffect(() => {
-    if (isUsingInitial) {
-      // Reset to initial content when user cleared filters / returned to initial page
-      setSermons(initialSermons);
-      setPagination(initialPagination);
-      setIsLoading(false);
-      setError(null);
-      return;
-    }
-
-    const requestKey = JSON.stringify({ currentPage, pageSize, speakerSlug, themeSlug, audioOnly });
-    lastRequestKeyRef.current = requestKey;
-
-    setIsLoading(true);
-    setError(null);
-
-    fetchSermonsClient({
-      page: currentPage,
-      pageSize,
-      speakerSlug: speakerSlug || undefined,
-      themeSlug: themeSlug || undefined,
-      audioOnly,
-    })
-      .then((response) => {
-        // Ignore stale responses
-        if (lastRequestKeyRef.current !== requestKey) return;
-
-        setSermons(response.data);
-        setPagination({
-          page: response.meta.pagination?.page ?? currentPage,
-          pageCount: response.meta.pagination?.pageCount ?? 1,
-          total: response.meta.pagination?.total ?? 0,
-        });
-      })
-      .catch((e: unknown) => {
-        if (lastRequestKeyRef.current !== requestKey) return;
-        setError(e instanceof Error ? e.message : 'Er ging iets mis bij het laden van preken.');
-        setSermons([]);
-        setPagination({ page: currentPage, pageCount: 1, total: 0 });
-      })
-      .finally(() => {
-        if (lastRequestKeyRef.current !== requestKey) return;
-        setIsLoading(false);
-      });
-  }, [
-    isUsingInitial,
-    initialSermons,
-    initialPagination,
-    currentPage,
-    pageSize,
-    speakerSlug,
-    themeSlug,
-    audioOnly,
-  ]);
+  const queryText = searchParams.get('q') || '';
+  const yearFrom = safeNumber(searchParams.get('yearFrom'));
+  const yearTo = safeNumber(searchParams.get('yearTo'));
 
   const selectedSpeakerName = useMemo(() => {
-    if (!speakerSlug) return 'Alle sprekers';
-    return speakers.find((s) => s.slug === speakerSlug)?.name ?? 'Spreker';
+    if (!speakerSlug) return '';
+    return speakers.find((s) => s.slug === speakerSlug)?.name ?? '';
   }, [speakerSlug, speakers]);
 
   const selectedThemeName = useMemo(() => {
-    if (!themeSlug) return 'Alle thema\'s';
-    return themes.find((t) => t.slug === themeSlug)?.name ?? 'Thema';
+    if (!themeSlug) return '';
+    return themes.find((t) => t.slug === themeSlug)?.name ?? '';
   }, [themeSlug, themes]);
 
-  function updateFilters(next: { speaker?: string; theme?: string; audio?: boolean }) {
+  const filteredDocs = useMemo(() => {
+    // Prefer the prebuilt search index (works offline/no network). If it's empty,
+    // fall back to just the initial page's data.
+    if (!documents || documents.length === 0) {
+      return [] as SearchDocument[];
+    }
+
+    const sorted = [...documents].sort(byDateDesc);
+
+    return sorted.filter((doc) => {
+      if (selectedSpeakerName && doc.speakerName !== selectedSpeakerName) {
+        return false;
+      }
+
+      if (selectedThemeName && !doc.themes.some((t) => t.name === selectedThemeName)) {
+        return false;
+      }
+
+      if (audioOnly && !doc.hasAudio) {
+        return false;
+      }
+
+      if (yearFrom !== null && doc.year < yearFrom) {
+        return false;
+      }
+
+      if (yearTo !== null && doc.year > yearTo) {
+        return false;
+      }
+
+      if (queryText && !matchesAllTokens(doc.searchableText, queryText)) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [documents, selectedSpeakerName, selectedThemeName, audioOnly, yearFrom, yearTo, queryText]);
+
+  const pagination = useMemo((): PaginationMeta => {
+    // If the index isn't loaded, just keep whatever the server rendered.
+    if (!documents || documents.length === 0) {
+      return initialPagination;
+    }
+
+    const total = filteredDocs.length;
+    const pageCount = Math.max(1, Math.ceil(total / pageSize));
+    const page = Math.min(Math.max(1, currentPage), pageCount);
+    return { page, pageCount, total };
+  }, [documents, filteredDocs.length, pageSize, currentPage, initialPagination]);
+
+  // If user is on a page number that's now out-of-range due to filters,
+  // keep the URL consistent by navigating to page 1.
+  useEffect(() => {
+    if (!documents || documents.length === 0) return;
+    if (currentPage <= pagination.pageCount) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    const qs = params.toString();
+    router.replace(qs ? `/sermons?${qs}` : '/sermons');
+  }, [documents, currentPage, pagination.pageCount, router, searchParams]);
+
+  const sermons: SermonCardData[] = useMemo(() => {
+    // When index isn't available, show the server-rendered list.
+    if (!documents || documents.length === 0) {
+      return initialSermons as unknown as SermonCardData[];
+    }
+
+    const startIndex = (pagination.page - 1) * pageSize;
+    const pageDocs = filteredDocs.slice(startIndex, startIndex + pageSize);
+
+    const speakerSlugByName = new Map<string, string>();
+    for (const s of speakers) {
+      speakerSlugByName.set(s.name, s.slug);
+    }
+
+    return pageDocs.map((doc) => {
+      const slug = speakerSlugByName.get(doc.speakerName ?? '') ?? null;
+      const speaker = doc.speakerName
+        ? {
+            name: doc.speakerName,
+            slug: slug ?? '',
+          }
+        : null;
+
+      return {
+        id: doc.id,
+        slug: doc.slug,
+        title: doc.title,
+        date: doc.date,
+        summary: doc.summary,
+        bibleText: doc.bibleText,
+        bibleReference: null,
+        audio: doc.hasAudio
+          ? ({
+              id: doc.id,
+              documentId: '',
+              name: 'audio',
+              url: '',
+              mime: '',
+              size: 0,
+            } as const)
+          : null,
+        speaker: speaker && slug ? ({ id: 0, documentId: '', name: speaker.name, slug, bio: null, createdAt: '', updatedAt: '' } as const) : null,
+        themes: [],
+        plaats: null,
+      };
+    });
+  }, [documents, initialSermons, filteredDocs, pagination.page, pageSize, speakers]);
+
+  const selectedThemeLabel = selectedThemeName || "Alle thema's";
+
+  function updateFilters(next: {
+    speaker?: string;
+    theme?: string;
+    audio?: boolean;
+    q?: string;
+    yearFrom?: number | null;
+    yearTo?: number | null;
+  }) {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (next.speaker !== undefined) {
-      if (next.speaker) params.set('speaker', next.speaker);
-      else params.delete('speaker');
-    }
-
-    if (next.theme !== undefined) {
-      if (next.theme) params.set('theme', next.theme);
-      else params.delete('theme');
-    }
+    if (next.speaker !== undefined) setOrDelete(params, 'speaker', next.speaker);
+    if (next.theme !== undefined) setOrDelete(params, 'theme', next.theme);
 
     if (next.audio !== undefined) {
       if (next.audio) params.set('audio', '1');
       else params.delete('audio');
     }
+
+    if (next.q !== undefined) setOrDelete(params, 'q', next.q);
+    setOrDeleteNumber(params, 'yearFrom', next.yearFrom);
+    setOrDeleteNumber(params, 'yearTo', next.yearTo);
 
     const qs = params.toString();
     router.push(qs ? `/sermons?${qs}` : '/sermons');
@@ -195,7 +249,7 @@ export default function SermonsArchiveClient({
     router.push('/sermons');
   }
 
-  const filtersActive = Boolean(speakerSlug || themeSlug || audioOnly);
+  const filtersActive = Boolean(speakerSlug || themeSlug || audioOnly || queryText || yearFrom !== null || yearTo !== null);
 
   return (
     <div className="lg:grid lg:grid-cols-[320px_1fr] gap-8">
@@ -245,7 +299,52 @@ export default function SermonsArchiveClient({
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-warm-500 dark:text-warm-400 mt-2">Geselecteerd: {selectedThemeName}</p>
+              <p className="text-xs text-warm-500 dark:text-warm-400 mt-2">Geselecteerd: {selectedThemeLabel}</p>
+            </div>
+
+            {/* Year range */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="block text-sm font-semibold text-warm-800 dark:text-warm-100">Jaar</span>
+                <span className="text-xs text-warm-500 dark:text-warm-400">{yearRange.min}–{yearRange.max}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="yearFrom" className="block text-xs text-warm-600 dark:text-warm-300 mb-1">Vanaf</label>
+                  <input
+                    id="yearFrom"
+                    inputMode="numeric"
+                    value={yearFrom ?? ''}
+                    onChange={(e) => updateFilters({ yearFrom: safeNumber(e.target.value) })}
+                    placeholder={String(yearRange.min)}
+                    className="w-full h-11 px-4 rounded-xl bg-warm-50 dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-400/40"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="yearTo" className="block text-xs text-warm-600 dark:text-warm-300 mb-1">Tot</label>
+                  <input
+                    id="yearTo"
+                    inputMode="numeric"
+                    value={yearTo ?? ''}
+                    onChange={(e) => updateFilters({ yearTo: safeNumber(e.target.value) })}
+                    placeholder={String(yearRange.max)}
+                    className="w-full h-11 px-4 rounded-xl bg-warm-50 dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-400/40"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Quick text filter */}
+            <div>
+              <label htmlFor="qFilter" className="block text-sm font-semibold text-warm-800 dark:text-warm-100 mb-2">Tekst</label>
+              <input
+                id="qFilter"
+                value={queryText}
+                onChange={(e) => updateFilters({ q: e.target.value })}
+                placeholder="Zoek in titel/tekst…"
+                className="w-full h-11 px-4 rounded-xl bg-warm-50 dark:bg-warm-950/40 border border-warm-200 dark:border-warm-800 text-warm-800 dark:text-warm-100 focus:outline-none focus:ring-2 focus:ring-primary-400/40"
+              />
+              <p className="text-xs text-warm-500 dark:text-warm-400 mt-2">Tip: meerdere woorden werken ook.</p>
             </div>
 
             {/* Audio */}
@@ -280,16 +379,10 @@ export default function SermonsArchiveClient({
                 Reset
               </button>
 
-              {isLoading && (
-                <span className="text-sm text-warm-500 dark:text-warm-300">Laden…</span>
+              {!isIndexLoaded && (
+                <span className="text-sm text-warm-500 dark:text-warm-300">Index laden…</span>
               )}
             </div>
-
-            {error && (
-              <div className="p-4 rounded-xl bg-red-50/60 dark:bg-red-900/15 border border-red-200/60 dark:border-red-900/30">
-                <p className="text-sm text-red-700 dark:text-red-200">{error}</p>
-              </div>
-            )}
           </div>
         </div>
       </aside>

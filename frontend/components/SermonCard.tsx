@@ -1,12 +1,23 @@
-'use client';
-
 import Link from 'next/link';
-import { Sermon } from '@/lib/types';
+import type { BibleReference, Speaker, StrapiMedia } from '@/lib/types';
 import { formatDate, formatBibleReference } from '@/lib/strapi';
 import FavoriteButton from '@/components/FavoriteButton';
 
+export type SermonCardData = {
+  id: number;
+  slug: string;
+  title: string;
+  date: string;
+  summary?: string | null;
+  bibleText?: string | null;
+  bibleReference?: BibleReference | null;
+  audio?: StrapiMedia | null;
+  speaker?: Pick<Speaker, 'name' | 'slug'> | null;
+  plaats?: string | null;
+};
+
 interface SermonCardProps {
-  sermon: Sermon;
+  sermon: SermonCardData;
 }
 
 export default function SermonCard({ sermon }: Readonly<SermonCardProps>) {
@@ -15,7 +26,7 @@ export default function SermonCard({ sermon }: Readonly<SermonCardProps>) {
   const speakerSlug = speaker?.slug;
   
   // Use structured bibleReference if available, otherwise fall back to bibleText
-  const displayBibleText = formatBibleReference(bibleReference) || bibleText;
+  const displayBibleText = formatBibleReference(bibleReference ?? null) || bibleText;
 
   return (
     <article className="group relative bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden border border-warm-100 dark:border-warm-800/60 hover:border-primary-200/60 dark:hover:border-primary-400/40 flex flex-col">

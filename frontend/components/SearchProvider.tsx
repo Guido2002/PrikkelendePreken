@@ -14,6 +14,7 @@ interface SearchContextType {
   recentSearches: string[];
   isLoading: boolean;
   isIndexLoaded: boolean;
+  documents: SearchDocument[];
   
   // Metadata
   speakers: string[];
@@ -48,7 +49,7 @@ interface SearchProviderProps {
   searchIndex: SearchDocument[];
 }
 
-export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
+export function SearchProvider({ children, searchIndex }: Readonly<SearchProviderProps>) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>({});
@@ -157,7 +158,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
     setQuery(suggestion);
   }, []);
 
-  const value: SearchContextType = {
+  const value: SearchContextType = useMemo(() => ({
     isOpen,
     query,
     filters,
@@ -167,6 +168,7 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
     recentSearches,
     isLoading,
     isIndexLoaded,
+    documents: searchIndex,
     speakers,
     themes,
     yearRange,
@@ -180,7 +182,28 @@ export function SearchProvider({ children, searchIndex }: SearchProviderProps) {
     search,
     clearRecentSearches: handleClearRecentSearches,
     selectSuggestion,
-  };
+  }), [
+    isOpen,
+    query,
+    filters,
+    sort,
+    results,
+    suggestions,
+    recentSearches,
+    isLoading,
+    isIndexLoaded,
+    searchIndex,
+    speakers,
+    themes,
+    yearRange,
+    totalDocuments,
+    openSearch,
+    closeSearch,
+    clearFiltersAction,
+    search,
+    handleClearRecentSearches,
+    selectSuggestion,
+  ]);
 
   return (
     <SearchContext.Provider value={value}>
