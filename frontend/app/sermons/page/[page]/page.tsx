@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import SermonCard from '@/components/SermonCard';
-import Pagination from '@/components/Pagination';
-import { getSermonPageCount, getSermons } from '@/lib/strapi';
-import { Sermon } from '@/lib/types';
+import SermonsArchiveClient from '@/components/SermonsArchiveClient';
+import { getSermonPageCount, getSermons, getSpeakers, getThemes } from '@/lib/strapi';
+import { Sermon, Speaker, Theme } from '@/lib/types';
 
 interface PageProps {
   params: Promise<{ page: string }>;
@@ -12,7 +11,7 @@ interface PageProps {
 // Required for static export - only allow pages from generateStaticParams
 export const dynamicParams = false;
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 15;
 
 export async function generateStaticParams() {
   try {
@@ -54,17 +53,26 @@ export default async function SermonsPagedPage({ params }: Readonly<PageProps>) 
   const currentPage = Number(page);
 
   let sermons: Sermon[] = [];
+  let speakers: Speaker[] = [];
+  let themes: Theme[] = [];
   let totalPages = 1;
   let totalSermons = 0;
 
   try {
-    const response = await getSermons({
-      page: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
-      pageSize: PAGE_SIZE,
-    });
-    sermons = response.data;
-    totalPages = response.meta.pagination?.pageCount || 1;
-    totalSermons = response.meta.pagination?.total || 0;
+    const [sermonsResponse, speakersResponse, themesResponse] = await Promise.all([
+      getSermons({
+        page: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
+        pageSize: PAGE_SIZE,
+      }),
+      getSpeakers(),
+      getThemes(),
+    ]);
+
+    sermons = sermonsResponse.data;
+    totalPages = sermonsResponse.meta.pagination?.pageCount || 1;
+    totalSermons = sermonsResponse.meta.pagination?.total || 0;
+    speakers = speakersResponse.data;
+    themes = themesResponse.data;
   } catch (error) {
     console.error('Error fetching sermons:', error);
   }
@@ -158,37 +166,13 @@ export default async function SermonsPagedPage({ params }: Readonly<PageProps>) 
 
       {/* Sermons Grid */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        {sermons.length > 0 ? (
-          <>
-            {/* Results count */}
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-warm-500 dark:text-warm-300 text-sm">
-                Toon {sermons.length} van {totalSermons} preken
-              </p>
-              <p className="text-warm-500 dark:text-warm-300 text-sm">
-                Pagina {currentPage} van {totalPages}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {sermons.map((sermon) => (
-                <SermonCard key={sermon.id} sermon={sermon} />
-              ))}
-            </div>
-
-            <Pagination currentPage={currentPage} totalPages={totalPages} />
-          </>
-        ) : (
-          <div className="text-center py-20 bg-white dark:bg-warm-900/40 rounded-2xl shadow-soft border border-warm-100 dark:border-warm-800/60">
-            <div className="w-20 h-20 bg-warm-100 dark:bg-warm-900/40 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-warm-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            </div>
-            <p className="text-warm-700 dark:text-warm-100 text-xl font-medium mb-2">Geen preken gevonden.</p>
-            <p className="text-warm-500 dark:text-warm-300">Er zijn nog geen preken gepubliceerd.</p>
-          </div>
-        )}
+        <SermonsArchiveClient
+          initialSermons={sermons}
+          initialPagination={{ page: currentPage, pageCount: totalPages, total: totalSermons }}
+          speakers={speakers}
+          themes={themes}
+          pageSize={PAGE_SIZE}
+        />
       </section>
     </div>
   );

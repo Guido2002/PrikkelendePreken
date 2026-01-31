@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Sermon } from '@/lib/types';
 import { formatDate, formatBibleReference } from '@/lib/strapi';
@@ -7,7 +9,7 @@ interface SermonCardProps {
   sermon: Sermon;
 }
 
-export default function SermonCard({ sermon }: SermonCardProps) {
+export default function SermonCard({ sermon }: Readonly<SermonCardProps>) {
   const { title, slug, date, summary, bibleText, bibleReference, speaker, audio, plaats } = sermon;
   const speakerName = speaker?.name;
   const speakerSlug = speaker?.slug;
@@ -37,7 +39,7 @@ export default function SermonCard({ sermon }: SermonCardProps) {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
                   </span>
-                  Audio
+                  <span>Audio</span>
                 </span>
               )}
               <FavoriteButton
